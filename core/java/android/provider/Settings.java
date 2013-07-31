@@ -2803,6 +2803,11 @@ public final class Settings {
         public static final String FORMAL_TEXT_INPUT = "formal_text_input";
 
         /**
+         * Force dual panel for settings
+         */
+        public static final String FORCE_DUAL_PANEL = "force_dualpanel"; 
+
+        /**
          * ListView Animations
          * 0 == None
          * 1 == Wave (Left)
