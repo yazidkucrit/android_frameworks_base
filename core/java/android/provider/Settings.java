@@ -2955,18 +2955,18 @@ public final class Settings {
          */
         public static final String GESTURES_DOUBLE_TAP = "gestures_double_tap";
 
-         /**
-          * Action to perform when the home key is long-pressed.
-          * (Default can be configured via config_longPressOnHomeBehavior)
-          * 0 - Nothing
-          * 1 - Menu
-          * 2 - App-switch
-          * 3 - Search
-          * 4 - Voice search
-          * 5 - In-app search
-          * @hide
-          */
-         public static final String KEY_HOME_LONG_PRESS_ACTION = "key_home_long_press_action";
+        /**
+         * Action to perform when the home key is long-pressed. (Default is 2)
+         * 0 - Nothing
+         * 1 - Menu
+         * 2 - App-switch
+         * 3 - Search
+         * 4 - Voice search
+         * 5 - In-app search
+         * 6 - Launch Camera
+         * @hide
+         */
+        public static final String KEY_HOME_LONG_PRESS_ACTION = "key_home_long_press_action";
 
          /**
           * Action to perform when the home key is double-tapped. (Default is 0)
@@ -3562,7 +3562,29 @@ public final class Settings {
         public static final String SCREEN_RECORDER_OUTPUT_DIMENSIONS = "screen_recorder_output_dimensions";
 
         /**
+<<<<<<< HEAD
          * Screen recorder framerate in bits per second
+=======
+         * Whether to wake the screen with the camera key half-press.
+         * @hide
+         */
+        public static final String CAMERA_WAKE_SCREEN = "camera_wake_screen";
+
+        /**
+         * Whether or not to send device back to sleep if Camera button is released ("Peek")
+         * @hide
+         */
+        public static final String CAMERA_SLEEP_ON_RELEASE = "camera_sleep_on_release";
+
+        /**
+         * Whether or not camera button music controls should be enabled to play/pause media tracks
+         * @hide
+         */
+        public static final String CAMERA_MUSIC_CONTROLS = "camera_music_controls";
+
+        /**
+         * Whether or not to launch default music player when headset is connected
+>>>>>>> 5b9ad0e... Camera button support (1/2)
          * @hide
          */
         public static final String SCREEN_RECORDER_BITRATE = "screen_recorder_bitrate";
@@ -3706,6 +3728,7 @@ public final class Settings {
         public static final String LISTVIEW_ANIMATION = "listview_animation";
 
         /**
+<<<<<<< HEAD
          * ListView Interpolators
          * 0 == None
          * 1 == accelerate_interpolator
@@ -3715,6 +3738,12 @@ public final class Settings {
          * 5 == overshoot_interpolator
          * 6 == anticipate_overshoot_interpolator
          * 7 == bounce_interpolator
+=======
+         * Swap volume buttons when the screen is rotated
+         * 0 - Disabled
+         * 1 - Enabled (screen is rotated by 90 or 180 degrees: phone, hybrid)
+         * 2 - Enabled (screen is rotated by 180 or 270 degrees: tablet)
+>>>>>>> 5b9ad0e... Camera button support (1/2)
          * @hide
          */
         public static final String LISTVIEW_INTERPOLATOR = "listview_interpolator";
