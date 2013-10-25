@@ -2957,6 +2957,7 @@ public final class Settings {
 
         /**
          * Action to perform when the home key is long-pressed. (Default is 2)
+         * (Default can be configured via config_longPressOnHomeBehavior)
          * 0 - Nothing
          * 1 - Menu
          * 2 - App-switch
@@ -2971,6 +2972,7 @@ public final class Settings {
          /**
           * Action to perform when the home key is double-tapped. (Default is 0)
           * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
+          * (Default can be configured via config_doubleTapOnHomeBehavior)
           * @hide
           */
          public static final String KEY_HOME_DOUBLE_TAP_ACTION = "key_home_double_tap_action";
