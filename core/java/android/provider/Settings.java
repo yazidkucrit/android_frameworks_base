@@ -2754,15 +2754,9 @@ public final class Settings {
          */
         public static final String GESTURES_DOUBLE_TAP = "gestures_double_tap";
 
-        /**
-         * Whether to enable custom rebindings of the actions performed on
-         * certain key press events.
-         * @hide
-         */
-        public static final String HARDWARE_KEY_REBINDING = "hardware_key_rebinding";
-
          /**
-          * Action to perform when the home key is long-pressed. (Default is 2)
+          * Action to perform when the home key is long-pressed.
+          * (Default can be configured via config_longPressOnHomeBehavior)
           * 0 - Nothing
           * 1 - Menu
           * 2 - App-switch

@@ -662,9 +662,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.KEY_APP_SWITCH_LONG_PRESS_ACTION), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.HARDWARE_KEY_REBINDING), false, this,
-                    UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.VOLUME_WAKE_SCREEN), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -1181,10 +1178,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         final boolean hasHome = (mDeviceHardwareKeys & KEY_MASK_HOME) != 0;
         final boolean hasAssist = (mDeviceHardwareKeys & KEY_MASK_ASSIST) != 0;
         final boolean hasAppSwitch = (mDeviceHardwareKeys & KEY_MASK_APP_SWITCH) != 0;
-        final boolean hasCamera = (mDeviceHardwareKeys & KEY_MASK_CAMERA) != 0;
         final ContentResolver resolver = mContext.getContentResolver();
 
-        // initialize all assignments to sane defaults
+        // Initialize all assignments to sane defaults.
         mPressOnMenuBehavior = KEY_ACTION_MENU;
         if (!hasMenu || hasAssist) {
             mLongPressOnMenuBehavior = KEY_ACTION_NOTHING;
@@ -1199,29 +1195,24 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mLongPressOnHomeBehavior = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_longPressOnHomeBehavior);
         if (mLongPressOnHomeBehavior < KEY_ACTION_NOTHING ||
-                mLongPressOnHomeBehavior > KEY_ACTION_IN_APP_SEARCH) {
+                mLongPressOnHomeBehavior > KEY_ACTION_LAUNCH_CAMERA) {
             mLongPressOnHomeBehavior = KEY_ACTION_NOTHING;
         }
 
         mDoubleTapOnHomeBehavior = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_doubleTapOnHomeBehavior);
         if (mDoubleTapOnHomeBehavior < KEY_ACTION_NOTHING ||
-                mDoubleTapOnHomeBehavior > KEY_ACTION_IN_APP_SEARCH) {
+                mDoubleTapOnHomeBehavior > KEY_ACTION_LAUNCH_CAMERA) {
             mDoubleTapOnHomeBehavior = KEY_ACTION_NOTHING;
         }
 
-        boolean keyRebindingEnabled = Settings.System.getIntForUser(resolver,
-                Settings.System.HARDWARE_KEY_REBINDING, 0, UserHandle.USER_CURRENT) == 1;
-        if (!keyRebindingEnabled) {
-            mHasMenuKeyEnabled = hasMenu;
-            return;
-        }
+        mHasMenuKeyEnabled = false;
 
+        // Check for custom assignments and whether KEY_ACTION_MENU is assigned.
         if (hasHome) {
             mLongPressOnHomeBehavior = Settings.System.getIntForUser(resolver,
                     Settings.System.KEY_HOME_LONG_PRESS_ACTION,
-                    hasAppSwitch ? KEY_ACTION_NOTHING : KEY_ACTION_APP_SWITCH,
-                    UserHandle.USER_CURRENT);
+                    mLongPressOnHomeBehavior, UserHandle.USER_CURRENT);
             mDoubleTapOnHomeBehavior = Settings.System.getIntForUser(resolver,
                     Settings.System.KEY_HOME_DOUBLE_TAP_ACTION,
                     mDoubleTapOnHomeBehavior, UserHandle.USER_CURRENT);
@@ -1231,31 +1222,30 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         if (hasMenu) {
             mPressOnMenuBehavior = Settings.System.getIntForUser(resolver,
                     Settings.System.KEY_MENU_ACTION,
-                    KEY_ACTION_MENU, UserHandle.USER_CURRENT);
+                    mPressOnMenuBehavior, UserHandle.USER_CURRENT);
             mLongPressOnMenuBehavior = Settings.System.getIntForUser(resolver,
                     Settings.System.KEY_MENU_LONG_PRESS_ACTION,
-                    hasAssist ? KEY_ACTION_NOTHING : KEY_ACTION_SEARCH,
-                    UserHandle.USER_CURRENT);
+                    mLongPressOnMenuBehavior, UserHandle.USER_CURRENT);
             mHasMenuKeyEnabled |= mPressOnMenuBehavior == KEY_ACTION_MENU
                     || mLongPressOnMenuBehavior == KEY_ACTION_MENU;
         }
         if (hasAssist) {
             mPressOnAssistBehavior = Settings.System.getIntForUser(resolver,
                     Settings.System.KEY_ASSIST_ACTION,
-                    KEY_ACTION_SEARCH, UserHandle.USER_CURRENT);
+                    mPressOnAssistBehavior, UserHandle.USER_CURRENT);
             mLongPressOnAssistBehavior = Settings.System.getIntForUser(resolver,
                     Settings.System.KEY_ASSIST_LONG_PRESS_ACTION,
-                    KEY_ACTION_VOICE_SEARCH, UserHandle.USER_CURRENT);
+                    mLongPressOnAssistBehavior, UserHandle.USER_CURRENT);
             mHasMenuKeyEnabled |= mPressOnAssistBehavior == KEY_ACTION_MENU
                     || mLongPressOnAssistBehavior == KEY_ACTION_MENU;
         }
         if (hasAppSwitch) {
             mPressOnAppSwitchBehavior = Settings.System.getIntForUser(resolver,
                     Settings.System.KEY_APP_SWITCH_ACTION,
-                    KEY_ACTION_APP_SWITCH, UserHandle.USER_CURRENT);
+                    mPressOnAppSwitchBehavior, UserHandle.USER_CURRENT);
             mLongPressOnAppSwitchBehavior = Settings.System.getIntForUser(resolver,
                     Settings.System.KEY_APP_SWITCH_LONG_PRESS_ACTION,
-                    KEY_ACTION_NOTHING, UserHandle.USER_CURRENT);
+                    mLongPressOnAppSwitchBehavior, UserHandle.USER_CURRENT);
             mHasMenuKeyEnabled |= mPressOnAppSwitchBehavior == KEY_ACTION_MENU
                     || mLongPressOnAppSwitchBehavior == KEY_ACTION_MENU;
         }
@@ -1444,7 +1434,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             MSG_ENABLE_POINTER_LOCATION : MSG_DISABLE_POINTER_LOCATION);
                 }
             }
-        
+
             // Height of the navigation bar when presented horizontally at bottom
             Resources res = mContext.getResources();
             mNavigationBarHeightForRotation[mPortraitRotation] =
@@ -1657,11 +1647,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 break;
         }
     }
-    
+
     void readLidState() {
         mLidState = mWindowManagerFuncs.getLidState();
     }
-    
+
     private boolean isHidden(int accessibilityMode) {
         switch (accessibilityMode) {
             case 1:
@@ -2017,16 +2007,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     /**
      * Preflight adding a window to the system.
-     * 
+     *
      * Currently enforces that three window types are singletons:
      * <ul>
      * <li>STATUS_BAR_TYPE</li>
      * <li>KEYGUARD_TYPE</li>
      * </ul>
-     * 
+     *
      * @param win The window to be added
      * @param attrs Information about the window to be added
-     * 
+     *
      * @return If ok, WindowManagerImpl.ADD_OKAY.  If too many singletons,
      * WindowManagerImpl.ADD_MULTIPLE_SINGLETON
      */
@@ -2108,7 +2098,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     static final boolean PRINT_ANIM = false;
-    
+
     /** {@inheritDoc} */
     @Override
     public int selectAnimationLw(WindowState win, int transit) {
@@ -2800,7 +2790,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         Intent intent = new Intent(Intent.ACTION_SEARCH_LONG_PRESS);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         try {
-            // TODO: This only stops the factory-installed search manager.  
+            // TODO: This only stops the factory-installed search manager.
             // Need to formalize an API to handle others
             SearchManager searchManager = getSearchManager();
             if (searchManager != null) {
@@ -3473,7 +3463,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
             if ((fl & (FLAG_LAYOUT_IN_SCREEN | FLAG_LAYOUT_INSET_DECOR))
                     == (FLAG_LAYOUT_IN_SCREEN | FLAG_LAYOUT_INSET_DECOR)) {
-                if (DEBUG_LAYOUT) Slog.v(TAG, "layoutWindowLw(" + attrs.getTitle() 
+                if (DEBUG_LAYOUT) Slog.v(TAG, "layoutWindowLw(" + attrs.getTitle()
                             + "): IN_SCREEN, INSET_DECOR");
                 // This is the case for a normal activity window: we want it
                 // to cover all of the screen space, and it can take care of
@@ -3757,7 +3747,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         if (DEBUG_LAYOUT) Slog.v(TAG, "Compute frame " + attrs.getTitle()
                 + ": sim=#" + Integer.toHexString(sim)
-                + " attach=" + attached + " type=" + attrs.type 
+                + " attach=" + attached + " type=" + attrs.type
                 + String.format(" flags=0x%08x", fl)
                 + " pf=" + pf.toShortString() + " df=" + df.toShortString()
                 + " of=" + of.toShortString()
@@ -3830,7 +3820,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mForceStatusBarFromKeyguard = false;
         mForcingShowNavBar = false;
         mForcingShowNavBarLayer = -1;
-        
+
         mHideLockScreen = false;
         mAllowLockscreenWhenOn = false;
         mDismissKeyguard = DISMISS_KEYGUARD_NONE;
@@ -4925,7 +4915,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     public void dismissKeyguardLw() {
-        if (mKeyguardDelegate != null && mKeyguardDelegate.isShowing()) { 
+        if (mKeyguardDelegate != null && mKeyguardDelegate.isShowing()) {
             mHandler.post(new Runnable() {
                 public void run() {
                     if (mKeyguardDelegate.isDismissable()) {
