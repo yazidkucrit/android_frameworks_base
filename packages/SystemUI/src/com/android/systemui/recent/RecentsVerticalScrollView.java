@@ -204,6 +204,7 @@ public class RecentsVerticalScrollView extends ScrollView
         }
     }
 
+<<<<<<< HEAD
     @Override
     public void swipeAllViewsInLayout() {
         smoothScrollTo(0, 0);
@@ -235,6 +236,22 @@ public class RecentsVerticalScrollView extends ScrollView
             }
         });
         clearAll.start();
+    }
+
+    /**
+     * Returns the child count of mLinearLayout
+     * @return
+     */
+    public int getLinearLayoutChildCount() {
+        return mLinearLayout.getChildCount();
+    }
+
+    /**
+     * Returns the child of mLinearLayout at the given index
+     * @return
+     */
+    public View getLinearLayoutChildAt(int index) {
+        return mLinearLayout.getChildAt(index);
     }
 
     public boolean onInterceptTouchEvent(MotionEvent ev) {
