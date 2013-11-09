@@ -1309,4 +1309,7 @@
 
     <!-- Boolean to enable adb by default on a per-device basis -->
     <bool name="config_enableAdbByDefault">false</bool>
+
+    <!-- Setting to false will disable CM's IME switcher implementation for tablets -->
+    <bool name="config_show_cmIMESwitcher">true</bool>
 </resources>
