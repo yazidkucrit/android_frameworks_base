@@ -90,8 +90,6 @@ class ServerThread {
         Log.wtf(TAG, "BOOT FAILURE " + msg, e);
     }
 
-    public void initAndLoop() {
-
     private class AdbPortObserver extends ContentObserver {
         public AdbPortObserver() {
             super(null);
@@ -105,8 +103,8 @@ class ServerThread {
         }
     }
 
-    @Override
-    public void run() {
+    public void initAndLoop() {
+
         EventLog.writeEvent(EventLogTags.BOOT_PROGRESS_SYSTEM_RUN,
             SystemClock.uptimeMillis());
 
