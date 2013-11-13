@@ -2495,8 +2495,19 @@ public final class Settings {
         public static final String LOCKSCREEN_BLUR_BEHIND = "lockscreen_blur_behind";
         public static final String LOCKSCREEN_BLUR_RADIUS = "lockscreen_blur_radius";
         
+        /*
+         * Custom navring actions
+         *
+         * @hide
+         */
+        public static final String[] NAVIGATION_RING_TARGETS = new String[] {
+            "navigation_ring_targets_0",
+            "navigation_ring_targets_1",
+            "navigation_ring_targets_2",
+        };
+
         /**
-         * Whether to wake the screen with the volume keys, the value is boolean.
+         * Whether to wake the screen with the volume keys, the value is boolean. 
          * @hide
          */
         public static final String VOLUME_WAKE_SCREEN = "volume_wake_screen";
