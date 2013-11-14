@@ -2688,6 +2688,11 @@ public final class Settings {
          */
         public static final String QUIET_HOURS_RINGER = "quiet_hours_ringer";
 
+        /** Weather to allow headsethook to launch voice commands
+         * @hide
+         */
+        public static final String HEADSETHOOK_LAUNCH_VOICE = "headsethook_launch_voice";
+
         /**
          * Whether to remove the sound from outgoing notifications during quiet hours.
          * @hide
