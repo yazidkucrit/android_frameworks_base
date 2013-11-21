@@ -774,6 +774,7 @@
         <!-- The standard AOSP fused location provider -->
         <item>com.android.location.fused</item>
         <item>com.google.android.gms</item>
+        <item>com.google.android.location</item>
     </string-array>
 
     <!-- Boolean indicating if current platform supports bluetooth SCO for off call
