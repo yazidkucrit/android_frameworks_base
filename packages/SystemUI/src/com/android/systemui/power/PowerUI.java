@@ -34,6 +34,7 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.UserHandle;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.util.Slog;
 import android.view.View;
@@ -336,27 +337,19 @@ public class PowerUI extends SystemUI {
         final String soundPath =
                 Settings.Global.getString(cr, Settings.Global.POWER_NOTIFICATIONS_RINGTONE);
 
-        NotificationManager notificationManager =
-                (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (notificationManager == null) {
-            return;
-        }
-
-        Notification powerNotify=new Notification();
-        powerNotify.defaults = Notification.DEFAULT_ALL;
-        if (soundPath != null) {
-            powerNotify.sound = Uri.parse(soundPath);
-            if (powerNotify.sound != null) {
-                // DEFAULT_SOUND overrides so flip off
-                powerNotify.defaults &= ~Notification.DEFAULT_SOUND;
+        if (soundPath != null && !soundPath.matches("silent")) {
+            Uri u = Uri.parse(soundPath);
+            if (u != null) {
+                Ringtone r = RingtoneManager.getRingtone(mContext, u);
+                r.play();
             }
         }
         if (Settings.Global.getInt(cr,
-                Settings.Global.POWER_NOTIFICATIONS_VIBRATE, 0) == 0) {
-            powerNotify.defaults &= ~Notification.DEFAULT_VIBRATE;
+                Settings.Global.POWER_NOTIFICATIONS_VIBRATE, 0) == 1) {
+            Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+            v.vibrate(100);
         }
 
-        notificationManager.notify(0, powerNotify);
     }
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
