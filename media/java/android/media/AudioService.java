@@ -3738,6 +3738,7 @@ public class AudioService extends IAudioService.Stub {
             //       However there appear to be some missing locks around mRingerModeMutedStreams
             //       and mRingerModeAffectedStreams, so will leave this synchronized for now.
             //       mRingerModeMutedStreams and mMuteAffectedStreams are safe (only accessed once).
+             synchronized (mSettingsLock) {
                 if (uri.equals(Settings.System.getUriFor(
                     Settings.System.SAFE_HEADSET_VOLUME))) {
                     mSafeVolumeEnabled = safeVolumeEnabled(mContentResolver);
