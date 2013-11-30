@@ -290,6 +290,43 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         }
     };
 
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_BACKGROUND),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_BACKGROUND_LANDSCAPE),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_BACKGROUND_ALPHA),
+                    false, this, UserHandle.USER_ALL);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            super.onChange(selfChange, uri);
+
+            if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_BACKGROUND))
+                || uri.equals(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_BACKGROUND_LANDSCAPE))
+                || uri.equals(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_BACKGROUND_ALPHA))) {
+                if (mNotificationPanel != null) {
+                    mNotificationPanel.setBackgroundDrawables();
+                }
+                if (mSettingsPanel != null) {
+                    mSettingsPanel.setBackgroundDrawables();
+                }
+            }
+        }
+    }
     // ensure quick settings is disabled until the current user makes it through the setup wizard
     private boolean mUserSetup = false;
     private ContentObserver mUserSetupObserver = new ContentObserver(new Handler()) {
