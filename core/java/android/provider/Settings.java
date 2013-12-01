@@ -2531,7 +2531,7 @@ public final class Settings {
         public static final String EGG_MODE = "egg_mode";
 
         /**
-         * Allows to show the background activity back the lockscreen
+         * Show the content behind the lockscreen
          * @hide
          */
         public static final String LOCKSCREEN_SEE_THROUGH = "lockscreen_see_through";
@@ -2615,6 +2615,12 @@ public final class Settings {
          * @hide
          */
         public static final String BATTERY_AROUND_LOCKSCREEN_RING = "battery_around_lockscreen_ring";
+
+        /**
+         * Setting to show the battery percentage text
+         * @hide
+         */
+        public static final String STATUS_BAR_BATTERY_STYLE = "status_bar_battery_style";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
