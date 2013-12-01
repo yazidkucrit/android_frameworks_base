@@ -3756,8 +3756,6 @@ public class AudioService extends IAudioService.Stub {
                     readDockAudioSettings(mContentResolver);
                 }
 
-                readDockAudioSettings(mContentResolver);
-
                 mLinkNotificationWithVolume = Settings.System.getIntForUser(mContentResolver,
                         Settings.System.VOLUME_LINK_NOTIFICATION, 1, UserHandle.USER_CURRENT) == 1;
                 if (mLinkNotificationWithVolume) {
