@@ -2541,14 +2541,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         }
     };
 
-    private View.OnClickListener mCalendarClickListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            Intent intent=Intent.makeMainSelectorActivity(Intent.ACTION_MAIN,
-                                                        Intent.CATEGORY_APP_CALENDAR);
-            startActivityDismissingKeyguard(intent,true);
-        }
-    };
-
     private View.OnClickListener mClockClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             startActivityDismissingKeyguard(
