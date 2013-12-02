@@ -100,25 +100,16 @@ class QuickSettings {
         BATTERY,
         AIRPLANE,
         BLUETOOTH,
-<<<<<<< HEAD
-        LOCATION
-=======
         LOCATION,
         IMMERSIVE
->>>>>>> PA-base/kitkat
     }
 
     public static final String NO_TILES = "NO_TILES";
     public static final String DELIMITER = ";";
     public static final String DEFAULT_TILES = Tile.USER + DELIMITER + Tile.BRIGHTNESS
         + DELIMITER + Tile.SETTINGS + DELIMITER + Tile.WIFI + DELIMITER + Tile.RSSI
-<<<<<<< HEAD
-        + DELIMITER + Tile.ROTATION + DELIMITER + Tile.BATTERY + DELIMITER
-        + Tile.BLUETOOTH + DELIMITER + Tile.LOCATION;
-=======
         + DELIMITER + Tile.ROTATION + DELIMITER + Tile.BATTERY + DELIMITER + Tile.BLUETOOTH
         + DELIMITER + Tile.LOCATION + DELIMITER + Tile.IMMERSIVE;
->>>>>>> PA-base/kitkat
 
     private Context mContext;
     private PanelBar mBar;

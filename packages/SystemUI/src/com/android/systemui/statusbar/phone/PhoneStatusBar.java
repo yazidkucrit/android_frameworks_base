@@ -534,12 +534,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         mHasSettingsPanel = res.getBoolean(R.bool.config_hasSettingsPanel);
         mHasFlipSettings = res.getBoolean(R.bool.config_hasFlipSettingsPanel);
 
-<<<<<<< HEAD
         // Notifications date time
         mDateTimeView = mNotificationPanelHeader.findViewById(R.id.datetime);
 
-=======
->>>>>>> PA-base/kitkat
         mSettingsButton = (ImageView) mStatusBarWindow.findViewById(R.id.settings_button);
         if (mSettingsButton != null) {
             mSettingsButton.setOnClickListener(mSettingsButtonListener);

@@ -1978,7 +1978,6 @@ public final class Settings {
         public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
 
         /**
-<<<<<<< HEAD
          * Whether the phone ringtone should be played in an increasing manner
          * @hide
          */
@@ -1997,8 +1996,6 @@ public final class Settings {
         public static final String INCREASING_RING_INTERVAL = "increasing_ring_interval";
 
         /**
-=======
->>>>>>> PA-base/kitkat
          * Whether silent mode should allow vibration feedback. This is used
          * internally in AudioService and the Sound settings activity to
          * coordinate decoupling of vibrate and silent modes. This setting
