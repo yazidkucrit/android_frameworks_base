@@ -1978,6 +1978,7 @@ public final class Settings {
         public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
 
         /**
+<<<<<<< HEAD
          * Whether the phone ringtone should be played in an increasing manner
          * @hide
          */
@@ -1996,6 +1997,8 @@ public final class Settings {
         public static final String INCREASING_RING_INTERVAL = "increasing_ring_interval";
 
         /**
+=======
+>>>>>>> PA-base/kitkat
          * Whether silent mode should allow vibration feedback. This is used
          * internally in AudioService and the Sound settings activity to
          * coordinate decoupling of vibrate and silent modes. This setting
@@ -2572,12 +2575,6 @@ public final class Settings {
         public static final String VOLUME_WAKE_SCREEN = "volume_wake_screen";
 
         /**
-         * Quick settings tiles to show on status bar
-         * @hide
-         */
-        public static final String QUICK_SETTINGS_TILES = "quick_settings_tiles";
-
-        /**
          * Volume keys control cursor in text fields (default is 0)
          * 0 - Disabled
          * 1 - Volume up/down moves cursor left/right
@@ -2607,6 +2604,20 @@ public final class Settings {
          * @hide
          */
         public static final String BATTERY_AROUND_LOCKSCREEN_RING = "battery_around_lockscreen_ring";
+
+        /**
+         * Immersive mode global actions switch
+         * 0 = no
+         * 1 = yes
+         * @hide
+         */
+        public static final String IMMERSIVE_MODE = "immersive_mode";
+
+        /**
+         * Quick settings tiles to show on status bar
+         * @hide
+         */
+        public static final String QUICK_SETTINGS_TILES = "quick_settings_tiles";
 
         /**
          * Setting to show the battery percentage text

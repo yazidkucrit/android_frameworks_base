@@ -3726,9 +3726,12 @@ public class AudioService extends IAudioService.Stub {
                 Settings.Global.DOCK_AUDIO_MEDIA_ENABLED), false, this);
             mContentResolver.registerContentObserver(Settings.System.getUriFor(
                 Settings.System.VOLUME_LINK_NOTIFICATION), false, this);
+<<<<<<< HEAD
             mContentResolver.registerContentObserver(Settings.System.getUriFor(
                 Settings.System.SAFE_HEADSET_VOLUME), false, this,
                 UserHandle.USER_ALL);
+=======
+>>>>>>> PA-base/kitkat
         }
 
         @Override
