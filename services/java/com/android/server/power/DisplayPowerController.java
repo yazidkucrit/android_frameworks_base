@@ -375,8 +375,6 @@ final class DisplayPowerController {
     // Twilight changed.  We might recalculate auto-brightness values.
     private boolean mTwilightChanged;
     private boolean mAutoBrightnessSettingsChanged;
-    
-    private Context mContext;
 
     private KeyguardServiceWrapper mKeyguardService;
     
@@ -411,7 +409,6 @@ final class DisplayPowerController {
         mDisplayBlanker = displayBlanker;
         mCallbacks = callbacks;
         mCallbackHandler = callbackHandler;
-        mContext = context;
 
         mLights = lights;
         mTwilight = twilight;
