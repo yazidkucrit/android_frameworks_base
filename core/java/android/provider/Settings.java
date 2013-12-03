@@ -2671,12 +2671,6 @@ public final class Settings {
         public static final String EGG_MODE = "egg_mode";
 
         /**
-         * Whether national data roaming should be used.
-         * @hide
-         */
-        public static final String MVNO_ROAMING = "mvno_roaming";
-
-        /**
          * Show the content behind the lockscreen
          * @hide
          */
@@ -3018,7 +3012,6 @@ public final class Settings {
         public static final String STATUS_BAR_BATTERY_STYLE = "status_bar_battery_style";
 
         /**
-<<<<<<< HEAD
          * Quick Settings Quick Pulldown
          *
          * @hide
