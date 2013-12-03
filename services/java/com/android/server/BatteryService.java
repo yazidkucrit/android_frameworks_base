@@ -24,7 +24,9 @@ import android.app.ActivityManagerNative;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.content.pm.PackageManager;
+import android.database.ContentObserver;
 import android.os.BatteryManager;
 import android.os.BatteryProperties;
 import android.os.Binder;
@@ -724,11 +726,8 @@ public final class BatteryService extends Binder {
             final int level = mBatteryProps.batteryLevel;
             final int status = mBatteryProps.batteryStatus;
 
-            if (!mLightEnabled) {
-                // No lights if explicitly disabled
-                mBatteryLight.turnOff();
-            } else if (inQuietHours() && mQuietHoursDim) {
-                if (mLedPulseEnabled && level < mLowBatteryWarningLevel &&
+            if (inQuietHours() && mQuietHoursDim) {
+                if (level < mLowBatteryWarningLevel &&
                         status != BatteryManager.BATTERY_STATUS_CHARGING) {
                     // The battery is low, the device is not charging and the low battery pulse
                     // is enabled - ignore Quiet Hours
@@ -815,8 +814,6 @@ public final class BatteryService extends Binder {
             mQuietHoursDim = Settings.System.getIntForUser(resolver,
                     Settings.System.QUIET_HOURS_DIM, 0,
                     UserHandle.USER_CURRENT_OR_SELF) != 0;
-
-            updateLedPulse();
         }
     }
 
