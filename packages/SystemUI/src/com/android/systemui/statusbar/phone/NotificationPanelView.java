@@ -33,6 +33,9 @@ import com.android.systemui.statusbar.GestureRecorder;
 public class NotificationPanelView extends PanelView {
     public static final boolean DEBUG_GESTURES = true;
 
+    private static final float STATUS_BAR_LEFT_PERCENTAGE = 0.7f;
+    private static final float STATUS_BAR_RIGHT_PERCENTAGE = 0.3f;
+
     Drawable mHandleBar;
     int mHandleBarHeight;
     View mHandleView;
@@ -110,29 +113,43 @@ public class NotificationPanelView extends PanelView {
             }
         }
         if (PhoneStatusBar.SETTINGS_DRAG_SHORTCUT && mStatusBar.mHasFlipSettings) {
+
+            boolean flip = false;
+
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
                     mOkToFlip = getExpandedHeight() == 0;
-                    break;
-                case MotionEvent.ACTION_POINTER_DOWN:
-                    if (mOkToFlip) {
-                        float miny = event.getY(0);
-                        float maxy = miny;
-                        for (int i=1; i<event.getPointerCount(); i++) {
-                            final float y = event.getY(i);
-                            if (y < miny) miny = y;
-                            if (y > maxy) maxy = y;
-                        }
-                        if (maxy - miny < mHandleBarHeight) {
-                            if (getMeasuredHeight() < mHandleBarHeight) {
-                                mStatusBar.switchToSettings();
-                            } else {
-                                mStatusBar.flipToSettings();
-                            }
-                            mOkToFlip = false;
-                        }
+                    if (event.getX(0) > getWidth() * (1.0f - STATUS_BAR_RIGHT_PERCENTAGE) &&
+                            Settings.System.getIntForUser(getContext().getContentResolver(),
+                            Settings.System.QS_QUICK_PULLDOWN, 0, UserHandle.USER_CURRENT) == 1) {
+                        flip = true;
+                    } else if (event.getX(0) < getWidth() * (1.0f - STATUS_BAR_LEFT_PERCENTAGE) &&
+                            Settings.System.getIntForUser(getContext().getContentResolver(),
+                            Settings.System.QS_QUICK_PULLDOWN, 0, UserHandle.USER_CURRENT) == 2) {
+                        flip = true;
                     }
                     break;
+                case MotionEvent.ACTION_POINTER_DOWN:
+                    flip = true;
+                    break;
+            }
+
+            if (mOkToFlip && flip) {
+                float miny = event.getY(0);
+                float maxy = miny;
+                for (int i=1; i<event.getPointerCount(); i++) {
+                    final float y = event.getY(i);
+                    if (y < miny) miny = y;
+                    if (y > maxy) maxy = y;
+                }
+                if (maxy - miny < mHandleBarHeight) {
+                    if (mJustPeeked || getExpandedHeight() < mHandleBarHeight) {
+                        mStatusBar.switchToSettings();
+                    } else {
+                        mStatusBar.flipToSettings();
+                    }
+                    mOkToFlip = false;
+                }
             }
         }
         return mHandleView.dispatchTouchEvent(event);

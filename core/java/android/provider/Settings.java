@@ -2643,7 +2643,15 @@ public final class Settings {
          * Setting to show the battery percentage text
          * @hide
          */
+
         public static final String STATUS_BAR_BATTERY_STYLE = "status_bar_battery_style";
+
+        /**
+         * Quick Settings Quick Pulldown
+         *
+         * @hide
+         */
+        public static final String QS_QUICK_PULLDOWN = "qs_quick_pulldown";
 
         /**
          * Whether to enable quiet hours.
