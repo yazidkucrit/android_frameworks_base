@@ -760,6 +760,8 @@ class QuickSettings {
         // Remote Display
         QuickSettingsBasicTile remoteDisplayTile
                 = new QuickSettingsBasicTile(mContext);
+
+        remoteDisplayTile.setTemporary(true);
         remoteDisplayTile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
