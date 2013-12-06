@@ -20,15 +20,12 @@ package com.android.keyguard;
 import android.app.PendingIntent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-<<<<<<< HEAD
 
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.*;
 import android.view.*;
 
-=======
->>>>>>> PA-base/kitkat
 import com.android.internal.policy.IKeyguardShowCallback;
 import com.android.internal.widget.LockPatternUtils;
 
@@ -95,12 +92,10 @@ public class KeyguardViewManager {
 
     private boolean mScreenOn = false;
     private LockPatternUtils mLockPatternUtils;
-<<<<<<< HEAD
+
     private Drawable mCustomBackground = null;
     private boolean mSeeThrough = false;
-    private int mBlurRadius = 14;
-=======
->>>>>>> PA-base/kitkat
+
 
     private KeyguardUpdateMonitorCallback mBackgroundChanger = new KeyguardUpdateMonitorCallback() {
         @Override
@@ -139,8 +134,6 @@ public class KeyguardViewManager {
     private void updateSettings() {
         mSeeThrough = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.LOCKSCREEN_SEE_THROUGH, 0) == 1;
-        mBlurRadius = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.LOCKSCREEN_BLUR_RADIUS, mBlurRadius);
         if(!mSeeThrough) mCustomBackground = null;
     }
 
@@ -160,11 +153,8 @@ public class KeyguardViewManager {
 
         SettingsObserver observer = new SettingsObserver(new Handler());
         observer.observe();
-<<<<<<< HEAD
-
         updateSettings();
-=======
->>>>>>> PA-base/kitkat
+
     }
 
     /**
@@ -243,34 +233,6 @@ public class KeyguardViewManager {
         return res.getBoolean(R.bool.config_enableLockScreenTranslucentDecor);
     }
 
-<<<<<<< HEAD
-    public void setBackgroundBitmap(Bitmap bmp) {
-        if (mSeeThrough) {
-                bmp = blurBitmap(bmp, mBlurRadius);
-        }
-        mCustomBackground = new BitmapDrawable(mContext.getResources(), bmp);
-    }
-
-    private Bitmap blurBitmap(Bitmap bmp, int radius) {
-        Bitmap out = Bitmap.createBitmap(bmp);
-        RenderScript rs = RenderScript.create(mContext);
-
-        Allocation input = Allocation.createFromBitmap(
-                rs, bmp, MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
-        Allocation output = Allocation.createTyped(rs, input.getType());
-
-        ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
-        script.setInput(input);
-        script.setRadius(radius);
-        script.forEach(output);
-
-        output.copyTo(out);
-
-        return out;
-    }
-
-=======
->>>>>>> PA-base/kitkat
     class ViewManagerHost extends FrameLayout {
         private static final int BACKGROUND_COLOR = 0x70000000;
 
