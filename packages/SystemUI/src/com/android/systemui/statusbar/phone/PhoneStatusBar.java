@@ -37,6 +37,7 @@ import android.app.PendingIntent;
 import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
@@ -50,6 +51,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.inputmethodservice.InputMethodService;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -297,6 +299,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
+            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BATTERY_STYLE), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_BACKGROUND),
                     false, this, UserHandle.USER_ALL);
@@ -330,10 +334,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             }else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_ALPHA))) {
                 setNotificationAlpha();
-                }
             }
+            updateBatteryIcons();
         }
     }
+
     // ensure quick settings is disabled until the current user makes it through the setup wizard
     private boolean mUserSetup = false;
     private ContentObserver mUserSetupObserver = new ContentObserver(new Handler()) {
@@ -379,22 +384,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             }
         }
     };
-
-    private final class SettingsObserver extends ContentObserver {
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observe() {
-            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_BATTERY_STYLE), false, this);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            updateBatteryIcons();
-        }
-    }
 
     private void updateBatteryIcons() {
         if (mQS != null) {

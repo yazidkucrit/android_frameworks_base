@@ -84,7 +84,7 @@ public class SeekBar extends AbsSeekBar {
     }
 
     @Override
-    void onProgressRefresh(float scale, boolean fromUser) {
+    public void onProgressRefresh(float scale, boolean fromUser) {
         super.onProgressRefresh(scale, fromUser);
 
         if (mOnSeekBarChangeListener != null) {
