@@ -17,17 +17,22 @@
 
 package com.android.keyguard;
 
+import android.app.PendingIntent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+<<<<<<< HEAD
 
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.*;
 import android.view.*;
 
+=======
+>>>>>>> PA-base/kitkat
 import com.android.internal.policy.IKeyguardShowCallback;
 import com.android.internal.widget.LockPatternUtils;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -49,11 +54,6 @@ import android.os.Parcelable;
 import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.provider.Settings;
-import android.renderscript.Allocation;
-import android.renderscript.Allocation.MipmapControl;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
 import android.util.Log;
 import android.util.Slog;
 import android.util.SparseArray;
@@ -95,9 +95,12 @@ public class KeyguardViewManager {
 
     private boolean mScreenOn = false;
     private LockPatternUtils mLockPatternUtils;
+<<<<<<< HEAD
     private Drawable mCustomBackground = null;
     private boolean mSeeThrough = false;
     private int mBlurRadius = 14;
+=======
+>>>>>>> PA-base/kitkat
 
     private KeyguardUpdateMonitorCallback mBackgroundChanger = new KeyguardUpdateMonitorCallback() {
         @Override
@@ -157,8 +160,11 @@ public class KeyguardViewManager {
 
         SettingsObserver observer = new SettingsObserver(new Handler());
         observer.observe();
+<<<<<<< HEAD
 
         updateSettings();
+=======
+>>>>>>> PA-base/kitkat
     }
 
     /**
@@ -237,6 +243,7 @@ public class KeyguardViewManager {
         return res.getBoolean(R.bool.config_enableLockScreenTranslucentDecor);
     }
 
+<<<<<<< HEAD
     public void setBackgroundBitmap(Bitmap bmp) {
         if (mSeeThrough) {
                 bmp = blurBitmap(bmp, mBlurRadius);
@@ -262,6 +269,8 @@ public class KeyguardViewManager {
         return out;
     }
 
+=======
+>>>>>>> PA-base/kitkat
     class ViewManagerHost extends FrameLayout {
         private static final int BACKGROUND_COLOR = 0x70000000;
 
@@ -362,7 +371,7 @@ public class KeyguardViewManager {
             if (bgAspect > vAspect) {
                 background.setBounds(0, 0, (int) (vHeight * bgAspect), vHeight);
             } else {
-                mCustomBackground.setBounds(0, 0, vWidth, (int) (vWidth * (vAspect >= 1 ? bgAspect : (1 / bgAspect))));
+                mCustomBackground.setBounds(0, 0, vWidth, (int) (vWidth / bgAspect));
             }
         }
 
@@ -450,16 +459,11 @@ public class KeyguardViewManager {
         }
 
         if (force || mKeyguardView == null) {
-                mKeyguardHost.setCustomBackground(null);
-                mKeyguardHost.removeAllViews();
-                inflateKeyguardView(options);
-                mKeyguardView.requestFocus();
+            mKeyguardHost.setCustomBackground(null);
+            mKeyguardHost.removeAllViews();
+            inflateKeyguardView(options);
+            mKeyguardView.requestFocus();
         }
-
-            if(mCustomBackground != null) {
-                mKeyguardHost.setCustomBackground(mCustomBackground);
-        }
-
         updateUserActivityTimeoutInWindowLayoutParams();
         mViewManager.updateViewLayout(mKeyguardHost, mWindowLayoutParams);
 
