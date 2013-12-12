@@ -73,7 +73,9 @@ public class KeyguardViewManager {
     private final static boolean DEBUG = KeyguardViewMediator.DEBUG;
     private static String TAG = "KeyguardViewManager";
     public final static String IS_SWITCHING_USER = "is_switching_user";
-    private final int BLUR_RADIUS = 14;
+
+    private final int MAX_BLUR_WIDTH = 900;
+    private final int MAX_BLUR_HEIGHT = 1600;
 
     // Delay dismissing keyguard to allow animations to complete.
     private static final int HIDE_KEYGUARD_DELAY = 500;
@@ -245,11 +247,17 @@ public class KeyguardViewManager {
     }
 
     private Bitmap blurBitmap(Bitmap bmp, int radius) {
+        Bitmap tmpBmp = bmp;
+
+        // scale image if it's too large
+        if (bmp.getWidth() > MAX_BLUR_WIDTH)
+            tmpBmp = bmp.createScaledBitmap(bmp, MAX_BLUR_WIDTH, MAX_BLUR_HEIGHT, false);
+
         Bitmap out = Bitmap.createBitmap(bmp);
         RenderScript rs = RenderScript.create(mContext);
 
         Allocation input = Allocation.createFromBitmap(
-                rs, bmp, MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
+                rs, tmpBmp, MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
         Allocation output = Allocation.createTyped(rs, input.getType());
 
         ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
