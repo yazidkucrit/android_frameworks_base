@@ -17,19 +17,14 @@
 
 package com.android.keyguard;
 
-import android.app.PendingIntent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.os.*;
-import android.view.*;
 
 import com.android.internal.policy.IKeyguardShowCallback;
 import com.android.internal.widget.LockPatternUtils;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -51,6 +46,11 @@ import android.os.Parcelable;
 import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.provider.Settings;
+import android.renderscript.Allocation;
+import android.renderscript.Allocation.MipmapControl;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.util.Log;
 import android.util.Slog;
 import android.util.SparseArray;
@@ -74,6 +74,9 @@ public class KeyguardViewManager {
     private static String TAG = "KeyguardViewManager";
     public final static String IS_SWITCHING_USER = "is_switching_user";
 
+    private final int MAX_BLUR_WIDTH = 900;
+    private final int MAX_BLUR_HEIGHT = 1600;
+
     // Delay dismissing keyguard to allow animations to complete.
     private static final int HIDE_KEYGUARD_DELAY = 500;
 
@@ -94,6 +97,7 @@ public class KeyguardViewManager {
     private LockPatternUtils mLockPatternUtils;
 
     private Drawable mCustomBackground = null;
+    private int mBlurRadius = 14;
     private boolean mSeeThrough = false;
 
 
@@ -134,6 +138,8 @@ public class KeyguardViewManager {
     private void updateSettings() {
         mSeeThrough = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.LOCKSCREEN_SEE_THROUGH, 0) == 1;
+        mBlurRadius = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_BLUR_RADIUS, mBlurRadius);
         if(!mSeeThrough) mCustomBackground = null;
     }
 
@@ -153,8 +159,8 @@ public class KeyguardViewManager {
 
         SettingsObserver observer = new SettingsObserver(new Handler());
         observer.observe();
-        updateSettings();
 
+        updateSettings();
     }
 
     /**
@@ -231,6 +237,37 @@ public class KeyguardViewManager {
     private boolean shouldEnableTranslucentDecor() {
         Resources res = mContext.getResources();
         return res.getBoolean(R.bool.config_enableLockScreenTranslucentDecor);
+    }
+
+    public void setBackgroundBitmap(Bitmap bmp) {
+        if (mSeeThrough) {
+                bmp = blurBitmap(bmp, mBlurRadius);
+        }
+        mCustomBackground = new BitmapDrawable(mContext.getResources(), bmp);
+    }
+
+    private Bitmap blurBitmap(Bitmap bmp, int radius) {
+        Bitmap tmpBmp = bmp;
+
+        // scale image if it's too large
+        if (bmp.getWidth() > MAX_BLUR_WIDTH)
+            tmpBmp = bmp.createScaledBitmap(bmp, MAX_BLUR_WIDTH, MAX_BLUR_HEIGHT, false);
+
+        Bitmap out = Bitmap.createBitmap(bmp);
+        RenderScript rs = RenderScript.create(mContext);
+
+        Allocation input = Allocation.createFromBitmap(
+                rs, tmpBmp, MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
+        Allocation output = Allocation.createTyped(rs, input.getType());
+
+        ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+        script.setInput(input);
+        script.setRadius(radius);
+        script.forEach(output);
+
+        output.copyTo(out);
+
+        return out;
     }
 
     class ViewManagerHost extends FrameLayout {
@@ -333,7 +370,7 @@ public class KeyguardViewManager {
             if (bgAspect > vAspect) {
                 background.setBounds(0, 0, (int) (vHeight * bgAspect), vHeight);
             } else {
-                mCustomBackground.setBounds(0, 0, vWidth, (int) (vWidth / bgAspect));
+                background.setBounds(0, 0, vWidth, (int) (vWidth * (vAspect >= 1 ? bgAspect : (1 / bgAspect))));
             }
         }
 
@@ -421,11 +458,16 @@ public class KeyguardViewManager {
         }
 
         if (force || mKeyguardView == null) {
-            mKeyguardHost.setCustomBackground(null);
-            mKeyguardHost.removeAllViews();
-            inflateKeyguardView(options);
-            mKeyguardView.requestFocus();
+                mKeyguardHost.setCustomBackground(null);
+                mKeyguardHost.removeAllViews();
+                inflateKeyguardView(options);
+                mKeyguardView.requestFocus();
         }
+
+            if(mCustomBackground != null) {
+                mKeyguardHost.setCustomBackground(mCustomBackground);
+        }
+
         updateUserActivityTimeoutInWindowLayoutParams();
         mViewManager.updateViewLayout(mKeyguardHost, mWindowLayoutParams);
 
