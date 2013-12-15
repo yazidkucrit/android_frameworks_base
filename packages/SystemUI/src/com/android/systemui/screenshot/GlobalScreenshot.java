@@ -457,8 +457,8 @@ class GlobalScreenshot {
         int rot = mDisplay.getRotation();
         // Allow for abnormal hardware orientation
         rot = (rot + mSfHwRotation) % 4;
-        float degrees = getDegreesForRotation(rot);
-        boolean requiresRotation = (degrees >= 0);
+        float degrees = getDegreesForRotation(mDisplay.getRotation());
+        boolean requiresRotation = (degrees > 0);
         if (requiresRotation) {
             // Get the dimensions of the device in its native orientation
             mDisplayMatrix.reset();
