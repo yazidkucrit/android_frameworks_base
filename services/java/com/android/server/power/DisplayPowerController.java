@@ -642,8 +642,10 @@ final class DisplayPowerController {
                             request.screenState == DisplayPowerRequest.SCREEN_STATE_OFF &&
                             Settings.System.getInt(mContext.getContentResolver(),
                                     Settings.System.LOCKSCREEN_SEE_THROUGH, 0) == 1) {
-                        DisplayInfo di = mDisplayManager.getDisplayInfo(mDisplayManager.getDisplayIds()[0]);
-                    Bitmap bmp = SurfaceControl.screenshot(di.getNaturalWidth(), di.getNaturalHeight());
+                    DisplayInfo di = mDisplayManager.getDisplayInfo(mDisplayManager.getDisplayIds()[0]);
+                    // Up to 22000, the layers seem to be used by apps. Everything above that is systemui or a system alert
+                    // and we don't want these on our screenshot.
+                    Bitmap bmp = SurfaceControl.screenshot(di.getNaturalWidth(), di.getNaturalHeight(), 0, 22000);
                     if (bmp != null) {
                         mKeyguardService.setBackgroundBitmap(bmp);
                         bmp.recycle();
