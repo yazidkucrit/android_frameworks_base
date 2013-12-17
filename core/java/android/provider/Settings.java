@@ -3630,6 +3630,12 @@ public final class Settings {
         public static final String TELO_RADIO_HIGH_POWER = "telo_radio_high_power";
 
         /**
+         * Enable/disable haptic feedback for virtual keys
+         * @hide
+         */
+        public static final String VIRTUAL_KEYS_HAPTIC_FEEDBACK = "virtual_keys_haptic_feedback";
+
+        /**
          * Whether to include audio when recording a video
          * @hide
          */
