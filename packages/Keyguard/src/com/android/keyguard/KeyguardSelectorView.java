@@ -43,6 +43,8 @@ import android.util.Slog;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import java.io.File;
+
 import com.android.internal.telephony.IccCardConstants.State;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.internal.widget.multiwaveview.GlowPadView;

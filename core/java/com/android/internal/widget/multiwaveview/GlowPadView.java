@@ -1291,6 +1291,14 @@ public class GlowPadView extends View {
         }
     }
 
+    public void setHandleDrawable(TargetDrawable d) {
+        float x = mHandleDrawable.getPositionX();
+        float y = mHandleDrawable.getPositionY();
+        mHandleDrawable = new TargetDrawable(d);
+        mHandleDrawable.setPositionX(x);
+        mHandleDrawable.setPositionY(y);
+    }
+
     public void setOnTriggerListener(OnTriggerListener listener) {
         mOnTriggerListener = listener;
     }
@@ -1466,5 +1474,15 @@ public class GlowPadView extends View {
     public void setArc(float angle, int color) {
         mArcAngle = angle;
         mArcPaint.setColor(color);
+    }
+
+    public void setHandleDrawable(Drawable handle) {
+        Resources res = mContext.getResources();
+        if (handle != null) {
+            mHandleDrawable = new TargetDrawable(res, handle);
+        } else {
+            mHandleDrawable = new TargetDrawable(res, 0);
+        }
+        mHandleDrawable.setState(TargetDrawable.STATE_INACTIVE);
     }
 }
