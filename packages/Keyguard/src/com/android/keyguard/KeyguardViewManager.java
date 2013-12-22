@@ -271,7 +271,7 @@ public class KeyguardViewManager {
         if (bmp.getWidth() > MAX_BLUR_WIDTH)
             tmpBmp = bmp.createScaledBitmap(bmp, MAX_BLUR_WIDTH, MAX_BLUR_HEIGHT, false);
 
-        Bitmap out = Bitmap.createBitmap(bmp);
+        Bitmap out = Bitmap.createBitmap(tmpBmp);
         RenderScript rs = RenderScript.create(mContext);
 
         Allocation input = Allocation.createFromBitmap(
