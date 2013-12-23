@@ -574,7 +574,7 @@ public class KeyguardViewManager {
     }
 
     void updateShowWallpaper(boolean show) {
-        if (isSeeThrough()) show = false;
+        if (mSeeThrough()) show = false;
 
         if (show) {
             mWindowLayoutParams.flags |= WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
