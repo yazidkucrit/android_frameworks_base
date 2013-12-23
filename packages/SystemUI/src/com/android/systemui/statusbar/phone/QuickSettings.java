@@ -333,6 +333,11 @@ class QuickSettings {
         mModel.refreshBatteryTile();
     }
 
+    private boolean immersiveEnabled() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.IMMERSIVE_MODE, 0) == 1;
+    }
+
     private void addTiles(ViewGroup parent, LayoutInflater inflater, boolean addMissing) {
         // Load all the customizable tiles. If not yet modified by the user, load default ones.
         // After enabled tiles are loaded, proceed to load missing tiles and set them to View.GONE.
@@ -373,6 +378,14 @@ class QuickSettings {
                                 mContext.startActivityAsUser(intent,
                                         new UserHandle(UserHandle.USER_CURRENT));
                             }
+                        }
+                    });
+
+                    userTile.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            startSettingsActivity(android.provider.Settings.ACTION_SYNC_SETTINGS);
+                            return true;
                         }
                     });
 
@@ -457,7 +470,8 @@ class QuickSettings {
                         public boolean onLongClick(View v) {
                             startSettingsActivity(android.provider.Settings.ACTION_WIFI_SETTINGS);
                             return true;
-                        }} );
+                        }
+                    });
 
                     mModel.addWifiTile(wifiTile, new NetworkActivityCallback() {
                         @Override
@@ -537,6 +551,15 @@ class QuickSettings {
                                 mRotationLockController.setRotationLocked(!locked);
                             }
                         });
+
+                        rotationLockTile.setOnLongClickListener(new View.OnLongClickListener() {
+                            @Override
+                            public boolean onLongClick(View v) {
+                                startSettingsActivity(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                                return true;
+                            }
+                        });
+
                         mModel.addRotationLockTile(rotationLockTile, mRotationLockController,
                                 new QuickSettingsModel.RefreshCallback() {
                                     @Override
@@ -651,7 +674,8 @@ class QuickSettings {
                                 startSettingsActivity(
                                         android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
                                 return true;
-                            }});
+                            }
+                        });
 
                         mModel.addBluetoothTile(bluetoothTile,
                                 new QuickSettingsModel.RefreshCallback() {
@@ -697,7 +721,8 @@ class QuickSettings {
                             startSettingsActivity(
                                     android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                             return true; // Consume click
-                        }} );
+                        }
+                    });
 
                     mModel.addLocationTile(locationTile,
                             new QuickSettingsModel.BasicRefreshCallback(locationTile));
@@ -706,23 +731,27 @@ class QuickSettings {
                 } else if(Tile.IMMERSIVE.toString().equals(tile.toString())) { // Immersive mode
                     final QuickSettingsBasicTile immersiveTile
                             = new QuickSettingsBasicTile(mContext);
+                    final boolean immersiveModeOn = immersiveEnabled();
                     immersiveTile.setTileId(Tile.IMMERSIVE);
-                    immersiveTile.setImageResource(R.drawable.ic_qs_immersive_off);
-                    immersiveTile.setTextResource(R.string.quick_settings_immersive_mode_off_label);
+                    immersiveTile.setImageResource(immersiveModeOn
+                                 ? R.drawable.ic_qs_immersive_on
+                                 : R.drawable.ic_qs_immersive_off);
+                    immersiveTile.setTextResource(immersiveModeOn
+                                 ? R.string.quick_settings_immersive_mode_label
+                                 : R.string.quick_settings_immersive_mode_off_label);
                     immersiveTile.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             collapsePanels();
-                            boolean immersiveModeOn = Settings.System.getInt(mContext
-                                    .getContentResolver(), Settings.System.IMMERSIVE_MODE, 0) == 1;
-                            immersiveTile.setImageResource(immersiveModeOn
+                            boolean immersiveOn = immersiveEnabled();
+                            immersiveTile.setImageResource(immersiveOn
                                     ? R.drawable.ic_qs_immersive_off :
                                             R.drawable.ic_qs_immersive_on);
-                            immersiveTile.setTextResource(immersiveModeOn
+                            immersiveTile.setTextResource(immersiveOn
                                     ? R.string.quick_settings_immersive_mode_off_label :
                                             R.string.quick_settings_immersive_mode_label);
                             Settings.System.putInt(mContext.getContentResolver(),
-                                    Settings.System.IMMERSIVE_MODE, immersiveModeOn ? 0 : 1);
+                                    Settings.System.IMMERSIVE_MODE, immersiveOn ? 0 : 1);
                         }
                     });
                     parent.addView(immersiveTile);
