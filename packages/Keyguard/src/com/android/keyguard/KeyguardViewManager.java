@@ -573,8 +573,13 @@ public class KeyguardViewManager {
         mViewManager.updateViewLayout(mKeyguardHost, mWindowLayoutParams);
     }
 
+    private boolean isSeeThroughEnabled() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_SEE_THROUGH, 0) == 1;
+    }
+
     void updateShowWallpaper(boolean show) {
-        if (mSeeThrough()) show = false;
+        if (isSeeThroughEnabled()) show = false;
 
         if (show) {
             mWindowLayoutParams.flags |= WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
