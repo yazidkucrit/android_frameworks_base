@@ -44,7 +44,6 @@ public class NotificationPanelView extends PanelView {
     private int mFingers;
     private PhoneStatusBar mStatusBar;
     private boolean mOkToFlip;
-    private static final float mQuickPullDownPercentage = 0.8f;
 
     public NotificationPanelView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -128,8 +127,6 @@ public class NotificationPanelView extends PanelView {
                     } else if (event.getX(0) < getWidth() * (1.0f - STATUS_BAR_LEFT_PERCENTAGE) &&
                             Settings.System.getIntForUser(getContext().getContentResolver(),
                             Settings.System.QS_QUICK_PULLDOWN, 1, UserHandle.USER_CURRENT) == 2) {
-                        flip = true;
-                    } else if (event.getX(0) > getWidth() * mQuickPullDownPercentage) {
                         flip = true;
                     }
                     break;
