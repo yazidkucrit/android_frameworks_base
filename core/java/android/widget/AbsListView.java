@@ -82,7 +82,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.RemoteViews.OnClickHandler;
 
 import com.android.internal.R;
-import com.android.internal.util.aokp.AwesomeAnimationHelper;
+import com.android.internal.util.AOSPAL.AwesomeAnimationHelper;
 import java.util.ArrayList;
 import java.util.List;
 
