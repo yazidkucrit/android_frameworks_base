@@ -38,4 +38,7 @@
     <!-- [CHAR LIMIT=10] Running services, summary of foreground processes -->
     <string name="service_used_mem"><xliff:g id="memory">%1$s</xliff:g> used</string>
 
+    <!-- NFC Quicksettings tile -->
+    <string name="quick_settings_nfc_label">NFC on</string>
+    <string name="quick_settings_nfc_off_label">NFC off</string>
 </resources>
