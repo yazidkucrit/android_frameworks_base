@@ -41,4 +41,8 @@
     <!-- NFC Quicksettings tile -->
     <string name="quick_settings_nfc_label">NFC on</string>
     <string name="quick_settings_nfc_off_label">NFC off</string>
+
+    <!-- ADB ober network quicksettings tile -->
+    <string name="quick_settings_adb_label">ADB over network on</string>
+    <string name="quick_settings_adb_off_label">ADB over network off</string>
 </resources>

@@ -2793,6 +2793,12 @@ public final class Settings {
         public static final String QUICK_SETTINGS_TILES = "quick_settings_tiles";
 
         /**
+         * Enable ADB over network tile
+         * @hide
+         */
+        public static final String QUICK_SETTINGS_ADB_TILE = "quick_settings_adb_tile";
+
+        /**
          * Setting to show the battery percentage text
          * @hide
          */
