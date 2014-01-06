@@ -2903,6 +2903,13 @@ public final class Settings {
         public static final String STATUSBAR_CLOCK_DATE_FORMAT = "statusbar_clock_date_format";
 
         /**
+         * Should Flip to Silence be used
+         *
+         * @hide
+         */
+        public static final String FLIP_ACTION_KEY = "flip_action";
+
+        /**
          * Setting to show the battery percentage text
          * @hide
          */
