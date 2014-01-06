@@ -382,14 +382,12 @@ final class DisplayPowerController {
     private final ServiceConnection mKeyguardConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            if (DEBUG) Log.v(TAG, "*** Keyguard connected (yay!)");
             mKeyguardService = new KeyguardServiceWrapper(
                     IKeyguardService.Stub.asInterface(service));
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            if (DEBUG) Log.v(TAG, "*** Keyguard disconnected (boo!)");
             mKeyguardService = null;
         }
 
@@ -403,13 +401,13 @@ final class DisplayPowerController {
             DisplayManagerService displayManager,
             SuspendBlocker displaySuspendBlocker, DisplayBlanker displayBlanker,
             Callbacks callbacks, Handler callbackHandler) {
-        mContext = context;
         mHandler = new DisplayControllerHandler(looper);
         mNotifier = notifier;
         mDisplaySuspendBlocker = displaySuspendBlocker;
         mDisplayBlanker = displayBlanker;
         mCallbacks = callbacks;
         mCallbackHandler = callbackHandler;
+        mContext = context;
 
         mLights = lights;
         mTwilight = twilight;
@@ -481,12 +479,8 @@ final class DisplayPowerController {
 
         Intent intent = new Intent();
         intent.setClassName("com.android.keyguard", "com.android.keyguard.KeyguardService");
-        if (!context.bindServiceAsUser(intent, mKeyguardConnection,
-                Context.BIND_AUTO_CREATE, UserHandle.OWNER)) {
-            Log.e(TAG, "*** Keyguard: can't bind to keyguard");
-        } else {
-            Log.e(TAG, "*** Keyguard started");
-        }
+        context.bindServiceAsUser(intent, mKeyguardConnection,
+                Context.BIND_AUTO_CREATE, UserHandle.OWNER);
     }
 
     private void updateAutomaticBrightnessSettings() {
@@ -607,6 +601,10 @@ final class DisplayPowerController {
      */
     public boolean requestPowerState(DisplayPowerRequest request,
             boolean waitForNegativeProximity) {
+
+        final int MAX_BLUR_WIDTH = 900;
+        final int MAX_BLUR_HEIGHT = 1600;
+
         if (DEBUG) {
             Slog.d(TAG, "requestPowerState: "
                     + request + ", waitForNegativeProximity=" + waitForNegativeProximity);
@@ -633,18 +631,31 @@ final class DisplayPowerController {
                 mDisplayReadyLocked = false;
             }
 
+            boolean seeThrough = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.LOCKSCREEN_SEE_THROUGH, 0) == 1;
             if (changed && !mPendingRequestChangedLocked) {
                 if ((mKeyguardService == null || !mKeyguardService.isShowing()) &&
                             request.screenState == DisplayPowerRequest.SCREEN_STATE_OFF &&
-                            Settings.System.getInt(mContext.getContentResolver(),
-                                    Settings.System.LOCKSCREEN_SEE_THROUGH, 0) == 1) {
-                        DisplayInfo di = mDisplayManager.getDisplayInfo(mDisplayManager.getDisplayIds()[0]);
-                    Bitmap bmp = SurfaceControl.screenshot(di.getNaturalWidth(), di.getNaturalHeight());
+                            seeThrough) {
+                    DisplayInfo di = mDisplayManager
+                            .getDisplayInfo(mDisplayManager.getDisplayIds() [0]);
+                    /* Limit max screenshot capture layer to 22000.
+                       Prevents status bar and navigation bar from being captured.*/ 
+                    Bitmap bmp = SurfaceControl
+                            .screenshot(di.getNaturalWidth(),di.getNaturalHeight(), 0, 22000);
                     if (bmp != null) {
-                        mKeyguardService.setBackgroundBitmap(bmp);
+                        Bitmap tmpBmp = bmp;
+
+                        // scale image if its too large
+                        if (bmp.getWidth() > MAX_BLUR_WIDTH) {
+                                tmpBmp = bmp.createScaledBitmap(bmp, MAX_BLUR_WIDTH, MAX_BLUR_HEIGHT, true);
+                        }
+
+                        mKeyguardService.setBackgroundBitmap(tmpBmp);
                         bmp.recycle();
+                        tmpBmp.recycle();
                     }
-                }
+                } else if (!seeThrough) mKeyguardService.setBackgroundBitmap(null);
                 mPendingRequestChangedLocked = true;
                 sendUpdatePowerStateLocked();
             }
