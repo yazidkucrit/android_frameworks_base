@@ -2438,6 +2438,12 @@ public final class Settings {
         public static final String POINTER_LOCATION = "pointer_location";
 
         /**
+         * Reverse default app picker behaviour
+         * @hide
+         */
+        public static final String REVERSE_DEFAULT_APP_PICKER = "reverse_default_app_picker";
+
+        /**
          * Show touch positions on screen?
          * 0 = no
          * 1 = yes
@@ -2692,6 +2698,18 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_NOTIFICATIONS_HEIGHT = "lockscreen_notifications_height";
+        
+        /**
+         * Changes the offset of the notifications to the top of the screen
+         * @hide
+         */
+        public static final String LOCKSCREEN_NOTIFICATIONS_OFFSET_TOP = "lockscreen_notifications_offset_top";
+        
+        /**
+         * Enables a privacy mode which disables showing notifications.
+         * @hide
+         */
+        public static final String LOCKSCREEN_NOTIFICATIONS_PRIVACY_MODE = "lockscreen_notifications_privacy_mode";
 
         /**
          * MediaScanner behavior on boot.
@@ -2713,6 +2731,12 @@ public final class Settings {
             "navigation_ring_targets_1",
             "navigation_ring_targets_2",
         };
+
+        /**
+         * Wether navigation bar is enabled or not
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_SHOW = "navigation_bar_show";
 
         /**
          * Whether to show the network status in the status bar
@@ -2770,6 +2794,8 @@ public final class Settings {
          * Immersive mode global actions switch
          * 0 = no
          * 1 = yes
+         * 2 = hide navbar
+         * 3 = hide statusbar
          * @hide
          */
         public static final String IMMERSIVE_MODE = "immersive_mode";
@@ -2779,6 +2805,12 @@ public final class Settings {
          * @hide
          */
         public static final String QUICK_SETTINGS_TILES = "quick_settings_tiles";
+
+        /**
+         * Enable ADB over network tile
+         * @hide
+         */
+        public static final String QUICK_SETTINGS_ADB_TILE = "quick_settings_adb_tile";
 
         /**
          * Setting to show the battery percentage text
@@ -3873,7 +3905,13 @@ public final class Settings {
          * The TCP/IP port to run ADB on, or -1 for USB
          * @hide
          */
+
         public static final String ADB_PORT = "adb_port";
+        /**
+        * Whether to display the ADB notification.
+        * @hide
+        */
+        public static final String ADB_NOTIFY = "adb_notify";
 
         /**
          * The hostname for this device
