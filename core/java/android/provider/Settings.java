@@ -2901,13 +2901,6 @@ public final class Settings {
         public static final String RECENTS_RAM_BAR_CACHE_COLOR = "recents_ram_bar_cache_color";
 
         /**
-         * Volume key controls ringtone or media sound stream
-         *
-         * @hide
-         */
-        public static final String VOLUME_KEYS_CONTROL_MEDIA_STREAM = "volume_keys_control_media_stream";
-
-        /**
          * Ram Usage Bar app mem color
          *
          * @hide
