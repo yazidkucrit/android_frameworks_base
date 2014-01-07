@@ -34,6 +34,7 @@ import static android.net.ConnectivityManager.TYPE_WIFI;
 import static android.net.ConnectivityManager.TYPE_WIMAX;
 import static android.net.ConnectivityManager.isNetworkTypeMobile;
 import static android.net.NetworkPolicy.CYCLE_NONE;
+import static android.net.NetworkPolicy.CYCLE_MONTHLY;
 import static android.net.NetworkPolicy.LIMIT_DISABLED;
 import static android.net.NetworkPolicy.SNOOZE_NEVER;
 import static android.net.NetworkPolicy.WARNING_DISABLED;
@@ -133,7 +134,6 @@ import com.android.internal.R;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.util.FastXmlSerializer;
 import com.android.internal.util.IndentingPrintWriter;
-import com.android.internal.util.Objects;
 import com.google.android.collect.Lists;
 import com.google.android.collect.Maps;
 import com.google.android.collect.Sets;
@@ -155,6 +155,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import libcore.io.IoUtils;
 
@@ -201,6 +202,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
     private static final String ATTR_SUBSCRIBER_ID = "subscriberId";
     private static final String ATTR_NETWORK_ID = "networkId";
     private static final String ATTR_CYCLE_DAY = "cycleDay";
+    private static final String ATTR_CYCLE_LENGTH = "cycleLength";
     private static final String ATTR_CYCLE_TIMEZONE = "cycleTimezone";
     private static final String ATTR_WARNING_BYTES = "warningBytes";
     private static final String ATTR_LIMIT_BYTES = "limitBytes";
@@ -583,7 +585,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
                 if (policy == null && meteredHint) {
                     // policy doesn't exist, and AP is hinting that it's
                     // metered: create an inferred policy.
-                    policy = new NetworkPolicy(template, CYCLE_NONE, Time.TIMEZONE_UTC,
+                    policy = new NetworkPolicy(template, CYCLE_NONE, CYCLE_MONTHLY, Time.TIMEZONE_UTC,
                             WARNING_DISABLED, LIMIT_DISABLED, SNOOZE_NEVER, SNOOZE_NEVER,
                             meteredHint, true);
                     addNetworkPolicyLocked(policy);
@@ -688,7 +690,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
                 // mobile templates are relevant when SIM is ready and
                 // subscriberId matches.
                 if (tele.getSimState() == SIM_STATE_READY) {
-                    return Objects.equal(tele.getSubscriberId(), template.getSubscriberId());
+                    return Objects.equals(tele.getSubscriberId(), template.getSubscriberId());
                 } else {
                     return false;
                 }
@@ -946,7 +948,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
                 // TODO: offer more granular control over radio states once
                 // 4965893 is available.
                 if (tele.getSimState() == SIM_STATE_READY
-                        && Objects.equal(tele.getSubscriberId(), template.getSubscriberId())) {
+                        && Objects.equals(tele.getSubscriberId(), template.getSubscriberId())) {
                     setPolicyDataEnable(TYPE_MOBILE, enabled);
                     setPolicyDataEnable(TYPE_WIMAX, enabled);
                 }
@@ -1126,11 +1128,13 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
             time.setToNow();
 
             final int cycleDay = time.monthDay;
+            final int cycleLength = CYCLE_MONTHLY;
             final String cycleTimezone = time.timezone;
 
             final NetworkTemplate template = buildTemplateMobileAll(subscriberId);
-            final NetworkPolicy policy = new NetworkPolicy(template, cycleDay, cycleTimezone,
-                    warningBytes, LIMIT_DISABLED, SNOOZE_NEVER, SNOOZE_NEVER, true, true);
+            final NetworkPolicy policy = new NetworkPolicy(template, cycleDay, cycleLength, 
+            		cycleTimezone, warningBytes, LIMIT_DISABLED, SNOOZE_NEVER, SNOOZE_NEVER, 
+            		true, true);
             addNetworkPolicyLocked(policy);
         }
     }
@@ -1172,6 +1176,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
                             networkId = null;
                         }
                         final int cycleDay = readIntAttribute(in, ATTR_CYCLE_DAY);
+                        final int cycleLength = readIntAttribute(in, ATTR_CYCLE_LENGTH);
                         final String cycleTimezone;
                         if (version >= VERSION_ADDED_TIMEZONE) {
                             cycleTimezone = in.getAttributeValue(null, ATTR_CYCLE_TIMEZONE);
@@ -1218,8 +1223,8 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
                         final NetworkTemplate template = new NetworkTemplate(
                                 networkTemplate, subscriberId, networkId);
                         mNetworkPolicy.put(template, new NetworkPolicy(template, cycleDay,
-                                cycleTimezone, warningBytes, limitBytes, lastWarningSnooze,
-                                lastLimitSnooze, metered, inferred));
+                                cycleLength, cycleTimezone, warningBytes, limitBytes, 
+                                lastWarningSnooze, lastLimitSnooze, metered, inferred));
 
                     } else if (TAG_UID_POLICY.equals(tag)) {
                         final int uid = readIntAttribute(in, ATTR_UID);
@@ -1303,6 +1308,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
                     out.attribute(null, ATTR_NETWORK_ID, networkId);
                 }
                 writeIntAttribute(out, ATTR_CYCLE_DAY, policy.cycleDay);
+                writeIntAttribute(out, ATTR_CYCLE_LENGTH, policy.cycleLength); 
                 out.attribute(null, ATTR_CYCLE_TIMEZONE, policy.cycleTimezone);
                 writeLongAttribute(out, ATTR_WARNING_BYTES, policy.warningBytes);
                 writeLongAttribute(out, ATTR_LIMIT_BYTES, policy.limitBytes);

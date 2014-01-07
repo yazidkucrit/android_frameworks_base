@@ -30,6 +30,7 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaRouter;
 import android.media.MediaRouter.RouteInfo;
 import android.net.ConnectivityManager;
+import android.nfc.NfcAdapter;
 import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
@@ -223,12 +224,49 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         }
     }
 
+    /** Broadcast receiver for NFC State */
+    private final BroadcastReceiver mNfcReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (NfcAdapter.ACTION_ADAPTER_STATE_CHANGED.equals(action)) {
+                int state = intent.getIntExtra(NfcAdapter.EXTRA_ADAPTER_STATE,
+                        NfcAdapter.STATE_OFF);
+                boolean nfcEnabled = state == NfcAdapter.STATE_ON ||
+                        state == NfcAdapter.STATE_TURNING_ON;
+                onNfcSettingsChanged(nfcEnabled);
+            }
+        }
+    };
+
+    /** ContentObserver observing changes of adb over network */
+    private class AdbObserver extends ContentObserver {
+        public AdbObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override public void onChange(boolean selfChange) {
+            onAdbChanged();
+        }
+
+        public void startObserving() {
+            final ContentResolver cr = mContext.getContentResolver();
+            cr.registerContentObserver(
+                    Settings.Secure.getUriFor(Settings.Secure.ADB_PORT), false, this,
+                    UserHandle.USER_ALL);
+            cr.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.QUICK_SETTINGS_ADB_TILE), false, this,
+                    UserHandle.USER_ALL);
+        }
+    }
+
     private final Context mContext;
     private final Handler mHandler;
     private final CurrentUserTracker mUserTracker;
     private final NextAlarmObserver mNextAlarmObserver;
     private final BugreportObserver mBugreportObserver;
     private final BrightnessObserver mBrightnessObserver;
+    private final AdbObserver mAdbObserver;
 
     private final MediaRouter mMediaRouter;
     private final RemoteDisplayRouteCallback mRemoteDisplayRouteCallback;
@@ -299,6 +337,14 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
     private RefreshCallback mSslCaCertWarningCallback;
     private State mSslCaCertWarningState = new State();
 
+    private QuickSettingsTileView mNfcTile;
+    private RefreshCallback mNfcCallback;
+    private State mNfcState = new State();
+
+    private QuickSettingsTileView mAdbTile;
+    private RefreshCallback mAdbCallback;
+    private State mAdbState = new State();
+
     private RotationLockController mRotationLockController;
 
     public QuickSettingsModel(Context context) {
@@ -322,6 +368,8 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         mBugreportObserver.startObserving();
         mBrightnessObserver = new BrightnessObserver(mHandler);
         mBrightnessObserver.startObserving();
+        mAdbObserver = new AdbObserver(mHandler);
+        mAdbObserver.startObserving();
 
         mMediaRouter = (MediaRouter)context.getSystemService(Context.MEDIA_ROUTER_SERVICE);
         rebindMediaRouterAsCurrentUser();
@@ -335,6 +383,10 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         IntentFilter alarmIntentFilter = new IntentFilter();
         alarmIntentFilter.addAction(Intent.ACTION_ALARM_CHANGED);
         context.registerReceiver(mAlarmIntentReceiver, alarmIntentFilter);
+
+        IntentFilter nfcIntentFilter = new IntentFilter();
+        nfcIntentFilter.addAction(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED);
+        context.registerReceiver(mNfcReceiver, nfcIntentFilter);
     }
 
     void updateResources() {
@@ -637,6 +689,47 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         mLocationState.label = label;
         mLocationState.iconId = locationIconId;
         mLocationCallback.refreshView(mLocationTile, mLocationState);
+    }
+
+    // NFC
+    void addNfcTile(QuickSettingsTileView view, RefreshCallback cb) {
+        mNfcTile = view;
+        mNfcCallback = cb;
+        mNfcCallback.refreshView(view, mNfcState);
+    }
+    void onNfcSettingsChanged(boolean nfcEnabled) {
+        int textResId = nfcEnabled ? R.string.quick_settings_nfc_label
+                : R.string.quick_settings_nfc_off_label;
+        String label = mContext.getText(textResId).toString();
+        int nfcIconId = nfcEnabled
+                ? R.drawable.ic_qs_nfc_on : R.drawable.ic_qs_nfc_off;
+        mNfcState.enabled = nfcEnabled;
+        mNfcState.label = label;
+        mNfcState.iconId = nfcIconId;
+        mNfcCallback.refreshView(mNfcTile, mNfcState);
+    }
+
+    //Adb
+    void addAdbTile(QuickSettingsTileView view, RefreshCallback cb) {
+        mAdbTile = view;
+        mAdbCallback = cb;
+        mAdbCallback.refreshView(view, mAdbState);
+
+    }
+    void onAdbChanged() {
+        if (mAdbTile != null) {
+            boolean enabled = Settings.Secure.getInt(mContext.getContentResolver(),
+                    Settings.Secure.ADB_PORT, -1) != -1;
+            mAdbState.enabled = enabled;
+            int textResId = enabled ? R.string.quick_settings_adb_label
+                    : R.string.quick_settings_adb_off_label;
+            String label = mContext.getText(textResId).toString();
+            int iconId = enabled
+                    ? R.drawable.ic_qs_adb_on : R.drawable.ic_qs_adb_off;
+            mAdbState.label = label;
+            mAdbState.iconId = iconId;
+            mAdbCallback.refreshView(mAdbTile, mAdbState);
+        }
     }
 
     // Bug report

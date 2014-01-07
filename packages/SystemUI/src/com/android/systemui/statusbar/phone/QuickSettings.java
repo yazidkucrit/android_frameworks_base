@@ -31,6 +31,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.UserInfo;
 import android.content.res.Resources;
@@ -42,6 +43,7 @@ import android.hardware.display.DisplayManager;
 import android.media.MediaRouter;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.nfc.NfcAdapter;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.RemoteException;
@@ -102,7 +104,9 @@ class QuickSettings {
         AIRPLANE,
         BLUETOOTH,
         LOCATION,
-        IMMERSIVE
+        IMMERSIVE,
+        NFC,
+        ADB
     }
 
     public static final String NO_TILES = "NO_TILES";
@@ -140,6 +144,8 @@ class QuickSettings {
     private BatteryMeterView mBattery;
     private BatteryCircleMeterView mCircleBattery;
     private int mBatteryStyle;
+
+    private int mLastImmersiveMode = 2;
 
     public QuickSettings(Context context, QuickSettingsContainerView container) {
         mDevicePolicyManager
@@ -325,7 +331,7 @@ class QuickSettings {
         mContext.startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
         collapsePanels();
     }
-    
+
     public void updateBattery() {
         if (mBattery == null || mModel == null) {
             return;
@@ -337,9 +343,18 @@ class QuickSettings {
         mModel.refreshBatteryTile();
     }
 
-    private boolean immersiveEnabled() {
+    private int getImmersiveMode() {
         return Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.IMMERSIVE_MODE, 0) == 1;
+                    Settings.System.IMMERSIVE_MODE, 0);
+    }
+
+    private boolean isNfcSupported() {
+        return mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_NFC);
+    }
+    
+    private boolean isAdbTileEnabled() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.QUICK_SETTINGS_ADB_TILE, 0) == 1;
     }
 
     private void addTiles(ViewGroup parent, LayoutInflater inflater, boolean addMissing) {
@@ -742,31 +757,88 @@ class QuickSettings {
                 } else if(Tile.IMMERSIVE.toString().equals(tile.toString())) { // Immersive mode
                     final QuickSettingsBasicTile immersiveTile
                             = new QuickSettingsBasicTile(mContext);
-                    final boolean immersiveModeOn = immersiveEnabled();
+                    final int immersiveMode = getImmersiveMode();
                     immersiveTile.setTileId(Tile.IMMERSIVE);
-                    immersiveTile.setImageResource(immersiveModeOn
+                    immersiveTile.setImageResource(immersiveMode != 0
                                  ? R.drawable.ic_qs_immersive_on
                                  : R.drawable.ic_qs_immersive_off);
-                    immersiveTile.setTextResource(immersiveModeOn
+                    immersiveTile.setTextResource(immersiveMode != 0
                                  ? R.string.quick_settings_immersive_mode_label
                                  : R.string.quick_settings_immersive_mode_off_label);
                     immersiveTile.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             collapsePanels();
-                            boolean immersiveOn = immersiveEnabled();
-                            immersiveTile.setImageResource(immersiveOn
+                            int immersive = getImmersiveMode();
+                            immersive = immersive == 0 ? 1 : 0;
+                            immersiveTile.setImageResource(immersive == 0
                                     ? R.drawable.ic_qs_immersive_off :
                                             R.drawable.ic_qs_immersive_on);
-                            immersiveTile.setTextResource(immersiveOn
+                            immersiveTile.setTextResource(immersive == 0
                                     ? R.string.quick_settings_immersive_mode_off_label :
                                             R.string.quick_settings_immersive_mode_label);
                             Settings.System.putInt(mContext.getContentResolver(),
-                                    Settings.System.IMMERSIVE_MODE, immersiveOn ? 0 : 1);
+                                    Settings.System.IMMERSIVE_MODE, immersive);
+                        }
+                    });
+                    immersiveTile.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            collapsePanels();
+                            int immersive = getImmersiveMode();
+                            if (immersive == 0 || immersive == 1) { 
+                                immersiveTile.setImageResource(R.drawable.ic_qs_immersive_on);
+                                immersiveTile.setTextResource(R.string.quick_settings_immersive_mode_label);
+                                Settings.System.putInt(mContext.getContentResolver(),
+                                        Settings.System.IMMERSIVE_MODE, mLastImmersiveMode);
+                            } else {
+                                mLastImmersiveMode = mLastImmersiveMode == 3 ? 2 : 3;
+                                Settings.System.putInt(mContext.getContentResolver(),
+                                        Settings.System.IMMERSIVE_MODE, mLastImmersiveMode);
+                            }
+                            return true;
                         }
                     });
                     parent.addView(immersiveTile);
                     if(addMissing) immersiveTile.setVisibility(View.GONE);
+                } else if(Tile.NFC.toString().equals(tile.toString()) && isNfcSupported()) {
+                    final QuickSettingsBasicTile nfcTile = new QuickSettingsBasicTile(mContext);
+                    nfcTile.setTileId(Tile.NFC);
+                    NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(mContext);
+                    boolean nfcEnabled = nfcAdapter != null ? nfcAdapter.isEnabled() : false;
+                    nfcTile.setImageResource(nfcEnabled ?
+                            R.drawable.ic_qs_nfc_on :
+                            R.drawable.ic_qs_nfc_off);
+                    nfcTile.setTextResource(nfcEnabled ?
+                            R.string.quick_settings_nfc_label :
+                            R.string.quick_settings_nfc_off_label);
+                    nfcTile.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            //We have to use that deprecated function here, 
+                            //because getDefaultAdapter(mContext) always returns null with the context we get on boot
+                            NfcAdapter adapter = NfcAdapter.getDefaultAdapter();
+                            if (adapter != null) {
+                                boolean enabled = adapter.isEnabled();
+                                if (enabled) {
+                                    adapter.disable();
+                                } else {
+                                    adapter.enable();
+                                }
+                                enabled = !enabled;
+                                nfcTile.setImageResource(enabled ?
+                                        R.drawable.ic_qs_nfc_on :
+                                        R.drawable.ic_qs_nfc_off);
+                                nfcTile.setTextResource(enabled ?
+                                        R.string.quick_settings_nfc_label :
+                                        R.string.quick_settings_nfc_off_label);
+                            }
+                        }
+                    });
+                    mModel.addNfcTile(nfcTile, new QuickSettingsModel.BasicRefreshCallback(nfcTile));
+                    parent.addView(nfcTile);
+                    if(addMissing) nfcTile.setVisibility(View.GONE);
                 }
             }
         }
@@ -905,6 +977,48 @@ class QuickSettings {
                 new QuickSettingsModel.BasicRefreshCallback(sslCaCertWarningTile)
                         .setShowWhenEnabled(true));
         parent.addView(sslCaCertWarningTile);
+
+        // ADB over network
+        final QuickSettingsBasicTile adbTile = new QuickSettingsBasicTile(mContext);
+        adbTile.setTemporary(true);
+        boolean adbEnabled = Settings.Secure.getInt(mContext.getContentResolver(),
+                Settings.Secure.ADB_PORT, -1) != -1;
+        adbTile.setImageResource(adbEnabled ?
+                R.drawable.ic_qs_adb_on :
+                R.drawable.ic_qs_adb_off);
+        adbTile.setTextResource(adbEnabled ?
+                R.string.quick_settings_adb_label :
+                R.string.quick_settings_adb_off_label);
+        adbTile.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                boolean enabled = Settings.Secure.getInt(mContext.getContentResolver(),
+                        Settings.Secure.ADB_PORT, -1) != -1;
+                if (enabled) {
+                    Settings.Secure.putInt(mContext.getContentResolver(),
+                        Settings.Secure.ADB_PORT, -1);
+                } else {
+                    Settings.Secure.putInt(mContext.getContentResolver(),
+                            Settings.Secure.ADB_PORT, 5555);
+                }
+                enabled = !enabled;
+                adbTile.setImageResource(enabled ?
+                        R.drawable.ic_qs_adb_on :
+                        R.drawable.ic_qs_adb_off);
+                adbTile.setTextResource(enabled ?
+                        R.string.quick_settings_adb_label :
+                        R.string.quick_settings_adb_off_label);
+            }
+        });
+        mModel.addAdbTile(adbTile, new QuickSettingsModel.BasicRefreshCallback(adbTile) {
+            @Override
+            public void refreshView(QuickSettingsTileView view, State state) {
+                super.refreshView(view, state);
+                adbTile.setVisibility(isAdbTileEnabled() ? View.VISIBLE : View.GONE);
+            }
+        });
+        parent.addView(adbTile);
     }
 
     List<String> enumToStringArray(Tile[] enumData) {

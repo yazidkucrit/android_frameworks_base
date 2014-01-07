@@ -888,7 +888,6 @@ public final class WifiService extends IWifiManager.Stub {
         return mWifiStateMachine.getCountryCode();
     }
 
-
     /**
      * Set the operational frequency band
      * @param band One of

@@ -35,7 +35,10 @@ import android.app.ActivityManagerNative;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.StatusBarManager;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -50,6 +53,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.inputmethodservice.InputMethodService;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -59,6 +63,8 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.provider.AlarmClock;
+import android.provider.CalendarContract;
+import android.provider.CalendarContract.Events;
 import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
 import android.util.DisplayMetrics;
@@ -219,6 +225,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     // top bar
     View mNotificationPanelHeader;
     View mDateTimeView;
+    View mClockViewExpanded;
+    View mDateViewExpanded;
     View mClearButton;
     ImageView mSettingsButton, mNotificationButton, mEditModeButton;
     boolean mAnimatingEditModeButton;
@@ -231,6 +239,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     private int mNotificationHeaderHeight;
 
     private boolean mShowCarrierInPanel = false;
+
+    private boolean mRecreating = false;
 
     // position
     int[] mPositionTmp = new int[2];
@@ -341,12 +351,22 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         }
 
         void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_CAMERA_WIDGET),
+                    false, this, UserHandle.USER_ALL);
             mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_BATTERY_STYLE), false, this);
         }
 
         @Override
-        public void onChange(boolean selfChange) {
+        public void onChange(boolean selfChange, Uri uri) {
+            if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_CAMERA_WIDGET))) {
+                if (mNavigationBarView != null) {
+                    mNavigationBarView.disableCameraByUser();
+                }
+            }
             updateBatteryIcons();
         }
     }
@@ -540,6 +560,18 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         if (mDateTimeView != null) {
             mDateTimeView.setOnClickListener(mClockClickListener);
             mDateTimeView.setEnabled(true);
+        }
+
+        mClockViewExpanded = mNotificationPanelHeader.findViewById(R.id.clock);
+        if (mClockViewExpanded != null) {
+            mClockViewExpanded.setOnClickListener(mClockClickListener);
+            mClockViewExpanded.setOnLongClickListener(mClockLongClickListener);
+        }
+
+        mDateViewExpanded = mNotificationPanelHeader.findViewById(R.id.date);
+        if (mDateViewExpanded != null) {
+            mDateViewExpanded.setOnClickListener(mDateClickListener);
+            mDateViewExpanded.setOnLongClickListener(mDateLongClickListener);
         }
 
         mSettingsButton = (ImageView) mStatusBarWindow.findViewById(R.id.settings_button);
@@ -2035,6 +2067,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         }
     }
 
+    @Override  // CommandQueue
+    public void setAutoRotate(boolean enabled) {
+        Settings.System.putInt(mContext.getContentResolver(),
+                Settings.System.ACCELEROMETER_ROTATION,
+                enabled ? 1 : 0);
+    }
+
     private int computeBarMode(int oldVis, int newVis, BarTransitions transitions,
             int transientFlag, int translucentFlag) {
         final int oldMode = barMode(oldVis, transientFlag, translucentFlag);
@@ -2183,6 +2222,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
     @Override
     protected void tick(IBinder key, StatusBarNotification n, boolean firstTime) {
+        // we are in the process of recreating the statusbar
+        // so nothing to do right now
+        if (mRecreating) {
+            return;
+        }
         // no ticking in lights-out mode
         if (!areLightsOn()) return;
 
@@ -2538,7 +2582,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         } catch (RemoteException e) {
         }
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        mContext.startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
+        try {
+            mContext.startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
+        } catch ( ActivityNotFoundException e) {
+            Log.v(TAG, "ActivityNotFound: " + intent);
+        }
         animateCollapsePanels();
     }
 
@@ -2568,7 +2616,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         }
     };
 
-    private View.OnClickListener mCalendarClickListener = new View.OnClickListener() {
+   private View.OnClickListener mCalendarClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             Intent intent=Intent.makeMainSelectorActivity(Intent.ACTION_MAIN,
                                                         Intent.CATEGORY_APP_CALENDAR);
@@ -2580,6 +2628,36 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         public void onClick(View v) {
             startActivityDismissingKeyguard(
                     new Intent(AlarmClock.ACTION_SHOW_ALARMS), true);
+        }
+    };
+
+    private View.OnLongClickListener mClockLongClickListener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            startActivityDismissingKeyguard(
+                    new Intent(AlarmClock.ACTION_SET_ALARM), true);
+            return true;
+        }
+    };
+
+    private View.OnClickListener mDateClickListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+            builder.appendPath("time");
+            ContentUris.appendId(builder, System.currentTimeMillis());
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(builder.build());
+            startActivityDismissingKeyguard(intent, true);
+        }
+    };
+
+    private View.OnLongClickListener mDateLongClickListener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            Intent intent = new Intent(Intent.ACTION_INSERT);
+            intent.setData(Events.CONTENT_URI);
+            startActivityDismissingKeyguard(intent, true);
+            return true;
         }
     };
 

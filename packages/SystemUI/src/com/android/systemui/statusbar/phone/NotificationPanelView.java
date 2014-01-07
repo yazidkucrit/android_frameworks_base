@@ -20,6 +20,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.EventLog;
 import android.view.MotionEvent;
@@ -33,13 +35,15 @@ import com.android.systemui.statusbar.GestureRecorder;
 public class NotificationPanelView extends PanelView {
     public static final boolean DEBUG_GESTURES = true;
 
+    private static final float STATUS_BAR_LEFT_PERCENTAGE = 0.7f;
+    private static final float STATUS_BAR_RIGHT_PERCENTAGE = 0.3f;
+
     private Drawable mHandleBar;
     private int mHandleBarHeight;
     private View mHandleView;
     private int mFingers;
     private PhoneStatusBar mStatusBar;
     private boolean mOkToFlip;
-    private static final float mQuickPullDownPercentage = 0.8f;
 
     public NotificationPanelView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -111,11 +115,18 @@ public class NotificationPanelView extends PanelView {
             }
         }
         if (PhoneStatusBar.SETTINGS_DRAG_SHORTCUT && mStatusBar.mHasFlipSettings) {
+
             boolean flip = false;
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
                     mOkToFlip = getExpandedHeight() == 0;
-                    if (event.getX(0) > getWidth() * mQuickPullDownPercentage) {
+                    if (event.getX(0) > getWidth() * (1.0f - STATUS_BAR_RIGHT_PERCENTAGE) &&
+                            Settings.System.getIntForUser(getContext().getContentResolver(),
+                            Settings.System.QS_QUICK_PULLDOWN, 1, UserHandle.USER_CURRENT) == 1) {
+                        flip = true;
+                    } else if (event.getX(0) < getWidth() * (1.0f - STATUS_BAR_LEFT_PERCENTAGE) &&
+                            Settings.System.getIntForUser(getContext().getContentResolver(),
+                            Settings.System.QS_QUICK_PULLDOWN, 1, UserHandle.USER_CURRENT) == 2) {
                         flip = true;
                     }
                     break;

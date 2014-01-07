@@ -598,7 +598,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         Slog.d(TAG, "removeUpstreamInterface(" + iface + ")");
 
         try {
-            final Command cmd = new Command("tether", "interface", "remove_upstream");
+            final Command cmd = new Command("tether", "interface", "add_upstream");
             cmd.appendArg(iface);
             mConnector.execute(cmd);
         } catch (NativeDaemonConnectorException e) {
