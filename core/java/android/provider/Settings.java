@@ -2739,6 +2739,12 @@ public final class Settings {
         public static final String NAVIGATION_BAR_SHOW = "navigation_bar_show";
 
         /**
+         * Sets navigation bar height in percent
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_HEIGHT = "navigation_bar_height";
+
+        /**
          * Whether to show the network status in the status bar
          * @hide
          */
