@@ -1585,13 +1585,6 @@ public class WifiStateMachine extends StateMachine {
      * Returns the operational country code
      */
     public String getCountryCode() {
-        return mLastSetCountryCode;
-    }
-
-    /**
-     * Returns the operational country code
-     */
-    public String getCountryCode() {
         return mCountryCode;
     }
 

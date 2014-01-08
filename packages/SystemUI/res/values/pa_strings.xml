@@ -31,7 +31,7 @@
     <!-- QuickSettings: Immersive mode (Off) [CHAR LIMIT=NONE] -->
     <string name="quick_settings_immersive_mode_off_label">Immersive Off</string>
 
-    !-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_data_connection_HP">HSPA+</string>
 
     <!-- Recents Ram Bar -->
