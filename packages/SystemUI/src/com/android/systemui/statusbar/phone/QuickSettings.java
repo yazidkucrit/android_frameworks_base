@@ -851,44 +851,6 @@ class QuickSettings {
                     mModel.addNfcTile(nfcTile, new QuickSettingsModel.BasicRefreshCallback(nfcTile));
                     parent.addView(nfcTile);
                     if(addMissing) nfcTile.setVisibility(View.GONE);
-                } else if (Tile.LTE.toString().equals(tile.toString())) { // LTE
-                    final QuickSettingsBasicTile lteTile
-                            = new QuickSettingsBasicTile(mContext);
-                    lteTile.setTileId(Tile.LTE);
-                    lteTile.setImageResource(R.drawable.ic_qs_lte_on);
-                    lteTile.setTextResource(R.string.quick_settings_lte);
-                    lteTile.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            toggleLteState();
-                        }
-                    });
-
-                    lteTile.setOnLongClickListener(new View.OnLongClickListener() {
-                        @Override
-                        public boolean onLongClick(View v) {
-                            Intent intent = new Intent(Intent.ACTION_MAIN);
-                            intent.setClassName("com.android.phone", "com.android.phone.Settings");
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startSettingsActivity(intent);
-                            return true;
-                        }
-                    });
-
-                    mModel.addLteTile(lteTile, new QuickSettingsModel.RefreshCallback() {
-                        @Override
-                        public void refreshView(QuickSettingsTileView unused, State lteState) {
-                            lteTile.setTextResource(lteState.enabled ?
-                                                        R.string.quick_settings_lte :
-                                                        R.string.quick_settings_lte_off);
-                            lteTile.setImageResource(lteState.enabled ?
-                                                        R.drawable.ic_qs_lte_on :
-                                                        R.drawable.ic_qs_lte_off);
-                        }
-                    });
-
-                    parent.addView(lteTile);
-                    if(addMissing) lteTile.setVisibility(View.GONE);
                 } else if (Tile.MOBILENETWORK.toString().equals(tile.toString())) { // MobileNetwork
                     if (mModel.deviceHasMobileData()) {
                         final QuickSettingsBasicTile mobileNetworkTile
