@@ -3338,6 +3338,18 @@ public final class Settings {
          public static final String VOLUME_KEY_CURSOR_CONTROL = "volume_key_cursor_control";
 
         /**
+         * What application to launch when the user click the clock in the notification bar
+         * @hide
+         */
+        public static final String CLOCK_SHORTCUT = "clock_shortcut";
+
+        /**
+         * What application to launch when the user click the calendar in the notification bar
+         * @hide
+         */
+        public static final String CALENDAR_SHORTCUT = "calendar_shortcut";
+
+        /**
          * Override and forcefully disable the fullscreen keyboard
          * @hide
          */

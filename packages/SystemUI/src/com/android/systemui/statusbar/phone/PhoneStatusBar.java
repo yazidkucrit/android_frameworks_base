@@ -125,6 +125,7 @@ import com.android.systemui.statusbar.policy.RotationLockController;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.lang.StringBuilder;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
@@ -286,6 +287,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
     // the date view
     DateView mDateView;
+    View mClockView;
 
     // for heads up notifications
     private HeadsUpNotificationView mHeadsUpNotificationView;
@@ -880,16 +882,21 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         mClearButton.setVisibility(View.INVISIBLE);
         mClearButton.setEnabled(false);
         mDateView = (DateView)mStatusBarWindow.findViewById(R.id.date);
+        if (mDateView != null) {
+            mDateView.setOnClickListener(mCalendarClickListener);
+            mDateView.setEnabled(true);
+        }
+        mClockView = mNotificationPanelHeader.findViewById(R.id.clock);
+        if (mClockView != null) {
+            mClockView.setOnClickListener(mClockClickListener);
+            mClockView.setEnabled(true);
+        }
 
         mHasSettingsPanel = res.getBoolean(R.bool.config_hasSettingsPanel);
         mHasFlipSettings = res.getBoolean(R.bool.config_hasFlipSettingsPanel);
 
         // Notifications date time
         mDateTimeView = mNotificationPanelHeader.findViewById(R.id.datetime);
-        if (mDateTimeView != null) {
-            mDateTimeView.setOnClickListener(mClockClickListener);
-            mDateTimeView.setEnabled(true);
-        }
 
         mSettingsButton = (ImageView) mStatusBarWindow.findViewById(R.id.settings_button);
         if (mSettingsButton != null) {
@@ -3128,18 +3135,47 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         }
     };
 
-   private View.OnClickListener mCalendarClickListener = new View.OnClickListener() {
+    private View.OnClickListener mClockClickListener = new View.OnClickListener() {
         public void onClick(View v) {
-            Intent intent=Intent.makeMainSelectorActivity(Intent.ACTION_MAIN,
-                                                        Intent.CATEGORY_APP_CALENDAR);
-            startActivityDismissingKeyguard(intent,true);
+            Intent clockShortcutIntent = null;
+            String clockShortcutIntentUri = Settings.System.getStringForUser(
+                    mContext.getContentResolver(), Settings.System.CLOCK_SHORTCUT, UserHandle.USER_CURRENT);
+            if(clockShortcutIntentUri != null) {
+                try {
+                    clockShortcutIntent = Intent.parseUri(clockShortcutIntentUri, 0);
+                } catch (URISyntaxException e) {
+                    clockShortcutIntent = null;
+                }
+            }
+
+            if(clockShortcutIntent != null) {
+                startActivityDismissingKeyguard(clockShortcutIntent, true);
+            } else {
+                startActivityDismissingKeyguard(
+                    new Intent(Intent.ACTION_QUICK_CLOCK), true); // have fun, everyone
+            }
         }
     };
 
-    private View.OnClickListener mClockClickListener = new View.OnClickListener() {
+    private View.OnClickListener mDateClickListener = new View.OnClickListener() {
         public void onClick(View v) {
-            startActivityDismissingKeyguard(
-                    new Intent(Intent.ACTION_QUICK_CLOCK), true); // have fun, everyone
+            Intent calendarShortcutIntent = null;
+            String calendarShortcutIntentUri = Settings.System.getStringForUser(
+                    mContext.getContentResolver(), Settings.System.CALENDAR_SHORTCUT, UserHandle.USER_CURRENT);
+            if(calendarShortcutIntentUri != null) {
+                try {
+                    calendarShortcutIntent = Intent.parseUri(calendarShortcutIntentUri, 0);
+                } catch (URISyntaxException e) {
+                    calendarShortcutIntent = null;
+                }
+            }
+
+            if(calendarShortcutIntent != null) {
+                startActivityDismissingKeyguard(calendarShortcutIntent, true);
+            } else {
+                Intent intent=Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_CALENDAR);
+                startActivityDismissingKeyguard(intent,true);
+            }
         }
     };
 
