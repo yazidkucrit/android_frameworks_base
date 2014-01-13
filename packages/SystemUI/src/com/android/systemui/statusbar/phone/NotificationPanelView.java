@@ -149,8 +149,7 @@ public class NotificationPanelView extends PanelView {
                     flip = true;
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    if (Settings.System.getInt(getContext().getContentResolver(),
-                            Settings.System.QUICK_SWIPE, 0) == 1 && !mStatusBar.isEditModeEnabled()) {
+                    if (!mStatusBar.isEditModeEnabled()) {
                         final float deltaX = Math.abs(event.getX(0) - mGestureStartX);
                         final float deltaY = Math.abs(event.getY(0) - mGestureStartY);
                         final float maxDeltaY = getHeight() * STATUS_BAR_SWIPE_VERTICAL_MAX_PERCENTAGE;
