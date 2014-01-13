@@ -1823,6 +1823,11 @@ public final class Settings {
         public static final String FONT_SCALE = "font_scale";
 
         /**
+         * Should Flip to Silence be used
+         * @hide
+         */
+        public static final String FLIP_ACTION_KEY = "flip_action_key";
+        /**
          * Name of an application package to be debugged.
          *
          * @deprecated Use {@link Global#DEBUG_APP} instead
