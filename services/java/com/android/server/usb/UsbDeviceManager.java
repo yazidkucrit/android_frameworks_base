@@ -111,6 +111,7 @@ public class UsbDeviceManager {
     private UsbSettingsManager mCurrentSettings;
     private NotificationManager mNotificationManager;
     private final boolean mHasUsbAccessory;
+    private boolean mUseUsbNotification;
     private boolean mAdbEnabled;
     private boolean mAudioSourceEnabled;
     private Map<String, List<Pair<String, String>>> mOemModeMap;
@@ -190,6 +191,14 @@ public class UsbDeviceManager {
 
         mNotificationManager = (NotificationManager)
                 mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // We do not show the USB notification if the primary volume supports mass storage.
+        // The legacy mass storage UI will be used instead.
+        boolean massStorageSupported = false;
+        final StorageManager storageManager = StorageManager.from(mContext);
+        final StorageVolume primary = storageManager.getPrimaryVolume();
+        massStorageSupported = primary != null && primary.allowMassStorage();
+        mUseUsbNotification = !massStorageSupported;
 
         // make sure the ADB_ENABLED setting value matches the current state
         Settings.Global.putInt(mContentResolver, Settings.Global.ADB_ENABLED, mAdbEnabled ? 1 : 0);
@@ -574,14 +583,19 @@ public class UsbDeviceManager {
                 intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);
                 intent.putExtra("state", (enabled ? 1 : 0));
                 if (enabled) {
+                    Scanner scanner = null;
                     try {
-                        Scanner scanner = new Scanner(new File(AUDIO_SOURCE_PCM_PATH));
+                        scanner = new Scanner(new File(AUDIO_SOURCE_PCM_PATH));
                         int card = scanner.nextInt();
                         int device = scanner.nextInt();
                         intent.putExtra("card", card);
                         intent.putExtra("device", device);
                     } catch (FileNotFoundException e) {
                         Slog.e(TAG, "could not open audio source PCM file", e);
+                    } finally {
+                        if (scanner != null) {
+                            scanner.close();
+                        }
                     }
                 }
                 mContext.sendStickyBroadcastAsUser(intent, UserHandle.ALL);
@@ -654,7 +668,7 @@ public class UsbDeviceManager {
         }
 
         private void updateUsbNotification() {
-            if (mNotificationManager == null) return;
+            if (mNotificationManager == null || !mUseUsbNotification) return;
             int id = 0;
             Resources r = mContext.getResources();
             if (mConnected) {
@@ -664,7 +678,7 @@ public class UsbDeviceManager {
                     id = com.android.internal.R.string.usb_ptp_notification_title;
                 } else if (containsFunction(mCurrentFunctions,
                         UsbManager.USB_FUNCTION_MASS_STORAGE)) {
-                    id = com.android.internal.R.string.usb_mass_storage_notification_title;
+                    id = com.android.internal.R.string.usb_cd_installer_notification_title;
                 } else if (containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_ACCESSORY)) {
                     id = com.android.internal.R.string.usb_accessory_notification_title;
                 } else {

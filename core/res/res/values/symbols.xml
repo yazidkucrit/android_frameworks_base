@@ -1586,7 +1586,7 @@
   <java-symbol type="string" name="throttled_notification_message" />
   <java-symbol type="string" name="throttled_notification_title" />
   <java-symbol type="string" name="usb_accessory_notification_title" />
-  <java-symbol type="string" name="usb_mass_storage_notification_title" />
+  <java-symbol type="string" name="usb_cd_installer_notification_title" />
   <java-symbol type="string" name="usb_mtp_notification_title" />
   <java-symbol type="string" name="usb_notification_message" />
   <java-symbol type="string" name="use_physical_keyboard" />
@@ -1670,6 +1670,7 @@
   <java-symbol type="string" name="usb_storage_stop_title" />
   <java-symbol type="string" name="usb_storage_title" />
   <java-symbol type="style" name="Animation.RecentApplications" />
+  <java-symbol type="bool" name="config_combined_signal" />
 
   <!-- ImfTest -->
   <java-symbol type="layout" name="auto_complete_list" />

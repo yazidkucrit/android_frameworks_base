@@ -2054,24 +2054,6 @@ public final class Settings {
         public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
 
         /**
-         * Whether the phone ringtone should be played in an increasing manner
-         * @hide
-         */
-        public static final String INCREASING_RING = "increasing_ring";
-
-        /**
-         * Minimum volume index for increasing ring volume
-         * @hide
-         */
-        public static final String INCREASING_RING_MIN_VOLUME = "increasing_ring_min_vol";
-
-        /**
-         * Time (in ms) between ringtone volume increases
-         * @hide
-         */
-        public static final String INCREASING_RING_INTERVAL = "increasing_ring_interval";
-
-        /**
          * Whether silent mode should allow vibration feedback. This is used
          * internally in AudioService and the Sound settings activity to
          * coordinate decoupling of vibrate and silent modes. This setting
@@ -2303,6 +2285,27 @@ public final class Settings {
          * @hide
          */
         public static final String VIBRATE_WHEN_RINGING = "vibrate_when_ringing";
+
+        /**
+         * Whether the phone ringtone should be played in an increasing manner
+         * 
+         * @hide
+         */
+        public static final String INCREASING_RING = "increasing_ring";
+
+        /**
+         * Increase ringtone volume each ringing interval
+         * 
+         * @hide
+         */
+        public static final String INCREASING_RING_INTERVAL = "increasing_ring_interval";
+
+        /**
+         * Volume level to start at for increasing ringtone
+         * 
+         * @hide
+         */
+        public static final String INCREASING_RING_MIN_VOLUME = "increasing_ring_min_volume";
 
         /**
          * Whether the audible DTMF tones are played by the dialer when dialing. The value is
@@ -2634,9 +2637,14 @@ public final class Settings {
          * Allows blurring the lockscreen background
          * @hide
          */
-
         public static final String LOCKSCREEN_BLUR_BEHIND = "lockscreen_blur_behind";
         public static final String LOCKSCREEN_BLUR_RADIUS = "lockscreen_blur_radius";
+
+        /**
+         * Swipe between quick settings and notification drawer
+         * @hide
+         */
+        public static final String QUICK_SWIPE = "quick_swipe";
 
         /**
          * Enables/disables lockscreen notifications
@@ -2733,10 +2741,10 @@ public final class Settings {
         };
 
         /**
-         * Wether navigation bar is enabled or not
+         * Sets navigation bar height in percent
          * @hide
          */
-        public static final String NAVIGATION_BAR_SHOW = "navigation_bar_show";
+        public static final String NAVIGATION_BAR_HEIGHT = "navigation_bar_height";
 
         /**
          * Whether to show the network status in the status bar
@@ -3124,6 +3132,7 @@ public final class Settings {
             SIP_RECEIVE_CALLS,
             POINTER_SPEED,
             VIBRATE_WHEN_RINGING,
+            INCREASING_RING,
             RINGTONE,
             NOTIFICATION_SOUND,
             QUIET_HOURS_ENABLED,
