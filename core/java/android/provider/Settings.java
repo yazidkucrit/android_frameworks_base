@@ -2637,6 +2637,12 @@ public final class Settings {
          * @hide
          */
         public static final String EGG_MODE = "egg_mode";
+ 
+        /**
+         * Whether national data roaming should be used.
+         * @hide
+         */
+        public static final String MVNO_ROAMING = "mvno_roaming";
 
         /**
          * Show the content behind the lockscreen

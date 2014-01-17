@@ -166,6 +166,8 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
 
     boolean mDataAndWifiStacked = false;
 
+    private UpdateUIListener mUpdateUIListener = null;
+
     public interface SignalCluster {
         void setWifiIndicators(boolean visible, int strengthIcon, int activityIcon,
                 String contentDescription);
@@ -1214,6 +1216,11 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
             }
         }
 
+        // Cleanup the double quotes
+        if (wifiLabel.length() > 0) {
+            wifiLabel = wifiLabel.replaceAll("^\"|\"$", "");
+        }
+
         if (DEBUG) {
             Log.d(TAG, "refreshViews connected={"
                     + (mWifiConnected?" wifi":"")
@@ -1416,6 +1423,11 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                 v.setText(mobileLabel); // comes from the telephony stack
                 v.setVisibility(View.VISIBLE);
             }
+        }
+
+        // Update the dependency UI
+        if (mUpdateUIListener != null) {
+            mUpdateUIListener.onUpdateUI();
         }
     }
 
@@ -1647,5 +1659,16 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                 }
             }
         }
+    }
+
+    /**
+     * Let others listen for UI updates in NetworkController.
+     */
+    public static interface UpdateUIListener {
+        void onUpdateUI();
+    }
+
+    public void setListener(UpdateUIListener listener) {
+        mUpdateUIListener = listener;
     }
 }
