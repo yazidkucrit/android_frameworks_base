@@ -92,10 +92,4 @@
   <java-symbol type="anim" name="slide_in_left_no_fade" />
   <java-symbol type="anim" name="slide_out_right_no_fade" />
 
-  <!--Setting confirmation dialog-->
-  <java-symbol type="id" name="setting_confirmation_dialog_visual_hint" />
-  <java-symbol type="layout" name="setting_confirmation_dialog" />
-  <java-symbol type="string" name="setting_confirmation_ask_me_later" />
-  <java-symbol type="string" name="setting_confirmation_yes" />
-  <java-symbol type="string" name="setting_confirmation_no" />
 </resources>

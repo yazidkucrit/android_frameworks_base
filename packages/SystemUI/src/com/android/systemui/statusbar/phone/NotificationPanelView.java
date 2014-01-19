@@ -24,7 +24,6 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.EventLog;
-import android.util.SettingConfirmationHelper;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
@@ -202,16 +201,7 @@ public class NotificationPanelView extends PanelView {
                 }
                 if (maxy - miny < mHandleBarHeight) {
                     if (mJustPeeked || getExpandedHeight() < mHandleBarHeight) {
-                        SettingConfirmationHelper helper = new SettingConfirmationHelper(mContext);
-                        helper.showConfirmationDialogForSetting(
-                                mContext.getString(R.string.quick_settings_quick_pull_down_title),
-                                mContext.getString(R.string.quick_settings_quick_pull_down_message),
-                                mContext.getResources().getDrawable(R.drawable.quick_pull_down),
-                                Settings.System.QS_QUICK_PULLDOWN);
-                        if(Settings.System.getInt(mContext.getContentResolver(),
-                                    Settings.System.QS_QUICK_PULLDOWN, 0) != 2) {
-                            mStatusBar.switchToSettings();
-                        }
+                        mStatusBar.switchToSettings();
                     } else {
                         mStatusBar.flipToSettings();
                     }
