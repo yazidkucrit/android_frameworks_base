@@ -1194,6 +1194,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         mCircleBattery = (BatteryCircleMeterView) mStatusBarView.findViewById(R.id.circle_battery);
 
         mNotificationShortcutsLayout.setupShortcuts();
+        updateCarrierAndWifiLabelVisibility(true);
 
         return mStatusBarView;
     }
