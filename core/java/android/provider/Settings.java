@@ -2781,6 +2781,18 @@ public final class Settings {
           */
          public static final String KEY_MENU_ACTION = "key_menu_action";
 
+        /**
+         * Whether to unlock the screen with the home key.  The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String HOME_UNLOCK_SCREEN = "home_unlock_screen";
+
+        /**
+         * Whether to unlock the menu key.  The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String MENU_UNLOCK_SCREEN = "menu_unlock_screen";
+
          /**
           * Action to perform when the menu key is long-pressed.
           * (Default is 0 on devices with a search key, 3 on devices without)
