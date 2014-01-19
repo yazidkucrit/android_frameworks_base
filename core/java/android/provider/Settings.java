@@ -3171,15 +3171,6 @@ public final class Settings {
             QUIET_HOURS_DIM
         };
 
-        /**
-         *
-         * Settings to reset on user choice. They will fall back to their default value (0).
-         * @hide
-         */
-        public static final String[] SETTINGS_TO_RESET = {
-            QUICK_SETTINGS_QUICK_PULL_DOWN
-        };
-
         // Settings moved to Settings.Secure
 
         /**
