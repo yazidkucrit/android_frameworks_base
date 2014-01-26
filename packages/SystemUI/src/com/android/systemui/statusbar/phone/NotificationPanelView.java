@@ -20,10 +20,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-<<<<<<< HEAD
 import android.os.UserHandle;
-=======
->>>>>>> PA/kitkat
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.EventLog;
@@ -48,10 +45,6 @@ public class NotificationPanelView extends PanelView {
     private int mFingers;
     private PhoneStatusBar mStatusBar;
     private boolean mOkToFlip;
-<<<<<<< HEAD
-=======
-    private static final float QUICK_PULL_DOWN_PERCENTAGE = 0.8f;
->>>>>>> PA/kitkat
 
     public NotificationPanelView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -128,7 +121,6 @@ public class NotificationPanelView extends PanelView {
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
                     mOkToFlip = getExpandedHeight() == 0;
-<<<<<<< HEAD
                     if (event.getX(0) > getWidth() * (1.0f - STATUS_BAR_RIGHT_PERCENTAGE) &&
                             Settings.System.getIntForUser(getContext().getContentResolver(),
                             Settings.System.QS_QUICK_PULLDOWN, 1, UserHandle.USER_CURRENT) == 1) {
@@ -136,9 +128,6 @@ public class NotificationPanelView extends PanelView {
                     } else if (event.getX(0) < getWidth() * (1.0f - STATUS_BAR_LEFT_PERCENTAGE) &&
                             Settings.System.getIntForUser(getContext().getContentResolver(),
                             Settings.System.QS_QUICK_PULLDOWN, 1, UserHandle.USER_CURRENT) == 2) {
-=======
-                    if (event.getX(0) > getWidth() * QUICK_PULL_DOWN_PERCENTAGE) {
->>>>>>> PA/kitkat
                         flip = true;
                     }
                     break;
