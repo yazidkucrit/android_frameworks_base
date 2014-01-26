@@ -55,6 +55,7 @@ public class NotificationPanelView extends PanelView {
     private boolean mTrackingSwipe;
     private boolean mSwipeTriggered;
 
+
     public NotificationPanelView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
