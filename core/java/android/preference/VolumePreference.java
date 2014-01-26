@@ -381,7 +381,6 @@ public class VolumePreference extends SeekBarDialogPreference implements
             } else {
                 mSeekBar.setProgress(mLastProgress);
             }
-
         }
 
         public void onStartTrackingTouch(SeekBar seekBar) {
