@@ -638,7 +638,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.IMMERSIVE_MODE), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NAVIGATION_BAR_SHOW), false, this,
+                    Settings.System.NAVIGATION_BAR_HEIGHT), false, this,
                     UserHandle.USER_ALL);
 
             updateSettings();
@@ -1289,17 +1289,23 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // Height of the navigation bar when presented horizontally at bottom
         mNavigationBarHeightForRotation[mPortraitRotation] =
         mNavigationBarHeightForRotation[mUpsideDownRotation] =
-                res.getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_height);
+                Math.round(res.getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_height) *
+                Settings.System.getFloat(mContext.getContentResolver(),
+                        Settings.System.NAVIGATION_BAR_HEIGHT, 1f));
         mNavigationBarHeightForRotation[mLandscapeRotation] =
-        mNavigationBarHeightForRotation[mSeascapeRotation] = res.getDimensionPixelSize(
-                com.android.internal.R.dimen.navigation_bar_height_landscape);
+        mNavigationBarHeightForRotation[mSeascapeRotation] = Math.round(res.getDimensionPixelSize(
+                com.android.internal.R.dimen.navigation_bar_height_landscape) *
+                Settings.System.getFloat(mContext.getContentResolver(),
+                        Settings.System.NAVIGATION_BAR_HEIGHT, 1f));
 
         // Width of the navigation bar when presented vertically along one side
         mNavigationBarWidthForRotation[mPortraitRotation] =
         mNavigationBarWidthForRotation[mUpsideDownRotation] =
         mNavigationBarWidthForRotation[mLandscapeRotation] =
         mNavigationBarWidthForRotation[mSeascapeRotation] =
-                res.getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_width);
+                Math.round(res.getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_width) *
+                Settings.System.getFloat(mContext.getContentResolver(),
+                        Settings.System.NAVIGATION_BAR_HEIGHT, 1f));
 
         // SystemUI (status bar) layout policy
         int shortSizeDp = shortSize * DisplayMetrics.DENSITY_DEFAULT / density;
@@ -1308,12 +1314,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // Allow the navigation bar to move on small devices (phones).
         mNavigationBarCanMove = shortSizeDp < 600;
 
-        final int showByDefault = mContext.getResources().getBoolean(
-                    com.android.internal.R.bool.config_showNavigationBar) ? 1 : 0;
-        mHasNavigationBar = Settings.System.getIntForUser(mContext.getContentResolver(),
-                    Settings.System.NAVIGATION_BAR_SHOW, showByDefault,
-                    UserHandle.USER_CURRENT) == 1;
-
+        mHasNavigationBar = res.getBoolean(com.android.internal.R.bool.config_showNavigationBar);
         // Allow a system property to override this. Used by the emulator.
         // See also hasNavigationBar().
         String navBarOverride = SystemProperties.get("qemu.hw.mainkeys");
@@ -1385,7 +1386,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_CURRENT);
             mHomeWakeScreen = (Settings.System.getIntForUser(resolver,
                     Settings.System.HOME_WAKE_SCREEN, 1, UserHandle.USER_CURRENT) == 1);
-
             updateKeyAssignments();
             mImmersiveModeStyle = Settings.System.getIntForUser(resolver,
                     Settings.System.IMMERSIVE_MODE, 0, UserHandle.USER_CURRENT);
@@ -1411,12 +1411,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mVolumeWakeScreen = Settings.System.getIntForUser(resolver,
                     Settings.System.VOLUME_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) != 0;
 
-            final int showByDefault = mContext.getResources().getBoolean(
-                    com.android.internal.R.bool.config_showNavigationBar) ? 1 : 0;
-            mHasNavigationBar = Settings.System.getIntForUser(resolver,
-                    Settings.System.NAVIGATION_BAR_SHOW, showByDefault,
-                    UserHandle.USER_CURRENT) == 1;
-
             if (mSystemReady) {
                 int pointerLocation = Settings.System.getIntForUser(resolver,
                         Settings.System.POINTER_LOCATION, 0, UserHandle.USER_CURRENT);
@@ -1426,6 +1420,30 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             MSG_ENABLE_POINTER_LOCATION : MSG_DISABLE_POINTER_LOCATION);
                 }
             }
+        
+            // Height of the navigation bar when presented horizontally at bottom
+            Resources res = mContext.getResources();
+            mNavigationBarHeightForRotation[mPortraitRotation] =
+            mNavigationBarHeightForRotation[mUpsideDownRotation] =
+                    Math.round(res.getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_height) *
+                    Settings.System.getFloat(mContext.getContentResolver(),
+                            Settings.System.NAVIGATION_BAR_HEIGHT, 1f));
+            mNavigationBarHeightForRotation[mLandscapeRotation] =
+            mNavigationBarHeightForRotation[mSeascapeRotation] = Math.round(res.getDimensionPixelSize(
+                    com.android.internal.R.dimen.navigation_bar_height_landscape) *
+                    Settings.System.getFloat(mContext.getContentResolver(),
+                            Settings.System.NAVIGATION_BAR_HEIGHT, 1f));
+
+            // Width of the navigation bar when presented vertically along one side
+            mNavigationBarWidthForRotation[mPortraitRotation] =
+            mNavigationBarWidthForRotation[mUpsideDownRotation] =
+            mNavigationBarWidthForRotation[mLandscapeRotation] =
+            mNavigationBarWidthForRotation[mSeascapeRotation] =
+                    Math.round(res.getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_width) *
+                    Settings.System.getFloat(mContext.getContentResolver(),
+                            Settings.System.NAVIGATION_BAR_HEIGHT, 1f));
+
+
             // use screen off timeout setting as the timeout for the lockscreen
             mLockScreenTimeout = Settings.System.getIntForUser(resolver,
                     Settings.System.SCREEN_OFF_TIMEOUT, 0, UserHandle.USER_CURRENT);
@@ -2951,6 +2969,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     public int adjustSystemUiVisibilityLw(int visibility) {
         mStatusBarController.adjustSystemUiVisibilityLw(mLastSystemUiFlags, visibility);
         mNavigationBarController.adjustSystemUiVisibilityLw(mLastSystemUiFlags, visibility);
+        updateSystemUiVisibilityLw();
 
         // Reset any bits in mForceClearingStatusBarVisibility that
         // are now clear.
@@ -5587,7 +5606,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 && windowType <= WindowManager.LayoutParams.LAST_SUB_WINDOW);
         final boolean wasCleared = mClearedBecauseOfForceShow;
         if (mForcingShowNavBar && (win.getSurfaceLayer() < mForcingShowNavBarLayer
-                || subWindowInExpandedMode)) {
+                || subWindowInImmersiveMode)) {
             int clearableFlags = View.SYSTEM_UI_CLEARABLE_FLAGS;
             if (immersiveModeHidesStatusBar()) {
                 clearableFlags &= ~View.SYSTEM_UI_FLAG_FULLSCREEN;
@@ -5608,7 +5627,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 && mFocusedApp == win.getAppToken()) {
             return 0;
         }
-
         // The window who requested navbar force showing disappeared and next window wants
         // to hide navbar. Instead of hiding we will make it transient. SystemUI will take care
         // about hiding after timeout. This should not happen if next window is keyguard because
@@ -5620,6 +5638,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mWindowManagerFuncs.addSystemUIVisibilityFlag(View.NAVIGATION_BAR_TRANSIENT);
         }
 
+        if (wasCleared && !mClearedBecauseOfForceShow
+                && (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0) {
+            mNavigationBarController.showTransient();
+            visibility |= View.NAVIGATION_BAR_TRANSIENT;
+            mWindowManagerFuncs.addSystemUIVisibilityFlag(View.NAVIGATION_BAR_TRANSIENT);
+        }
         final int visibility2 = visibility;
         mLastSystemUiFlags = visibility;
         mLastFocusNeedsMenu = needsMenu;

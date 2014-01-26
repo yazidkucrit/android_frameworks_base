@@ -1823,6 +1823,11 @@ public final class Settings {
         public static final String FONT_SCALE = "font_scale";
 
         /**
+         * Should Flip to Silence be used
+         * @hide
+         */
+        public static final String FLIP_ACTION_KEY = "flip_action_key";
+        /**
          * Name of an application package to be debugged.
          *
          * @deprecated Use {@link Global#DEBUG_APP} instead
@@ -2074,24 +2079,6 @@ public final class Settings {
          * @hide
          */
         public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
-
-        /**
-         * Whether the phone ringtone should be played in an increasing manner
-         * @hide
-         */
-        public static final String INCREASING_RING = "increasing_ring";
-
-        /**
-         * Minimum volume index for increasing ring volume
-         * @hide
-         */
-        public static final String INCREASING_RING_MIN_VOLUME = "increasing_ring_min_vol";
-
-        /**
-         * Time (in ms) between ringtone volume increases
-         * @hide
-         */
-        public static final String INCREASING_RING_INTERVAL = "increasing_ring_interval";
 
         /**
          * Whether silent mode should allow vibration feedback. This is used
@@ -2400,6 +2387,12 @@ public final class Settings {
         public static final String HAPTIC_FEEDBACK_ENABLED = "haptic_feedback_enabled";
 
         /**
+         * Minimum vibration duration in milliseconds (0-100ms)
+         * @hide
+         */
+        public static final String MINIMUM_VIBRATION_DURATION = "minimum_vibration_duration";
+
+        /**
          * @deprecated Each application that shows web suggestions should have its own
          * setting for this.
          */
@@ -2687,6 +2680,12 @@ public final class Settings {
          * @hide
          */
         public static final String EGG_MODE = "egg_mode";
+ 
+        /**
+         * Whether national data roaming should be used.
+         * @hide
+         */
+        public static final String MVNO_ROAMING = "mvno_roaming";
 
         /**
          * Whether or not to launch default music player when headset is connected
@@ -2829,7 +2828,6 @@ public final class Settings {
          * Allows blurring the lockscreen background
          * @hide
          */
-
         public static final String LOCKSCREEN_BLUR_BEHIND = "lockscreen_blur_behind";
         public static final String LOCKSCREEN_BLUR_RADIUS = "lockscreen_blur_radius";
 
@@ -2906,6 +2904,13 @@ public final class Settings {
          */
         public static final String LOCKSCREEN_NOTIFICATIONS_PRIVACY_MODE = "lockscreen_notifications_privacy_mode";
 
+       /**
+         * A list of packages to exclude from being displayed as lockscreen notifications.
+         * This should be a string of packages separated by |
+         * @hide
+         */
+        public static final String LOCKSCREEN_NOTIFICATIONS_EXCLUDED_APPS = "lockscreen_notifications_excluded_apps";
+
         /**
          * MediaScanner behavior on boot.
          * 0 = enabled
@@ -2928,10 +2933,16 @@ public final class Settings {
         };
 
         /**
-         * Wether navigation bar is enabled or not
+         * Sets navigation bar height in percent
          * @hide
          */
-        public static final String NAVIGATION_BAR_SHOW = "navigation_bar_show";
+        public static final String NAVIGATION_BAR_HEIGHT = "navigation_bar_height";
+
+        /**
+         * Enable/disable statusbar network indicators
+         * @hide
+         */
+        public static final String STATUS_BAR_NETWORK_INDICATORS = "status_bar_network_indicators";
 
         /**
          * Whether to show the network status in the status bar
@@ -3017,6 +3028,70 @@ public final class Settings {
         public static final String QUICK_SETTINGS_ADB_TILE = "quick_settings_adb_tile";
 
         /**
+         * Navigation controls to Use
+         *
+         * @hide
+         */
+
+        public static final String NAV_BUTTONS = "nav_buttons";
+
+        /**
+         * Show or hide clock
+         * 0 - hide
+         * 1 - show (default)
+         * @hide
+         */
+        public static final String STATUS_BAR_CLOCK = "status_bar_clock";
+
+        /**
+         * AM/PM Style for clock options
+         * 0 - Normal AM/PM
+         * 1 - Small AM/PM
+         * 2 - No AM/PM
+         * @hide
+         */
+        public static final String STATUSBAR_CLOCK_AM_PM_STYLE = "statusbar_clock_am_pm_style";
+
+        /**
+         * Style of clock
+         * 0 - Hide Clock
+         * 1 - Right Clock
+         * 2 - Center Clock
+         * @hide
+         */
+        public static final String STATUSBAR_CLOCK_STYLE = "statusbar_clock_style";
+
+        /**
+         * Setting for clock color
+         * @hide
+         */
+        public static final String STATUSBAR_CLOCK_COLOR = "statusbar_clock_color";
+
+        /**
+        * @hide
+        * Shows custom date before clock time
+        * 0 - No Date
+        * 1 - Small Date
+        * 2 - Normal Date
+        */
+        public static final String STATUSBAR_CLOCK_DATE_DISPLAY = "statusbar_clock_date_display";
+
+        /**
+        * @hide
+        * Sets the date string style
+        * 0 - Regular style
+        * 1 - Lowercase
+        * 2 - Uppercase
+        */
+        public static final String STATUSBAR_CLOCK_DATE_STYLE = "statusbar_clock_date_style";
+
+        /**
+        * @hide
+        * Stores the java DateFormat string for the date
+        */
+        public static final String STATUSBAR_CLOCK_DATE_FORMAT = "statusbar_clock_date_format";
+
+        /**
          * Setting to show the battery percentage text
          * @hide
          */
@@ -3035,6 +3110,13 @@ public final class Settings {
          * @hide
          */
         public static final String QS_QUICK_PULLDOWN = "qs_quick_pulldown";
+
+        /**
+         * Quick Settings Smart Pulldown
+         *
+         * @hide
+         */
+        public static final String QS_SMART_PULLDOWN = "qs_smart_pulldown";
 
         /**
          * Whether to enable quiet hours.
@@ -3224,10 +3306,11 @@ public final class Settings {
         public static final String AOSP_DIALER = "aosp_dialer";
 
         /**
-         * Weather to minimize lockscreen challenge on screen turned on
+         * Holds the text for the Carrier label. An empty string
+         * will bring the default text back.
          * @hide
          */
-        public static final String LOCKSCREEN_MAXIMIZE_WIDGETS = "lockscreen_maximize_widgets";
+        public static final String NOTIFICATION_CUSTOM_CARRIER_LABEL = "notification_custom_carrier_label";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
@@ -3303,15 +3386,6 @@ public final class Settings {
             QUIET_HOURS_MUTE,
             QUIET_HOURS_STILL,
             QUIET_HOURS_DIM
-        };
-
-        /**
-         * Settings to reset on user choice. They will fall back to their default value (0).
-         *
-         * @hide
-         */
-        public static final String[] SETTINGS_TO_RESET = {
-            QUICK_SETTINGS_QUICK_PULL_DOWN
         };
 
         // Settings moved to Settings.Secure
@@ -5583,6 +5657,11 @@ public final class Settings {
          * Constant for use in AIRPLANE_MODE_RADIOS to specify NFC radio.
          */
         public static final String RADIO_NFC = "nfc";
+
+        /**
+         * Define when Nfc polling is activated.
+         */
+        public static final String RADIO_NFC_POLLING = "nfc_polling";
 
         /**
          * A comma separated list of radios that need to be disabled when airplane mode

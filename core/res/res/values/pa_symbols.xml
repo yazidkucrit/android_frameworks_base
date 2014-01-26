@@ -34,9 +34,12 @@
   <!--Notification led-->
   <java-symbol type="array" name="notification_light_package_mapping" />
 
+<<<<<<< HEAD
   <java-symbol type="bool" name="config_multiColorBatteryLed" />
   <java-symbol type="bool" name="config_intrusiveBatteryLed" />
 
+=======
+>>>>>>> base/kitkat-remix
   <!-- Navigation Ring -->
   <java-symbol type="drawable" name="ic_navigation_ring_blank_normal" />
   <java-symbol type="drawable" name="ic_navigation_ring_blank_activated" />
@@ -50,6 +53,7 @@
   <java-symbol type="drawable" name="ic_navigation_ring_torch_on" />
   <java-symbol type="drawable" name="ic_navigation_ring_torch_off" />
   <java-symbol type="drawable" name="ic_navigation_ring_vibrate" />
+  <java-symbol type="drawable" name="ic_navigation_ring_lastapp" />
 
   <java-symbol type="string" name="action_null"/>
   
@@ -95,10 +99,13 @@
   <java-symbol type="anim" name="slide_in_left_no_fade" />
   <java-symbol type="anim" name="slide_out_right_no_fade" />
 
+<<<<<<< HEAD
   <!--Setting confirmation dialog-->
   <java-symbol type="id" name="setting_confirmation_dialog_visual_hint" />
   <java-symbol type="layout" name="setting_confirmation_dialog" />
   <java-symbol type="string" name="setting_confirmation_ask_me_later" />
   <java-symbol type="string" name="setting_confirmation_yes" />
   <java-symbol type="string" name="setting_confirmation_no" />
+=======
+>>>>>>> base/kitkat-remix
 </resources>

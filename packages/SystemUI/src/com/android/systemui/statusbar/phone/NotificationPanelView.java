@@ -20,14 +20,10 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-<<<<<<< HEAD
 import android.os.UserHandle;
-=======
->>>>>>> PA/kitkat
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.EventLog;
-import android.util.SettingConfirmationHelper;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
@@ -41,6 +37,9 @@ public class NotificationPanelView extends PanelView {
 
     private static final float STATUS_BAR_LEFT_PERCENTAGE = 0.7f;
     private static final float STATUS_BAR_RIGHT_PERCENTAGE = 0.3f;
+    private static final float STATUS_BAR_SWIPE_TRIGGER_PERCENTAGE = 0.05f;
+    private static final float STATUS_BAR_SWIPE_VERTICAL_MAX_PERCENTAGE = 0.025f;
+    private static final float STATUS_BAR_SWIPE_MOVE_PERCENTAGE = 0.2f;
 
     private Drawable mHandleBar;
     private int mHandleBarHeight;
@@ -48,10 +47,13 @@ public class NotificationPanelView extends PanelView {
     private int mFingers;
     private PhoneStatusBar mStatusBar;
     private boolean mOkToFlip;
-<<<<<<< HEAD
-=======
-    private static final float QUICK_PULL_DOWN_PERCENTAGE = 0.8f;
->>>>>>> PA/kitkat
+
+    private float mGestureStartX;
+    private float mGestureStartY;
+    private float mFlipOffset;
+    private float mSwipeDirection;
+    private boolean mTrackingSwipe;
+    private boolean mSwipeTriggered;
 
     public NotificationPanelView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -122,28 +124,79 @@ public class NotificationPanelView extends PanelView {
                        event.getActionMasked(), (int) event.getX(), (int) event.getY());
             }
         }
+        boolean shouldRecycleEvent = false;
         if (PhoneStatusBar.SETTINGS_DRAG_SHORTCUT && mStatusBar.mHasFlipSettings) {
-
+            boolean swipeFlipJustFinished = false;
+            boolean swipeFlipJustStarted = false;
             boolean flip = false;
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
+                    mGestureStartX = event.getX(0);
+                    mGestureStartY = event.getY(0);
+                    mTrackingSwipe = isFullyExpanded();
                     mOkToFlip = getExpandedHeight() == 0;
-<<<<<<< HEAD
-                    if (event.getX(0) > getWidth() * (1.0f - STATUS_BAR_RIGHT_PERCENTAGE) &&
-                            Settings.System.getIntForUser(getContext().getContentResolver(),
-                            Settings.System.QS_QUICK_PULLDOWN, 1, UserHandle.USER_CURRENT) == 1) {
+                    int quickPulldownMode = Settings.System.getIntForUser(
+                            getContext().getContentResolver(), Settings.System.QS_QUICK_PULLDOWN,
+                            0, UserHandle.USER_CURRENT);
+                    int smartPulldownMode = Settings.System.getIntForUser(
+                            getContext().getContentResolver(), Settings.System.QS_SMART_PULLDOWN,
+                            0, UserHandle.USER_CURRENT);
+                    if (smartPulldownMode == 1 && !mStatusBar.hasClearableNotifications()) {
                         flip = true;
-                    } else if (event.getX(0) < getWidth() * (1.0f - STATUS_BAR_LEFT_PERCENTAGE) &&
-                            Settings.System.getIntForUser(getContext().getContentResolver(),
-                            Settings.System.QS_QUICK_PULLDOWN, 1, UserHandle.USER_CURRENT) == 2) {
-=======
-                    if (event.getX(0) > getWidth() * QUICK_PULL_DOWN_PERCENTAGE) {
->>>>>>> PA/kitkat
+                    } else if (smartPulldownMode == 2 && !mStatusBar.hasVisibleNotifications()) {
+                        flip = true;
+                    } else if (quickPulldownMode == 1
+                            && mGestureStartX > getWidth() * (1.0f - STATUS_BAR_RIGHT_PERCENTAGE)) {
+                        flip = true;
+                    } else if (quickPulldownMode == 2
+                            && mGestureStartX < getWidth() * (1.0f - STATUS_BAR_LEFT_PERCENTAGE)) {
                         flip = true;
                     }
                     break;
                 case MotionEvent.ACTION_POINTER_DOWN:
                     flip = true;
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    if (!mStatusBar.isEditModeEnabled()) {
+                        final float deltaX = Math.abs(event.getX(0) - mGestureStartX);
+                        final float deltaY = Math.abs(event.getY(0) - mGestureStartY);
+                        final float maxDeltaY = getHeight() * STATUS_BAR_SWIPE_VERTICAL_MAX_PERCENTAGE;
+                        final float minDeltaX = getWidth() * STATUS_BAR_SWIPE_TRIGGER_PERCENTAGE;
+
+                        if (mTrackingSwipe && deltaY > maxDeltaY) {
+                            mTrackingSwipe = false;
+                        }
+                        if (mTrackingSwipe && deltaX > deltaY && deltaX > minDeltaX) {
+
+                            mSwipeDirection = event.getX(0) - mGestureStartX;
+
+                            // The value below can be used to adjust deltaX to always increase,
+                            // if the user keeps swiping in the same direction as she started the
+                            // gesture. If she, however, moves her finger the other way, deltaX will
+                            // decrease.
+                            //
+                            // This allows for a horizontal, in any direction, to always flip the
+                            // views.
+                            mSwipeDirection = mSwipeDirection < 0f ? -1f : 1f;
+
+                            if (mStatusBar.isShowingSettings()) {
+                                mFlipOffset = 1f;
+                                // in this case, however, we need deltaX to decrease
+                                mSwipeDirection = -mSwipeDirection;
+                            } else {
+                                mFlipOffset = -1f;
+                            }
+                            mGestureStartX = event.getX(0);
+                            mTrackingSwipe = false;
+                            mSwipeTriggered = true;
+                            swipeFlipJustStarted = true;
+                        }
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                    swipeFlipJustFinished = mSwipeTriggered;
+                    mSwipeTriggered = false;
+                    mTrackingSwipe = false;
                     break;
             }
             if (mOkToFlip && flip) {
@@ -156,23 +209,41 @@ public class NotificationPanelView extends PanelView {
                 }
                 if (maxy - miny < mHandleBarHeight) {
                     if (mJustPeeked || getExpandedHeight() < mHandleBarHeight) {
-                        SettingConfirmationHelper helper = new SettingConfirmationHelper(mContext);
-                        helper.showConfirmationDialogForSetting(
-                                mContext.getString(R.string.quick_settings_quick_pull_down_title),
-                                mContext.getString(R.string.quick_settings_quick_pull_down_message),
-                                mContext.getResources().getDrawable(R.drawable.quick_pull_down),
-                                Settings.System.QUICK_SETTINGS_QUICK_PULL_DOWN);
-                        if(Settings.System.getInt(mContext.getContentResolver(),
-                                    Settings.System.QUICK_SETTINGS_QUICK_PULL_DOWN, 0) != 2) {
-                            mStatusBar.switchToSettings();
-                        }
+                        mStatusBar.switchToSettings();
                     } else {
                         mStatusBar.flipToSettings();
                     }
                     mOkToFlip = false;
                 }
             }
+
+            if (mSwipeTriggered) {
+                final float deltaX = (event.getX(0) - mGestureStartX) * mSwipeDirection;
+                mStatusBar.partialFlip(mFlipOffset +
+                                       deltaX / (getWidth() * STATUS_BAR_SWIPE_MOVE_PERCENTAGE));
+                if (!swipeFlipJustStarted) {
+                    return true; // Consume the event.
+                }
+            } else if (swipeFlipJustFinished) {
+                mStatusBar.completePartialFlip();
+            }
+
+            if (swipeFlipJustStarted || swipeFlipJustFinished) {
+                // Made up event: finger at the middle bottom of the view.
+                MotionEvent original = event;
+                event = MotionEvent.obtain(original.getDownTime(), original.getEventTime(),
+                    original.getAction(), getWidth()/2, getHeight(),
+                    original.getPressure(0), original.getSize(0), original.getMetaState(),
+                    original.getXPrecision(), original.getYPrecision(), original.getDeviceId(),
+                    original.getEdgeFlags());
+                shouldRecycleEvent = true;
+            }
+
         }
-        return mHandleView.dispatchTouchEvent(event);
+        final boolean result = mHandleView.dispatchTouchEvent(event);
+        if (shouldRecycleEvent) {
+            event.recycle();
+        }
+        return result;
     }
 }

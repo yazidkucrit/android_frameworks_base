@@ -318,6 +318,7 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         @Override
         public void onChange(boolean selfChange) {
             onImmersiveChanged();
+            onImmersiveModeChanged();
         }
 
         public void startObserving() {
@@ -363,6 +364,9 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
                 boolean nfcEnabled = state == NfcAdapter.STATE_ON ||
                         state == NfcAdapter.STATE_TURNING_ON;
                 onNfcSettingsChanged(nfcEnabled);
+            }
+        }
+    };
 
     /** Broadcast receive to determine wifi ap state. */
     private BroadcastReceiver mWifiApStateReceiver = new BroadcastReceiver() {
@@ -403,6 +407,8 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
     private final BugreportObserver mBugreportObserver;
     private final BrightnessObserver mBrightnessObserver;
     private final AdbObserver mAdbObserver;
+    private final NetworkObserver mLteObserver;
+
     private final NetworkObserver mMobileNetworkObserver;
     private final SleepTimeObserver mSleepTimeObserver;
     private final ImmersiveObserver mImmersiveObserver;
@@ -412,6 +418,9 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
     protected boolean mUsesAospDialer = false;
     private String[] mUsbRegexs;
     private ConnectivityManager mCM;
+
+    private int mLastImmersiveMode = 1;
+
 
     private final MediaRouter mMediaRouter;
     private final RemoteDisplayRouteCallback mRemoteDisplayRouteCallback;
@@ -507,6 +516,10 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
     private RefreshCallback mAdbCallback;
     private State mAdbState = new State();
 
+    protected QuickSettingsTileView mLteTile;
+    private RefreshCallback mLteCallback;
+    protected State mLteState = new State();
+
     private QuickSettingsTileView mMobileNetworkTile;
     private RefreshCallback mMobileNetworkCallback;
     private State mMobileNetworkState = new State();
@@ -522,6 +535,10 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
     private QuickSettingsTileView mImmersiveTile;
     private RefreshCallback mImmersiveCallback;
     private State mImmersiveState = new State();
+
+    private QuickSettingsTileView mImmersiveExtraTile;
+    private RefreshCallback mImmersiveExtraCallback;
+    private State mImmersiveExtraState = new State();
 
     private RotationLockController mRotationLockController;
     private LocationController mLocationController;
@@ -550,8 +567,13 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         mBugreportObserver.startObserving();
         mBrightnessObserver = new BrightnessObserver(mHandler);
         mBrightnessObserver.startObserving();
+
         mAdbObserver = new AdbObserver(mHandler);
         mAdbObserver.startObserving();
+
+        mLteObserver = new NetworkObserver(mHandler);
+        mLteObserver.startObserving();
+
         mMobileNetworkObserver = new NetworkObserver(mHandler);
         mMobileNetworkObserver.startObserving();
         mSleepTimeObserver = new SleepTimeObserver(mHandler);
@@ -1543,27 +1565,50 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         onImmersiveChanged();
     }
 
+    void addImmersiveExtraTile(QuickSettingsTileView view, RefreshCallback cb) {
+        mImmersiveExtraTile = view;
+        mImmersiveExtraCallback = cb;
+        onImmersiveChanged();
+    }
+
+    private void onImmersiveModeChanged() {
+        Resources r = mContext.getResources();
+        final int mode = getImmersiveMode();
+        if (mode == IMMERSIVE_MODE_OFF) {
+            mImmersiveExtraState.iconId = R.drawable.ic_qs_immersive_off;
+            mImmersiveExtraState.label = r.getString(R.string.quick_settings_immersive_mode_off_label);
+        } else if (mode == IMMERSIVE_MODE_FULL) {
+            mImmersiveExtraState.iconId = R.drawable.ic_qs_immersive_on;
+            mImmersiveExtraState.label = r.getString(R.string.quick_settings_immersive_mode_full_label);
+        } else if (mode == IMMERSIVE_MODE_HIDE_ONLY_NAVBAR) {
+            mImmersiveExtraState.iconId = R.drawable.ic_qs_immersive_status_bar_off;
+            mImmersiveExtraState.label = r.getString(R.string.quick_settings_immersive_mode_no_status_bar_label);
+        } else if (mode == IMMERSIVE_MODE_HIDE_ONLY_STATUSBAR) {
+            mImmersiveExtraState.iconId = R.drawable.ic_qs_immersive_navigation_bar_off;
+            mImmersiveExtraState.label = r.getString(R.string.quick_settings_immersive_mode_no_navigation_bar_label);
+        }
+        mImmersiveExtraCallback.refreshView(mImmersiveExtraTile, mImmersiveExtraState);
+    }
+
     private void onImmersiveChanged() {
         Resources r = mContext.getResources();
         final int mode = getImmersiveMode();
         if (mode == IMMERSIVE_MODE_OFF) {
             mImmersiveState.iconId = R.drawable.ic_qs_immersive_off;
             mImmersiveState.label = r.getString(R.string.quick_settings_immersive_mode_off_label);
-        } else if (mode == IMMERSIVE_MODE_FULL) {
+        } else {
             mImmersiveState.iconId = R.drawable.ic_qs_immersive_on;
-            mImmersiveState.label = r.getString(R.string.quick_settings_immersive_mode_full_label);
-        } else if (mode == IMMERSIVE_MODE_HIDE_ONLY_NAVBAR) {
-            mImmersiveState.iconId = R.drawable.ic_qs_immersive_status_bar_off;
-            mImmersiveState.label = r.getString(R.string.quick_settings_immersive_mode_no_status_bar_label);
-        } else if (mode == IMMERSIVE_MODE_HIDE_ONLY_STATUSBAR) {
-            mImmersiveState.iconId = R.drawable.ic_qs_immersive_navigation_bar_off;
-            mImmersiveState.label = r.getString(R.string.quick_settings_immersive_mode_no_navigation_bar_label);
+            mImmersiveState.label = r.getString(R.string.quick_settings_immersive_mode_on_label);
         }
         mImmersiveCallback.refreshView(mImmersiveTile, mImmersiveState);
     }
 
     void refreshImmersiveTile() {
         onImmersiveChanged();
+    }
+
+    void refreshImmersiveExtraTile() {
+        onImmersiveModeChanged();
     }
 
     protected int getImmersiveMode() {
@@ -1577,13 +1622,16 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
     }
 
     protected void switchImmersiveModeStyles() {
+        int immersiveMode = getImmersiveMode() + 1;
+        if (immersiveMode > 3) immersiveMode = IMMERSIVE_MODE_OFF;
+        setImmersiveMode(immersiveMode);
+        mLastImmersiveMode = immersiveMode;
+    }
+
+    protected void changeImmersiveMode() {
         if (getImmersiveMode() == IMMERSIVE_MODE_OFF) {
-            setImmersiveMode(IMMERSIVE_MODE_FULL);
-        } else if (getImmersiveMode() == IMMERSIVE_MODE_FULL) {
-            setImmersiveMode(IMMERSIVE_MODE_HIDE_ONLY_NAVBAR);
-        } else if (getImmersiveMode() == IMMERSIVE_MODE_HIDE_ONLY_NAVBAR) {
-            setImmersiveMode(IMMERSIVE_MODE_HIDE_ONLY_STATUSBAR);
-        } else if (getImmersiveMode() == IMMERSIVE_MODE_HIDE_ONLY_STATUSBAR) {
+            setImmersiveMode(mLastImmersiveMode);
+        } else {
             setImmersiveMode(IMMERSIVE_MODE_OFF);
         }
     }

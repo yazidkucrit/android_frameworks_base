@@ -128,8 +128,7 @@ public class RecentsActivity extends Activity {
         // Check if we need to enable alternate drawable for recent apps key
         if(mNavigationCallback == null) return; // Multiuser is not allowed
         int navigationHints = mNavigationCallback.getNavigationIconHints();
-        mNavigationCallback.setNavigationIconHints(NavigationBarView.NAVBAR_RECENTS_HINT,
-                show ? (navigationHints | StatusBarManager.NAVIGATION_HINT_RECENT_ALT)
+        mNavigationCallback.setNavigationIconHints( show ? (navigationHints | StatusBarManager.NAVIGATION_HINT_RECENT_ALT)
                 : (navigationHints & ~StatusBarManager.NAVIGATION_HINT_RECENT_ALT), true);
     }
 
@@ -194,8 +193,10 @@ public class RecentsActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getWindow().addPrivateFlags(
-                WindowManager.LayoutParams.PRIVATE_FLAG_INHERIT_TRANSLUCENT_DECOR);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.status_bar_recent_panel);
         mRecentsPanel = (RecentsPanelView) findViewById(R.id.recents_root);
         mRecentsPanel.setOnTouchListener(new TouchOutsideListener(mRecentsPanel));
