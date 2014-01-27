@@ -55,6 +55,7 @@
     <!-- QuickSettings: Immersive active modes [CHAR LIMIT=NONE] -->
     <string name="quick_settings_immersive_mode_off_label">Disabled</string>
     <string name="quick_settings_immersive_mode_full_label">Full</string>
+    <!-- QuickSettings: Immersive extra modes [CHAR LIMIT=NONE] -->
     <string name="quick_settings_immersive_mode_no_status_bar_label">Navigation bar</string>
     <string name="quick_settings_immersive_mode_no_navigation_bar_label">Status bar</string>
     <!-- QuickSettings: LTE On [CHAR LIMIT=NONE] -->
