@@ -4322,6 +4322,10 @@ public class WindowManagerService extends IWindowManager.Stub
             // If we are preparing an app transition, then delay changing
             // the visibility of this token until we execute that transition.
             if (okToDisplay() && mAppTransition.isTransitionSet()) {
+                // Already in requested state, don't do anything more.
+                if (wtoken.hiddenRequested != visible) {
+                    return;
+                }
                 wtoken.hiddenRequested = !visible;
 
                 if (!wtoken.startingDisplayed) {
@@ -5209,6 +5213,12 @@ public class WindowManagerService extends IWindowManager.Stub
     }
 
 
+    // Called by window manager policy.  Not exposed externally.
+    @Override
+    public void rebootTile() {
+        ShutdownThread.reboot(mContext, null, true);
+    }
+
     public void setInputFilter(IInputFilter filter) {
         if (!checkCallingPermission(android.Manifest.permission.FILTER_EVENTS, "setInputFilter()")) {
             throw new SecurityException("Requires FILTER_EVENTS permission");
@@ -5620,8 +5630,7 @@ public class WindowManagerService extends IWindowManager.Stub
 
                     // We keep on including windows until we go past a full-screen
                     // window.
-                    boolean fullscreen = ws.isFullscreen(dw, dh);
-                    including = !ws.mIsImWindow && !fullscreen;
+                    including = !ws.mIsImWindow && !ws.isFullscreen(dw, dh);
 
                     final WindowStateAnimator winAnim = ws.mWinAnimator;
                     if (maxLayer < winAnim.mSurfaceLayer) {

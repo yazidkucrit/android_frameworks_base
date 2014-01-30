@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
- * This code has been modified. Portions copyright (C) 2013, ParanoidAndroid Project.
+ * This code has been modified. Portions copyright (C) 2014 ParanoidAndroid Project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 package com.android.systemui.statusbar.phone;
 
 import android.animation.Animator;
-import android.animation.Animator.AnimatorListener;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -41,9 +41,10 @@ class QuickSettingsTileView extends FrameLayout {
     private static final String HOVER_COLOR_WHITE = "#3FFFFFFF"; // 25% white
     private static final String HOVER_COLOR_BLACK = "#3F000000"; // 25% black
 
-    private static final float NON_EDITABLE = 1f;
+    private static final float DEFAULT = 1.0f;
     private static final float ENABLED = 0.95f;
     private static final float DISABLED = 0.8f;
+    private static final float DISAPPEAR = 0.0f;
 
     private Tile mTileId;
 
@@ -57,7 +58,6 @@ class QuickSettingsTileView extends FrameLayout {
     private boolean mPrepared;
     private OnPrepareListener mOnPrepareListener;
 
-
     private boolean mTemporary;
     private boolean mEditMode;
     private boolean mVisible;
@@ -69,8 +69,7 @@ class QuickSettingsTileView extends FrameLayout {
         mColSpan = 1;
         mRowSpan = 1;
 
-        QuickSettingsTouchListener touchListener
-                = new QuickSettingsTouchListener();
+        QuickSettingsTouchListener touchListener = new QuickSettingsTouchListener();
         QuickSettingsDragListener dragListener = new QuickSettingsDragListener();
         setOnTouchListener(touchListener);
         setOnDragListener(dragListener);
@@ -148,10 +147,11 @@ class QuickSettingsTileView extends FrameLayout {
             setEditModeLongClickListener(null);
         } else {
             boolean temporaryEditMode = isTemporary() && enabled;
-            animate().scaleX(NON_EDITABLE).scaleY(NON_EDITABLE).setListener(null);
-            setOnClickListener(temporaryEditMode? null : mOnClickListener);
-            setOnLongClickListener(temporaryEditMode? null : mOnLongClickListener);
-            if(!mVisible) { // Item has been disabled
+            setOnClickListener(temporaryEditMode ? null : mOnClickListener);
+            setOnLongClickListener(temporaryEditMode ? null : mOnLongClickListener);
+            float scale = temporaryEditMode ? DISAPPEAR : DEFAULT;
+            animate().scaleX(scale).scaleY(scale).setListener(null);
+            if(!mVisible && !isTemporary()) { // Item has been disabled
                 setVisibility(View.GONE);
             }
         }
@@ -165,24 +165,20 @@ class QuickSettingsTileView extends FrameLayout {
         setHoverEffect(HOVER_COLOR_BLACK, mVisible);
         float scale = mVisible ? DISABLED : ENABLED;
         animate().scaleX(scale).scaleY(scale)
-                .setListener(new AnimatorListener() {
-            @Override
-            public void onAnimationCancel(Animator animation) {
-            }
-
+                .setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 mVisible = !mVisible;
             }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationStart(Animator animation) {
-            }
         });
+    }
+
+    void fadeOut() {
+        animate().alpha(0.05f);
+    }
+
+    void fadeIn() {
+        animate().alpha(1f);
     }
 
     void setEditModeClickListener(OnClickListener listener) {
@@ -191,7 +187,9 @@ class QuickSettingsTileView extends FrameLayout {
 
     @Override
     public void setOnClickListener(OnClickListener listener) {
-        mOnClickListener = listener;
+        if (!isEditModeEnabled()) {
+            mOnClickListener = listener;
+        }
         super.setOnClickListener(listener);
     }
 
@@ -201,7 +199,9 @@ class QuickSettingsTileView extends FrameLayout {
 
     @Override
     public void setOnLongClickListener(OnLongClickListener listener) {
-        mOnLongClickListener = listener;
+        if (!isEditModeEnabled()) {
+            mOnLongClickListener = listener;
+        }
         super.setOnLongClickListener(listener);
     }
 

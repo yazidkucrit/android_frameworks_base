@@ -1823,6 +1823,11 @@ public final class Settings {
         public static final String FONT_SCALE = "font_scale";
 
         /**
+         * Should Flip to Silence be used
+         * @hide
+         */
+        public static final String FLIP_ACTION_KEY = "flip_action_key";
+        /**
          * Name of an application package to be debugged.
          *
          * @deprecated Use {@link Global#DEBUG_APP} instead
@@ -2353,6 +2358,12 @@ public final class Settings {
         public static final String HAPTIC_FEEDBACK_ENABLED = "haptic_feedback_enabled";
 
         /**
+         * Minimum vibration duration in milliseconds (0-100ms)
+         * @hide
+         */
+        public static final String MINIMUM_VIBRATION_DURATION = "minimum_vibration_duration";
+
+        /**
          * @deprecated Each application that shows web suggestions should have its own
          * setting for this.
          */
@@ -2626,6 +2637,12 @@ public final class Settings {
          * @hide
          */
         public static final String EGG_MODE = "egg_mode";
+ 
+        /**
+         * Whether national data roaming should be used.
+         * @hide
+         */
+        public static final String MVNO_ROAMING = "mvno_roaming";
 
         /**
          * Show the content behind the lockscreen
@@ -2639,12 +2656,6 @@ public final class Settings {
          */
         public static final String LOCKSCREEN_BLUR_BEHIND = "lockscreen_blur_behind";
         public static final String LOCKSCREEN_BLUR_RADIUS = "lockscreen_blur_radius";
-
-        /**
-         * Swipe between quick settings and notification drawer
-         * @hide
-         */
-        public static final String QUICK_SWIPE = "quick_swipe";
 
         /**
          * Enables/disables lockscreen notifications
@@ -2719,6 +2730,13 @@ public final class Settings {
          */
         public static final String LOCKSCREEN_NOTIFICATIONS_PRIVACY_MODE = "lockscreen_notifications_privacy_mode";
 
+       /**
+         * A list of packages to exclude from being displayed as lockscreen notifications.
+         * This should be a string of packages separated by |
+         * @hide
+         */
+        public static final String LOCKSCREEN_NOTIFICATIONS_EXCLUDED_APPS = "lockscreen_notifications_excluded_apps";
+
         /**
          * MediaScanner behavior on boot.
          * 0 = enabled
@@ -2745,6 +2763,12 @@ public final class Settings {
          * @hide
          */
         public static final String NAVIGATION_BAR_HEIGHT = "navigation_bar_height";
+
+        /**
+         * Enable/disable statusbar network indicators
+         * @hide
+         */
+        public static final String STATUS_BAR_NETWORK_INDICATORS = "status_bar_network_indicators";
 
         /**
          * Whether to show the network status in the status bar
@@ -2802,8 +2826,8 @@ public final class Settings {
          * Immersive mode global actions switch
          * 0 = no
          * 1 = yes
-         * 2 = hide navbar
-         * 3 = hide statusbar
+         * 2 = hide navigation bar
+         * 3 = hide status bar
          * @hide
          */
         public static final String IMMERSIVE_MODE = "immersive_mode";
@@ -2821,6 +2845,70 @@ public final class Settings {
         public static final String QUICK_SETTINGS_ADB_TILE = "quick_settings_adb_tile";
 
         /**
+         * Navigation controls to Use
+         *
+         * @hide
+         */
+
+        public static final String NAV_BUTTONS = "nav_buttons";
+
+        /**
+         * Show or hide clock
+         * 0 - hide
+         * 1 - show (default)
+         * @hide
+         */
+        public static final String STATUS_BAR_CLOCK = "status_bar_clock";
+
+        /**
+         * AM/PM Style for clock options
+         * 0 - Normal AM/PM
+         * 1 - Small AM/PM
+         * 2 - No AM/PM
+         * @hide
+         */
+        public static final String STATUSBAR_CLOCK_AM_PM_STYLE = "statusbar_clock_am_pm_style";
+
+        /**
+         * Style of clock
+         * 0 - Hide Clock
+         * 1 - Right Clock
+         * 2 - Center Clock
+         * @hide
+         */
+        public static final String STATUSBAR_CLOCK_STYLE = "statusbar_clock_style";
+
+        /**
+         * Setting for clock color
+         * @hide
+         */
+        public static final String STATUSBAR_CLOCK_COLOR = "statusbar_clock_color";
+
+        /**
+        * @hide
+        * Shows custom date before clock time
+        * 0 - No Date
+        * 1 - Small Date
+        * 2 - Normal Date
+        */
+        public static final String STATUSBAR_CLOCK_DATE_DISPLAY = "statusbar_clock_date_display";
+
+        /**
+        * @hide
+        * Sets the date string style
+        * 0 - Regular style
+        * 1 - Lowercase
+        * 2 - Uppercase
+        */
+        public static final String STATUSBAR_CLOCK_DATE_STYLE = "statusbar_clock_date_style";
+
+        /**
+        * @hide
+        * Stores the java DateFormat string for the date
+        */
+        public static final String STATUSBAR_CLOCK_DATE_FORMAT = "statusbar_clock_date_format";
+
+        /**
          * Setting to show the battery percentage text
          * @hide
          */
@@ -2833,6 +2921,13 @@ public final class Settings {
          * @hide
          */
         public static final String QS_QUICK_PULLDOWN = "qs_quick_pulldown";
+
+        /**
+         * Quick Settings Smart Pulldown
+         *
+         * @hide
+         */
+        public static final String QS_SMART_PULLDOWN = "qs_smart_pulldown";
 
         /**
          * Whether to enable quiet hours.
@@ -3067,6 +3162,19 @@ public final class Settings {
          * @hide
          */
         public static final String NON_INTRUSIVE_INCALL = "non_intrusive_incall";
+
+        /**
+         * Setting to show determine if AOSP dialer is used
+         * @hide
+         */
+        public static final String AOSP_DIALER = "aosp_dialer";
+
+        /**
+         * Holds the text for the Carrier label. An empty string
+         * will bring the default text back.
+         * @hide
+         */
+        public static final String NOTIFICATION_CUSTOM_CARRIER_LABEL = "notification_custom_carrier_label";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
@@ -5376,6 +5484,11 @@ public final class Settings {
          * Constant for use in AIRPLANE_MODE_RADIOS to specify NFC radio.
          */
         public static final String RADIO_NFC = "nfc";
+
+        /**
+         * Define when Nfc polling is activated.
+         */
+        public static final String RADIO_NFC_POLLING = "nfc_polling";
 
         /**
          * A comma separated list of radios that need to be disabled when airplane mode

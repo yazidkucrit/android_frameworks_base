@@ -135,13 +135,21 @@ public class NotificationPanelView extends PanelView {
                     mGestureStartY = event.getY(0);
                     mTrackingSwipe = isFullyExpanded();
                     mOkToFlip = getExpandedHeight() == 0;
-                    if (event.getX(0) > getWidth() * (1.0f - STATUS_BAR_RIGHT_PERCENTAGE) &&
-                            Settings.System.getIntForUser(getContext().getContentResolver(),
-                            Settings.System.QS_QUICK_PULLDOWN, 1, UserHandle.USER_CURRENT) == 1) {
+                    int quickPulldownMode = Settings.System.getIntForUser(
+                            getContext().getContentResolver(), Settings.System.QS_QUICK_PULLDOWN,
+                            0, UserHandle.USER_CURRENT);
+                    int smartPulldownMode = Settings.System.getIntForUser(
+                            getContext().getContentResolver(), Settings.System.QS_SMART_PULLDOWN,
+                            0, UserHandle.USER_CURRENT);
+                    if (smartPulldownMode == 1 && !mStatusBar.hasClearableNotifications()) {
                         flip = true;
-                    } else if (event.getX(0) < getWidth() * (1.0f - STATUS_BAR_LEFT_PERCENTAGE) &&
-                            Settings.System.getIntForUser(getContext().getContentResolver(),
-                            Settings.System.QS_QUICK_PULLDOWN, 1, UserHandle.USER_CURRENT) == 2) {
+                    } else if (smartPulldownMode == 2 && !mStatusBar.hasVisibleNotifications()) {
+                        flip = true;
+                    } else if (quickPulldownMode == 1
+                            && mGestureStartX > getWidth() * (1.0f - STATUS_BAR_RIGHT_PERCENTAGE)) {
+                        flip = true;
+                    } else if (quickPulldownMode == 2
+                            && mGestureStartX < getWidth() * (1.0f - STATUS_BAR_LEFT_PERCENTAGE)) {
                         flip = true;
                     }
                     break;
@@ -149,8 +157,7 @@ public class NotificationPanelView extends PanelView {
                     flip = true;
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    if (Settings.System.getInt(getContext().getContentResolver(),
-                            Settings.System.QUICK_SWIPE, 0) == 1 && !mStatusBar.isEditModeEnabled()) {
+                    if (!mStatusBar.isEditModeEnabled()) {
                         final float deltaX = Math.abs(event.getX(0) - mGestureStartX);
                         final float deltaY = Math.abs(event.getY(0) - mGestureStartY);
                         final float maxDeltaY = getHeight() * STATUS_BAR_SWIPE_VERTICAL_MAX_PERCENTAGE;
