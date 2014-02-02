@@ -3945,13 +3945,8 @@ public class AudioService extends IAudioService.Stub {
                 } else {
                     mStreamVolumeAlias[AudioSystem.STREAM_NOTIFICATION] = AudioSystem.STREAM_NOTIFICATION;
                 }
-<<<<<<< HEAD
-=======
-                mVolumeKeysDefault = Settings.System.getIntForUser(mContentResolver,
-                        Settings.System.VOLUME_KEYS_DEFAULT, 1, UserHandle.USER_CURRENT);
 
                 reloadTouchSoundAssets();
->>>>>>> 7616882... [1/4] base: Audio Themes Support
             }
         }
     }
