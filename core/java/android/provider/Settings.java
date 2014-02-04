@@ -3375,12 +3375,6 @@ public final class Settings {
        public static final String STATUS_BAR_BRIGHTNESS_CONTROL = "status_bar_brightness_control";
 
         /**
-         * Whether to unlock the menu key.  The value is boolean (1 or 0).
-         * @hide
-         */
-        public static final String MENU_UNLOCK_SCREEN = "menu_unlock_screen";
-
-        /**
          *  TeloRadio Low power network
          * @hide
          */
