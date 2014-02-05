@@ -267,8 +267,6 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
         mItems = new ArrayList<Action>();
 
-        final ContentResolver cr = mContext.getContentResolver();
-
         // first: power off
         mItems.add(
             new SinglePressAction(
