@@ -505,11 +505,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private boolean mScreenRecordChordEnabled = true;
     private boolean mVolumeDownKeyTriggered;
     private long mVolumeDownKeyTime;
-    private long mVolumeUpKeyTime;
     private boolean mVolumeDownKeyConsumedByScreenshotChord;
     private boolean mVolumeUpKeyTriggered;
     private boolean mVolumeUpKeyConsumedByScreenRecordChord;
-    private boolean mVolumeUpKeyConsumedByChord;
     private boolean mPowerKeyTriggered;
     private long mPowerKeyTime;
     private boolean mVolumeWakeScreen;
@@ -848,7 +846,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             final long now = SystemClock.uptimeMillis();
             if (now <= mVolumeUpKeyTime + SCREENSHOT_CHORD_DEBOUNCE_DELAY_MILLIS
                     && now <= mPowerKeyTime + SCREENSHOT_CHORD_DEBOUNCE_DELAY_MILLIS) {
-                mVolumeUpKeyConsumedByChord = true;
+                mVolumeUpKeyConsumedByScreenshotChord = true;
                 cancelPendingPowerKeyAction();
 
                 mHandler.postDelayed(mScreencastRunnable, getScreenshotChordLongPressDelay());
@@ -867,10 +865,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     private void cancelPendingScreenshotChordAction() {
         mHandler.removeCallbacks(mScreenshotRunnable);
-    }
-
-    private void cancelPendingScreencastChordAction() {
-        mHandler.removeCallbacks(mScreencastRunnable);
     }
 
     private void interceptScreenRecordChord() {
@@ -945,14 +939,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         @Override
         public void run() {
             takeScreenshot();
-        }
-    };
-
-   private final Runnable mScreencastRunnable = new Runnable() {
-        @Override
-        public void run() {
-            Intent screencastIntent = new Intent("com.cyanogenmod.ACTION_START_SCREENCAST");
-            mContext.sendBroadcastAsUser(screencastIntent, UserHandle.CURRENT_OR_SELF);
         }
     };
 
@@ -2330,9 +2316,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (mVolumeDownKeyTriggered && !mPowerKeyTriggered) {
                 final long now = SystemClock.uptimeMillis();
                 final long timeoutTime = mVolumeDownKeyTime + SCREENSHOT_CHORD_DEBOUNCE_DELAY_MILLIS;
-                if (now < timeoutTime) {
-                    return timeoutTime - now;
-                }
             } else if (mVolumeUpKeyTriggered && !mVolumeDownKeyTriggered) {
                 final long now = SystemClock.uptimeMillis();
                 final long timeoutTime = mVolumeUpKeyTime + SCREENSHOT_CHORD_DEBOUNCE_DELAY_MILLIS;
