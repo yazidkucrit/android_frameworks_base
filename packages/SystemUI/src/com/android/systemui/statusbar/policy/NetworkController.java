@@ -276,6 +276,14 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         observer.onChange(true);
     }
 
+    public void unregisterController(Context context) {
+        context.unregisterReceiver(this);
+        if (mPhone != null) {
+            mPhone.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
+        }
+        mPhoneStateListener = null;
+    }
+
     public boolean hasMobileDataFeature() {
         return mHasMobileDataFeature;
     }

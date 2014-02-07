@@ -168,6 +168,7 @@ public class NotificationManagerService extends INotificationManager.Stub
     private boolean mScreenOn = true;
     private boolean mWasScreenOn = true;
     private boolean mInCall = false;
+    private boolean mBatterySaverDisableLED = false;
     private boolean mNotificationPulseEnabled;
     private ArrayMap<String, NotificationLedValues> mNotificationPulseCustomLedValues;
     private Map<String, String> mPackageNameMappings;
@@ -1269,6 +1270,9 @@ public class NotificationManagerService extends INotificationManager.Stub
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(ENABLED_NOTIFICATION_LISTENERS_URI,
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.Global.getUriFor(
+                    Settings.Global.BATTERY_SAVER_LED_DISABLE),
+                    false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_LIGHT_PULSE_DEFAULT_COLOR), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -1311,6 +1315,9 @@ public class NotificationManagerService extends INotificationManager.Stub
             if (uri == null || ENABLED_NOTIFICATION_LISTENERS_URI.equals(uri)) {
                 rebindListenerServices();
             }
+
+            mBatterySaverDisableLED = Settings.Global.getInt(resolver,
+                    Settings.Global.BATTERY_SAVER_LED_DISABLE, 0) != 0;
         }
     }
 
@@ -2287,9 +2294,8 @@ public class NotificationManagerService extends INotificationManager.Stub
             }
         }
 
-
         // Don't flash while we are in a call or screen is on
-        if (mLedNotification == null || mInCall || mScreenOn) {
+        if (mLedNotification == null || mInCall || mScreenOn || mBatterySaverDisableLED) {
             mNotificationLight.turnOff();
         } else {
             final Notification ledno = mLedNotification.sbn.getNotification();
