@@ -2366,6 +2366,12 @@ public final class Settings {
         public static final String NOISE_SUPPRESSION = "noise_suppression";
 
         /**
+         * Whether national data roaming should be used.
+         * @hide
+         */
+        public static final String MVNO_ROAMING = "mvno_roaming";
+
+        /**
          * Whether the sounds effects (key clicks, lid open ...) are enabled. The value is
          * boolean (1 or 0).
          */
@@ -3026,52 +3032,10 @@ public final class Settings {
          */
         public static final String QS_SMART_PULLDOWN = "qs_smart_pulldown";
 
-        /**
-         * Whether to enable quiet hours.
-         * @hide
-         */
-        public static final String QUIET_HOURS_ENABLED = "quiet_hours_enabled";
-
-        /**
-         * Sets when quiet hours starts. This is stored in minutes from the start of the day.
-         * @hide
-         */
-        public static final String QUIET_HOURS_START = "quiet_hours_start";
-
-        /**
-         * Sets when quiet hours end. This is stored in minutes from the start of the day.
-         * @hide
-         */
-        public static final String QUIET_HOURS_END = "quiet_hours_end";
-
         /** Weather to allow headsethook to launch voice commands
          * @hide
          */
         public static final String HEADSETHOOK_LAUNCH_VOICE = "headsethook_launch_voice";
-
-        /**
-         * Whether to remove the sound from outgoing notifications during quiet hours.
-         * @hide
-         */
-        public static final String QUIET_HOURS_MUTE = "quiet_hours_mute";
-
-        /**
-         * Whether to disable haptic feedback during quiet hours.
-         * @hide
-         */
-        public static final String QUIET_HOURS_HAPTIC = "quiet_hours_haptic";
-
-        /**
-         * Whether to remove the vibration from outgoing notifications during quiet hours.
-         * @hide
-         */
-        public static final String QUIET_HOURS_STILL = "quiet_hours_still";
-
-        /**
-         * Whether to attempt to dim the LED color during quiet hours.
-         * @hide
-         */
-        public static final String QUIET_HOURS_DIM = "quiet_hours_dim";
 
         /**
          * whether which Ram Usage Bar mode is used on recent switcher
@@ -3202,6 +3166,54 @@ public final class Settings {
         public static final String AOSP_DIALER = "aosp_dialer";
 
         /**
+         * Whether to enable quiet hours.
+         * @hide
+         */
+        public static final String QUIET_HOURS_ENABLED = "quiet_hours_enabled";
+
+        /**
+         * Sets when quiet hours starts. This is stored in minutes from the start of the day.
+         * @hide
+         */
+        public static final String QUIET_HOURS_START = "quiet_hours_start";
+
+        /**
+         * Sets when quiet hours end. This is stored in minutes from the start of the day.
+         * @hide
+         */
+        public static final String QUIET_HOURS_END = "quiet_hours_end";
+
+        /**
+         * Whether to remove the sound from outgoing notifications during quiet hours.
+         * @hide
+         */
+        public static final String QUIET_HOURS_MUTE = "quiet_hours_mute";
+
+        /**
+         * Whether to disable haptic feedback during quiet hours.
+         * @hide
+         */
+        public static final String QUIET_HOURS_HAPTIC = "quiet_hours_haptic";
+
+        /**
+         * Whether to remove the vibration from outgoing notifications during quiet hours.
+         * @hide
+         */
+        public static final String QUIET_HOURS_STILL = "quiet_hours_still";
+
+        /**
+         * Whether to attempt to dim the LED color during quiet hours.
+         * @hide
+         */
+        public static final String QUIET_HOURS_DIM = "quiet_hours_dim";
+
+        /**
+         * Whether to remove the sound from phone ringing during quiet hours.
+         * @hide
+         */
+        public static final String QUIET_HOURS_RINGER = "quiet_hours_ringer";
+
+        /**
          * Holds the text for the Carrier label. An empty string
          * will bring the default text back.
          * @hide
@@ -3234,8 +3246,6 @@ public final class Settings {
         public static final String DOUBLE_TAP_SLEEP_GESTURE = "double_tap_sleep_gesture";
 
         /**
-=======
->>>>>>> parent of be26e31... fb: Quiet hours 1/2 thanks cm
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
