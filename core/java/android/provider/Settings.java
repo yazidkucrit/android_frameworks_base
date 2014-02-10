@@ -2707,12 +2707,6 @@ public final class Settings {
         public static final String EGG_MODE = "egg_mode";
 
         /**
-         * Whether national data roaming should be used.
-         * @hide
-         */
-        public static final String MVNO_ROAMING = "mvno_roaming";
-
-        /**
          * Whether or not to launch default music player when headset is connected
          * @hide
          */
