@@ -3012,6 +3012,7 @@ public final class Settings {
         public static final String STATUS_BAR_BATTERY_STYLE = "status_bar_battery_style";
 
         /**
+<<<<<<< HEAD
          * Quick Settings Quick Pulldown
          *
          * @hide
@@ -3233,6 +3234,8 @@ public final class Settings {
         public static final String DOUBLE_TAP_SLEEP_GESTURE = "double_tap_sleep_gesture";
 
         /**
+=======
+>>>>>>> parent of be26e31... fb: Quiet hours 1/2 thanks cm
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -3300,12 +3303,6 @@ public final class Settings {
             INCREASING_RING,
             RINGTONE,
             NOTIFICATION_SOUND,
-            QUIET_HOURS_ENABLED,
-            QUIET_HOURS_START,
-            QUIET_HOURS_END,
-            QUIET_HOURS_MUTE,
-            QUIET_HOURS_STILL,
-            QUIET_HOURS_DIM,
             TELO_RADIO_ENABLED,
             TELO_RADIO_2G_WIFI,
             TELO_RADIO_LTE,
