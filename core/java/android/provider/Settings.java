@@ -2816,6 +2816,12 @@ public final class Settings {
         public static final String HOME_WAKE_SCREEN = "home_wake_screen";
 
         /**
+         * Whether power menu screen record is enabled
+         * @hide
+         */
+        public static final String POWER_MENU_SCREENRECORD_ENABLED = "power_menu_screenrecord_enabled";
+
+        /**
          * Enable Stylus Gestures
          *
          * @hide
@@ -3467,6 +3473,18 @@ public final class Settings {
          */
         public static final String QUIET_HOURS_START = "quiet_hours_start";
 
+         /**
+         * Width and height of output video expressed in WxH
+         * @hide
+         */
+        public static final String SCREEN_RECORDER_OUTPUT_DIMENSIONS = "screen_recorder_output_dimensions";
+
+        /**
+         * Screen recorder framerate in bits per second
+         * @hide
+         */
+        public static final String SCREEN_RECORDER_BITRATE = "screen_recorder_bitrate";
+
         /**
          * Sets when quiet hours end. This is stored in minutes from the start of the day.
          * @hide
@@ -3528,6 +3546,12 @@ public final class Settings {
          * @hide
          */
         public static final String TELO_RADIO_HIGH_POWER = "telo_radio_high_power";
+
+        /**
+         * Whether to include audio when recording a video
+         * @hide
+         */
+        public static final String SCREEN_RECORDER_RECORD_AUDIO = "screen_recorder_record_audio";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
