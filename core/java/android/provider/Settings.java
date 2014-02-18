@@ -2613,6 +2613,13 @@ public final class Settings {
         @ChaosLab(name="GestureAnywhere", classification=Classification.NEW_FIELD)
         public static final String GESTURE_ANYWHERE_TRIGGER_HEIGHT = "gesture_anywhere_trigger_height";
 
+        /**
+	*
+	* SMOOTH PROGRESS BAR interpolator
+	* @hide
+	*/
+        public static final String PROGRESSBAR_INTERPOLATOR = "progressbar_interpolator";
+
 	/**
 	*
 	* SMOOTH PROGRESS BAR Mirror
