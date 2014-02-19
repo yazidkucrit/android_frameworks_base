@@ -3617,6 +3617,7 @@ public final class Settings {
          * @hide
          */
         public static final String[] SETTINGS_TO_RESET = {
+            SAFE_HEADSET_VOLUME
         };
 
         // Settings moved to Settings.Secure
