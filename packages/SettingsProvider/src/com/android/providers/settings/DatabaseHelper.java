@@ -1993,6 +1993,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // Set default tty mode
             loadSetting(stmt, Settings.System.TTY_MODE, 0);
 
+            // Set default noise suppression value
+            loadSetting(stmt, Settings.System.NOISE_SUPPRESSION, 0);
+
             loadIntegerSetting(stmt, Settings.System.SCREEN_BRIGHTNESS,
                     R.integer.def_screen_brightness);
 
@@ -2290,6 +2293,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             loadIntegerSetting(stmt, Settings.Global.LOW_BATTERY_SOUND_TIMEOUT,
                     R.integer.def_low_battery_sound_timeout);
+
+            type = SystemProperties.getInt("ro.telephony.tetherdunrequired", -1);
+            if (type == 0 || type == 1) {
+                loadSetting(stmt, Settings.Global.TETHER_DUN_REQUIRED, type);
+            }
 
             // --- New global settings start here
             loadIntegerSetting(stmt, Settings.Global.TETHER_DUN_REQUIRED,
