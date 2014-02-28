@@ -85,7 +85,6 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
     private String[] mStoredTargets;
     private int mTargetOffset;
     private boolean mIsScreenLarge;
-    private GestureDetector mDoubleTapGesture;
 
     OnTriggerListener mOnTriggerListener = new OnTriggerListener() {
 
