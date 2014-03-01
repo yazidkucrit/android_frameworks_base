@@ -112,7 +112,7 @@ public class VolumePanel extends Handler implements OnSeekBarChangeListener, Vie
 
     public static final int VOLUME_OVERLAY_EXPANDABLE = 1;
 
-    private static final int TRANSLUCENT_START_LEVEL = 160;
+    private static final int TRANSLUCENT_START_LEVEL = 208;
     private static final int TRANSLUCENT_TO_OPAQUE_DURATION = 400;
 
     protected Context mContext;
