@@ -535,7 +535,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
         }
     };
 
-    protected final void updateSimState(Intent intent) {
+    protected void updateSimState(Intent intent) {
         String stateExtra = intent.getStringExtra(IccCardConstants.INTENT_KEY_ICC_STATE);
         if (IccCardConstants.INTENT_VALUE_ICC_ABSENT.equals(stateExtra)) {
             mSimState = IccCardConstants.State.ABSENT;
@@ -1691,8 +1691,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                             show,
                             iconId,
                             mWifiActivityIconId,
-                            "Demo",
-                            mNoSimIconId);
+                            "Demo");
                 }
             }
             String mobile = args.getString("mobile");
@@ -1727,7 +1726,7 @@ public class NetworkController extends BroadcastReceiver implements DemoMode {
                             mMobileActivityIconId,
                             mDemoDataTypeIconId,
                             "Demo",
-                            "Demo");
+                            mNoSimIconId);
                 }
             }
         }
