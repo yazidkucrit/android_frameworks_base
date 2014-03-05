@@ -2891,6 +2891,24 @@ public final class Settings {
         public static final String EGG_MODE = "egg_mode";
 
         /**
+         * Whether to wake the screen with the camera key half-press.
+         * @hide
+         */
+        public static final String CAMERA_WAKE_SCREEN = "camera_wake_screen";
+
+        /**
+         * Whether or not to send device back to sleep if Camera button is released ("Peek")
+         * @hide
+         */
+        public static final String CAMERA_SLEEP_ON_RELEASE = "camera_sleep_on_release";
+
+        /**
+         * Whether or not camera button music controls should be enabled to play/pause media tracks
+         * @hide
+         */
+        public static final String CAMERA_MUSIC_CONTROLS = "camera_music_controls";
+
+        /**
          * Whether or not to launch default music player when headset is connected
          * @hide
          */
@@ -2959,7 +2977,6 @@ public final class Settings {
 
         /**
          * Action to perform when the home key is long-pressed. (Default is 2)
-         * (Default can be configured via config_longPressOnHomeBehavior)
          * 0 - Nothing
          * 1 - Menu
          * 2 - App-switch
@@ -2971,20 +2988,27 @@ public final class Settings {
          */
         public static final String KEY_HOME_LONG_PRESS_ACTION = "key_home_long_press_action";
 
-         /**
-          * Action to perform when the home key is double-tapped. (Default is 0)
-          * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
-          * (Default can be configured via config_doubleTapOnHomeBehavior)
-          * @hide
-          */
-         public static final String KEY_HOME_DOUBLE_TAP_ACTION = "key_home_double_tap_action";
+        /**
+         * Action to perform when the home key is double-tapped. (Default is 0)
+         * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
+         * @hide
+         */
+        public static final String KEY_HOME_DOUBLE_TAP_ACTION = "key_home_double_tap_action";
 
-         /**
-          * Action to perform when the menu key is pressed. (Default is 1)
-          * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
-          * @hide
-          */
-         public static final String KEY_MENU_ACTION = "key_menu_action";
+        /**
+         * Action to perform when the menu key is pressed. (Default is 1)
+         * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
+         * @hide
+         */
+        public static final String KEY_MENU_ACTION = "key_menu_action";
+
+        /**
+         * Action to perform when the menu key is long-pressed.
+         * (Default is 0 on devices with a search key, 3 on devices without)
+         * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
+         * @hide
+         */
+        public static final String KEY_MENU_LONG_PRESS_ACTION = "key_menu_long_press_action";
 
         /**
          * Whether to unlock the screen with the home key.  The value is boolean (1 or 0).
@@ -2998,41 +3022,33 @@ public final class Settings {
          */
         public static final String MENU_UNLOCK_SCREEN = "menu_unlock_screen";
 
-         /**
-          * Action to perform when the menu key is long-pressed.
-          * (Default is 0 on devices with a search key, 3 on devices without)
-          * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
-          * @hide
-          */
-         public static final String KEY_MENU_LONG_PRESS_ACTION = "key_menu_long_press_action";
+        /**
+         * Action to perform when the assistant (search) key is pressed. (Default is 3)
+         * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
+         * @hide
+         */
+        public static final String KEY_ASSIST_ACTION = "key_assist_action";
 
-         /**
-          * Action to perform when the assistant (search) key is pressed. (Default is 3)
-          * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
-          * @hide
-          */
-         public static final String KEY_ASSIST_ACTION = "key_assist_action";
+        /**
+         * Action to perform when the assistant (search) key is long-pressed. (Default is 4)
+         * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
+         * @hide
+         */
+        public static final String KEY_ASSIST_LONG_PRESS_ACTION = "key_assist_long_press_action";
 
-         /**
-          * Action to perform when the assistant (search) key is long-pressed. (Default is 4)
-          * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
-          * @hide
-          */
-         public static final String KEY_ASSIST_LONG_PRESS_ACTION = "key_assist_long_press_action";
+        /**
+         * Action to perform when the app switch key is pressed. (Default is 2)
+         * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
+         * @hide
+         */
+        public static final String KEY_APP_SWITCH_ACTION = "key_app_switch_action";
 
-         /**
-          * Action to perform when the app switch key is pressed. (Default is 2)
-          * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
-          * @hide
-          */
-         public static final String KEY_APP_SWITCH_ACTION = "key_app_switch_action";
-
-         /**
-          * Action to perform when the app switch key is long-pressed. (Default is 0)
-          * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
-          * @hide
-          */
-         public static final String KEY_APP_SWITCH_LONG_PRESS_ACTION = "key_app_switch_long_press_action";
+        /**
+         * Action to perform when the app switch key is long-pressed. (Default is 0)
+         * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
+         * @hide
+         */
+        public static final String KEY_APP_SWITCH_LONG_PRESS_ACTION = "key_app_switch_long_press_action";
 
         /**
          * Allows to show the background activity back the lockscreen
@@ -3182,6 +3198,12 @@ public final class Settings {
          * @hide
          */
         public static final String REMINDER_ALERT_RINGER = "reminder_alert_ringer";
+
+        /**
+         * Reminder alert flip interval
+         * @hide
+         */
+        public static final String REMINDER_ALERT_INTERVAL = "reminder_alert_interval";
 
 
         /**
@@ -3566,29 +3588,7 @@ public final class Settings {
         public static final String SCREEN_RECORDER_OUTPUT_DIMENSIONS = "screen_recorder_output_dimensions";
 
         /**
-<<<<<<< HEAD
          * Screen recorder framerate in bits per second
-=======
-         * Whether to wake the screen with the camera key half-press.
-         * @hide
-         */
-        public static final String CAMERA_WAKE_SCREEN = "camera_wake_screen";
-
-        /**
-         * Whether or not to send device back to sleep if Camera button is released ("Peek")
-         * @hide
-         */
-        public static final String CAMERA_SLEEP_ON_RELEASE = "camera_sleep_on_release";
-
-        /**
-         * Whether or not camera button music controls should be enabled to play/pause media tracks
-         * @hide
-         */
-        public static final String CAMERA_MUSIC_CONTROLS = "camera_music_controls";
-
-        /**
-         * Whether or not to launch default music player when headset is connected
->>>>>>> 5b9ad0e... Camera button support (1/2)
          * @hide
          */
         public static final String SCREEN_RECORDER_BITRATE = "screen_recorder_bitrate";
@@ -3732,7 +3732,6 @@ public final class Settings {
         public static final String LISTVIEW_ANIMATION = "listview_animation";
 
         /**
-<<<<<<< HEAD
          * ListView Interpolators
          * 0 == None
          * 1 == accelerate_interpolator
@@ -3742,12 +3741,6 @@ public final class Settings {
          * 5 == overshoot_interpolator
          * 6 == anticipate_overshoot_interpolator
          * 7 == bounce_interpolator
-=======
-         * Swap volume buttons when the screen is rotated
-         * 0 - Disabled
-         * 1 - Enabled (screen is rotated by 90 or 180 degrees: phone, hybrid)
-         * 2 - Enabled (screen is rotated by 180 or 270 degrees: tablet)
->>>>>>> 5b9ad0e... Camera button support (1/2)
          * @hide
          */
         public static final String LISTVIEW_INTERPOLATOR = "listview_interpolator";
