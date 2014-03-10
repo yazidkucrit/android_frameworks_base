@@ -231,7 +231,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
     ClockCenter mClockCenter;
     View mCenterSpacer;
-    ViewFlipper mFlipper;
 
     private BatteryMeterView mBattery;
     private BatteryCircleMeterView mCircleBattery;
@@ -260,7 +259,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     View mClockViewExpanded;
     View mDateViewExpanded;
     View mClearButton;
-    View mSpacer;
     ImageView mSettingsButton, mNotificationButton, mEditModeButton;
 
     // carrier/wifi label
