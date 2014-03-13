@@ -1843,4 +1843,6 @@
 
   <java-symbol type="string" name="config_partial_segment_expire_age" />
 
+  <!-- SMS RIL_REQUEST_SEND_SMS_EXPECT_MORE -->
+  <java-symbol type="bool" name="config_smsUseExpectMore" />
 </resources>
