@@ -2330,7 +2330,8 @@ public class NotificationManagerService extends INotificationManager.Stub
             enableLed = true;
         }
 
-        if (!enableLed) {
+        // Don't flash while we are in a call or screen is on
+        if (mLedNotification == null || mInCall || mScreenOn) {
             mNotificationLight.turnOff();
         } else {
             final Notification ledno = mLedNotification.sbn.getNotification();
