@@ -2314,8 +2314,7 @@ public class NotificationManagerService extends INotificationManager.Stub
             }
         }
 
-        // Don't flash while we are in a call, screen is on or we are
-        // in quiet hours with light dimmed
+        // Don't flash while we are in a call, screen is on
         // (unless Notification has EXTRA_FORCE_SHOW_LGHTS)
         final boolean enableLed;
         if (mLedNotification == null) {
@@ -2323,8 +2322,6 @@ public class NotificationManagerService extends INotificationManager.Stub
         } else if (isLedNotificationForcedOn(mLedNotification)) {
             enableLed = true;
         } else if (mInCall || (mScreenOn && !mDreaming)) {
-            enableLed = false;
-        } else if (QuietHoursHelper.inQuietHours(mContext, Settings.System.QUIET_HOURS_DIM)) {
             enableLed = false;
         } else {
             enableLed = true;
