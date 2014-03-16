@@ -52,9 +52,9 @@ public class NetworkPolicy implements Parcelable, Comparable<NetworkPolicy> {
     private static final long DEFAULT_MTU = 1500;
 
     @Deprecated
-    public NetworkPolicy(NetworkTemplate template, int cycleDay, int cycleLength, String cycleTimezone,
+    public NetworkPolicy(NetworkTemplate template, int cycleDay, String cycleTimezone,
             long warningBytes, long limitBytes, boolean metered) {
-        this(template, cycleDay, cycleLength, cycleTimezone, warningBytes, limitBytes, SNOOZE_NEVER,
+        this(template, cycleDay, cycleTimezone, warningBytes, limitBytes, SNOOZE_NEVER,
                 SNOOZE_NEVER, metered, false);
     }
 
@@ -167,7 +167,7 @@ public class NetworkPolicy implements Parcelable, Comparable<NetworkPolicy> {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(template, cycleDay, cycleLength, cycleTimezone, warningBytes,
+        return Objects.hash(template, cycleDay, cycleLength, cycleTimezone, warningBytes,
                 limitBytes, lastWarningSnooze, lastLimitSnooze, metered, inferred);
     }
 
