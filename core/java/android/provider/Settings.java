@@ -3569,6 +3569,12 @@ public final class Settings {
          */
         public static final String AOSP_DIALER = "aosp_dialer";
 
+        /**
+         * Use EdgeGesture Service for system gestures in PhoneWindowManager
+         * @hide
+         */
+        public static final String USE_EDGE_SERVICE_FOR_GESTURES = "edge_service_for_gestures";
+
          /**
          * Width and height of output video expressed in WxH
          * @hide
