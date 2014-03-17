@@ -95,7 +95,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.ViewPropertyAnimator;
 import android.view.ViewStub;
 import android.view.WindowManager;
-import android.view.WindowManagerGlobal;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -448,8 +447,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.System.REMINDER_ALERT_ENABLED), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NAVIGATION_BAR_SHOW), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.REMINDER_ALERT_INTERVAL), false, this,
                     UserHandle.USER_ALL);
             updateSettings();
@@ -465,16 +462,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.System.LOCKSCREEN_USE_WIDGET_CONTAINER_CAROUSEL))) {
                 if (mNavigationBarView != null) {
                     mNavigationBarView.disableCameraByUser();
-                }
-            } else if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.NAVIGATION_BAR_SHOW))) {
-                boolean enabled = Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.NAVIGATION_BAR_SHOW, 1) == 1;
-                if (enabled) {
-                    makeNavigationBarView();
-                    addNavigationBar();
-                } else {
-                    removeNavigationBar();
                 }
             }
             updateBrightness();
@@ -515,37 +502,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     0, UserHandle.USER_CURRENT) == 1;
 
         }
-    }
-
-    private void makeNavigationBarView() {
-        boolean showNav = true;
-        try {
-              showNav = mWindowManagerService.hasNavigationBar()
-                                  || mWindowManagerService.wantsNavigationBar();
-        } catch(RemoteException ex) {
-            Log.e("NavBar", "Exception while checking NavigationBar stuff via WindowManagerStuff", ex);
-        }
-
-        if (DEBUG) Log.v(TAG, "hasNavigationBar=" + showNav);
-        if (showNav) {
-            if (!mRecreating) {
-                if (mNavigationBarView == null) {
-                    mNavigationBarView = (NavigationBarView) View.inflate(mContext, R.layout.navigation_bar, null);
-                }
-                mNavigationBarView.setDisabledFlags(mDisabled);
-                mNavigationBarView.setBar(this);
-                mNavigationBarView.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        checkUserAutohide(v, event);
-                        return false;
-                    }
-                });
-                addNavigationBar();
-            }
-        }
-        // set recents activity navigation bar view
-        RecentsActivity.setNavigationBarView(mNavigationBarView);
     }
 
     private void updateBatteryIcons() {
@@ -866,7 +822,28 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         updateShowSearchHoldoff();
 
-        makeNavigationBarView();
+        try {
+            boolean showNav = mWindowManagerService.hasNavigationBar();
+            if (DEBUG) Log.v(TAG, "hasNavigationBar=" + showNav);
+            if (showNav) {
+                mNavigationBarView =
+                    (NavigationBarView) View.inflate(context, R.layout.navigation_bar, null);
+
+                mNavigationBarView.setDisabledFlags(mDisabled);
+                mNavigationBarView.setBar(this);
+                mNavigationBarView.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        checkUserAutohide(v, event);
+                        return false;
+                    }});
+            }
+        } catch (RemoteException ex) {
+            // no window manager? good luck with that
+        }
+
+        // set recents activity navigation bar view
+        RecentsActivity.setNavigationBarView(mNavigationBarView);
 
         /* ChaosLab: GestureAnywhere - BEGIN */
         addGestureAnywhereView();
@@ -1378,24 +1355,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         prepareNavigationBarView();
 
-        try {
-            mWindowManager.addView(mNavigationBarView, getNavigationBarLayoutParams());
-        } catch (java.lang.IllegalStateException ex) {
-            // looks like we're fashionably late to this party... get over it.
-        }
-    }
-
-    private void removeNavigationBar() {
-        if (mNavigationBarView != null) {
-            mNavigationBarView.setOnTouchListener(null);
-            try {
-                mWindowManager.removeView(mNavigationBarView);
-            } catch (java.lang.IllegalStateException ex) {
-                // get over it
-            }
-            mNavigationBarView = null;
-        }
-        updateSearchPanel();
+        mWindowManager.addView(mNavigationBarView, getNavigationBarLayoutParams());
     }
 
     private void repositionNavigationBar() {
