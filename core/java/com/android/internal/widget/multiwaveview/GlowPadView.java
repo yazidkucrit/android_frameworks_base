@@ -68,6 +68,12 @@ public class GlowPadView extends View {
     private static final int STATE_SNAP = 4;
     private static final int STATE_FINISH = 5;
 
+    //Lockscreen targets
+    /**
+     * @hide
+     */
+    public final static String ICON_RESOURCE = "icon_resource";
+
     // Animation properties.
     private static final float SNAP_MARGIN_DEFAULT = 20.0f; // distance to ring before we snap to it
 
