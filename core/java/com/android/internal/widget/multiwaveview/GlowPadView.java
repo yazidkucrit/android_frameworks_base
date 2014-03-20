@@ -780,6 +780,26 @@ public class GlowPadView extends View {
     }
 
     /**
+     * Sets the target descriptions for accessibility.
+     *
+     * @param targetDescriptions The target descriptions list.
+     * @hide
+     */
+    public void setTargetDescriptions(ArrayList<String> targetDescriptions) {
+        mTargetDescriptions = targetDescriptions;
+    }
+
+    /**
+     * Sets the target direction descriptions for accessibility.
+     *
+     * @param targetDescriptions The target descriptions list.
+     * @hide
+     */
+    public void setDirectionDescriptions(ArrayList<String> directionDescriptions) {
+        mDirectionDescriptions = directionDescriptions;
+    }
+
+    /**
      * Enable or disable vibrate on touch.
      *
      * @param enabled
