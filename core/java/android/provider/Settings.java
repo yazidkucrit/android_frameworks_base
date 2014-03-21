@@ -2621,6 +2621,13 @@ public final class Settings {
                 "lockscreen_use_widget_container_carousel";
 
         /**
+         * Whether to hide the frame behind lockscreen widgets
+         * @hide
+         */
+        public static final String LOCKSCREEN_WIDGET_FRAME_ENABLED =
+                "lockscreen_widget_frame_enabled";
+
+        /**
          * Whether to use gesture anywhere feature.
          * @hide
          */
@@ -2655,6 +2662,7 @@ public final class Settings {
          */
         @ChaosLab(name="GestureAnywhere", classification=Classification.NEW_FIELD)
         public static final String GESTURE_ANYWHERE_TRIGGER_TOP = "gesture_anywhere_trigger_top";
+
 
         /**
          * Height of the gesture anywhere trigger.
