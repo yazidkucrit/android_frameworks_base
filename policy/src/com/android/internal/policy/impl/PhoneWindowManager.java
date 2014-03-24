@@ -1475,12 +1475,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // Allow the navigation bar to move on small devices (phones).
         mNavigationBarCanMove = shortSizeDp < 600;
 
-        final int showByDefault = mContext.getResources().getBoolean(
-                    com.android.internal.R.bool.config_showNavigationBar) ? 1 : 0;
-        mHasNavigationBar = Settings.System.getIntForUser(mContext.getContentResolver(),
-                    Settings.System.NAVIGATION_BAR_SHOW, showByDefault,
-                    UserHandle.USER_CURRENT) == 1;
-
+        mHasNavigationBar = res.getBoolean(com.android.internal.R.bool.config_showNavigationBar);
         // Allow a system property to override this. Used by the emulator.
         // See also hasNavigationBar().
         String navBarOverride = SystemProperties.get("qemu.hw.mainkeys");
@@ -1608,12 +1603,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
             mVolumeWakeScreen = Settings.System.getIntForUser(resolver,
                     Settings.System.VOLUME_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) != 0;
-
-            final int showByDefault = mContext.getResources().getBoolean(
-                    com.android.internal.R.bool.config_showNavigationBar) ? 1 : 0;
-            mHasNavigationBar = Settings.System.getIntForUser(resolver,
-                    Settings.System.NAVIGATION_BAR_SHOW, showByDefault,
-                    UserHandle.USER_CURRENT) == 1;
 
             mVirtualKeysHapticFeedback = Settings.System.getIntForUser(resolver,
                     Settings.System.VIRTUAL_KEYS_HAPTIC_FEEDBACK, 1, UserHandle.USER_CURRENT) != 0;
