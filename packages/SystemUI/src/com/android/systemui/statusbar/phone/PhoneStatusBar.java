@@ -822,7 +822,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         }
 
         // set recents activity navigation bar view
-        RecentsActivity.setNavigationBarView(mNavigationBarView);
+        RecentsActivity.addNavigationCallback(mNavigationBarView);
 
         /* ChaosLab: GestureAnywhere - BEGIN */
         addGestureAnywhereView();
