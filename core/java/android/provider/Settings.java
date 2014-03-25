@@ -3504,7 +3504,7 @@ public final class Settings {
         public static final String ANIMATION_IME_EXIT = "animation_ime_exit";
 
         /**
-         *
+         * Whether to wake the screen with the volume keys, the value is boolean.
          * @hide
          */
         public static final String ANIMATION_IME_INTERPOLATOR = "animation_ime_interpolator";
