@@ -204,7 +204,6 @@ public class RecentsVerticalScrollView extends ScrollView
         }
     }
 
-<<<<<<< HEAD
     @Override
     public void swipeAllViewsInLayout() {
         smoothScrollTo(0, 0);
