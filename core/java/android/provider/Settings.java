@@ -3208,12 +3208,6 @@ public final class Settings {
         public static final String LOCKSCREEN_NOTIFICATIONS_COLOR = "lockscreen_notifications_color";
 
         /**
-         * Always show the battery status on the lockscreen
-         * @hide
-         */
-        public static final String LOCKSCREEN_ALWAYS_SHOW_BATTERY = "lockscreen_always_show_battery";
-
-        /**
          * MediaScanner behavior on boot.
          * 0 = enabled
          * 1 = ask (notification)
@@ -3903,7 +3897,6 @@ public final class Settings {
             TELO_RADIO_LTE,
             TELO_RADIO_2G_SCREENOFF,
             TELO_RADIO_GO3G_UNLOCK,
-            LOCKSCREEN_ALWAYS_SHOW_BATTERY,
         };
 
         /**
@@ -4977,12 +4970,6 @@ public final class Settings {
          */
         public static final String LOCK_SCREEN_OWNER_INFO_ENABLED =
             "lock_screen_owner_info_enabled";
-
-        /**
-         * This preference enables showing the power menu on LockScreen.
-         * @hide
-         */
-        public static final String LOCK_SCREEN_POWER_MENU = "lock_screen_power_menu";
 
         /**
          * The Logging ID (a unique 64-bit value) as a hex string.
