@@ -3377,11 +3377,10 @@ public final class Settings {
         public static final String DOUBLE_TAP_SLEEP_STATUS_BAR = "double_tap_sleep_status_bar";
 
         /**
-         *  Enable statusbar double tap gesture on to put device to sleep
+         *  Enable lockscreen double tap gesture on to put device to sleep
          * @hide
          */
         public static final String DOUBLE_TAP_SLEEP_LOCKSCREEN = "double_tap_sleep_lockscreen";
-
 
         /**
          *
