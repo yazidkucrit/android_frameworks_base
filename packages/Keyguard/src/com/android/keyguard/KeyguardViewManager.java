@@ -516,8 +516,8 @@ public class KeyguardViewManager {
             mKeyguardView.requestFocus();
         }
 
-        if(mBlurredImage != null || (mSeeThrough && mBlurRadius == 0)) {
-            if (mBlurredImage != null || mLockscreenBackground != null) {
+        if(mBlurredImage != null || mLockscreenBackground != null || (mSeeThrough && mBlurRadius == 0)) {
+            if (mBlurredImage != null) {
                 int currentRotation = mKeyguardView.getDisplay().getRotation() * 90;
                 mBlurredImage = rotateBmp(mBlurredImage, mLastRotation - currentRotation);
                 mLastRotation = currentRotation;
