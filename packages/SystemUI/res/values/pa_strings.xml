@@ -89,6 +89,7 @@
     <string name="quick_settings_sleep_action_label">Sleep</string>
     <string name="quick_settings_sleep_time_15_label">15 seconds</string>
     <string name="quick_settings_sleep_time_30_label">30 seconds</string>
+    <string name="quick_settings_sleep_time_45_label">45 seconds</string>
     <string name="quick_settings_sleep_time_60_label">60 seconds</string>
     <string name="quick_settings_sleep_time_120_label">2 minutes</string>
     <string name="quick_settings_sleep_time_300_label">5 minutes</string>
