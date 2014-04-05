@@ -1848,4 +1848,7 @@
   <java-symbol type="bool" name="config_smsUseExpectMore" />
 
   <java-symbol type="integer" name="config_wallpaperMaxWidth" />
+
+  <!-- Package Manager -->
+  <java-symbol type="array" name="config_disabledComponents" />
 </resources>
