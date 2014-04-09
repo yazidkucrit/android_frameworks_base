@@ -99,7 +99,6 @@ public class KeyguardViewManager {
 
     private boolean mScreenOn = false;
     private LockPatternUtils mLockPatternUtils;
-
     private Bitmap mCustomImage = null;
     private int mBlurRadius = 12;
     private boolean mSeeThrough = false;
