@@ -317,8 +317,8 @@ public class KeyguardViewManager {
 
         public ViewManagerHost(Context context) {
             super(context);
-            mLastConfiguration = new Configuration(context.getResources().getConfiguration());
             setBackground(mBackgroundDrawable);
+            mLastConfiguration = new Configuration(context.getResources().getConfiguration());
         }
 
         public void setCustomBackground(Drawable d) {
