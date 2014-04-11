@@ -25,6 +25,7 @@ import android.app.ActivityManagerNative;
 import android.app.ActivityOptions;
 import android.app.TaskStackBuilder;
 import android.content.ActivityNotFoundException;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -372,7 +373,8 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             // if there are no apps, bring up a "No recent apps" message
             mRecentsNoApps.setAlpha(1f);
             mRecentsNoApps.setVisibility(getTasks() == 0 ? View.VISIBLE : View.INVISIBLE);
-            mClearRecents.setVisibility(getTasks() == 0 ? View.GONE : View.VISIBLE);
+            // mClearRecents is the top right view not the nabar one, so show it when navbar is not showing and/or pie is disabled.
+            mClearRecents.setVisibility(showAlternativeRecentsClearAll() && getTasks() > 0 ? View.VISIBLE : View.GONE);
 
             boolean showClearAllButton = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.SHOW_CLEAR_RECENTS_BUTTON, 1) == 1;
@@ -412,6 +414,11 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                 mPopup.dismiss();
             }
         }
+    }
+
+    public boolean showAlternativeRecentsClearAll() {
+        return Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.ALTERNATIVE_RECENTS_CLEAR_ALL, 0, UserHandle.USER_CURRENT) == 1;
     }
 
     protected void onAttachedToWindow () {
