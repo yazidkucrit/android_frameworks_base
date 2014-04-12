@@ -186,6 +186,9 @@ final class DisplayPowerController {
     // The display blanker.
     private final DisplayBlanker mDisplayBlanker;
 
+    // Our context
+    private final Context mContext;
+
     // Our handler.
     private final DisplayControllerHandler mHandler;
 
@@ -396,6 +399,7 @@ final class DisplayPowerController {
         mDisplayBlanker = displayBlanker;
         mCallbacks = callbacks;
         mCallbackHandler = callbackHandler;
+        mContext = context;
 
         mLights = lights;
         mTwilight = twilight;
