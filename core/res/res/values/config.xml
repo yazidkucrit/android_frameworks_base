@@ -774,7 +774,6 @@
         <!-- The standard AOSP fused location provider -->
         <item>com.android.location.fused</item>
         <item>com.google.android.gms</item>
-        <item>com.google.android.location</item>
     </string-array>
 
     <!-- Boolean indicating if current platform supports bluetooth SCO for off call
@@ -1306,22 +1305,4 @@
         <item>333</item>
         <item>353</item>
     </string-array>
-
-    <!-- Boolean to enable adb by default on a per-device basis -->
-    <bool name="config_enableAdbByDefault">false</bool>
-
-    <!-- Setting to false will disable CM's IME switcher implementation for tablets -->
-    <bool name="config_show_cmIMESwitcher">true</bool>
-
-    <!-- Device has a h/w rotation lock switch -->
-    <bool name="config_hasRotationLockSwitch">false</bool>
-
-   <!-- set to false if we dont need to consider data
-         service state to display signal strength bars -->
-    <bool name="config_combined_signal">true</bool>
-
-    <!-- Maximum wallpaper width for devices with very high-res screen (1920x1200)
-         the wallpaper width suggestion by the launcher may be too large for
-         the GPU to handle. -->
-    <integer name="config_wallpaperMaxWidth">-1</integer>
 </resources>

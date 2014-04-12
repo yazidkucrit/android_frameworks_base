@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright (C) 2014 ParanoidAndroid Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Dialog Cancel/OK -->
+    <string name="cancel">Cancel</string>
+    <string name="dlg_ok">Ok</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <!--App killed message used for navring targets -->
+    <string name="app_killed_message">App Killed</string>
+
+    <!-- Recents Ram Bar -->
+    <string name="memory">RAM</string>
+    <!-- [CHAR LIMIT=10] Running services, summary of background processes -->
+    <string name="service_free_mem"><xliff:g id="memory">%1$s</xliff:g> free</string>
+    <!-- [CHAR LIMIT=10] Running services, summary of foreground processes -->
+    <string name="service_used_mem"><xliff:g id="memory">%1$s</xliff:g> used</string>
+
+    <!-- NFC Quicksettings tile -->
+    <string name="quick_settings_nfc_label">NFC on</string>
+    <string name="quick_settings_nfc_off_label">NFC off</string>
+
+    <!-- ADB over network quicksettings tile -->
+    <string name="quick_settings_adb_label">ADB over network on</string>
+    <string name="quick_settings_adb_off_label">ADB over network off</string>
+
+    <!-- Dialog title for navigation bar button selection -->
+    <string name="navbar_dialog_title">Choose action to assign</string>
+    <string name="navbar_home_button">Home button</string>
+    <string name="navbar_recent_button">Recent button</string>
+    <string name="navbar_search_button">Search button</string>
+    <string name="navbar_back_button">Back button</string>
+    <string name="navbar_empty_button">Empty button</string>
+    <string name="navbar_menu_conditional_button">Menu (AutoHide) button</string>
+    <string name="navbar_menu_always_button">Menu (AlwaysShow) button</string>
+    <string name="navbar_menu_big_button">Menu button</string>
+
+    <!-- Notification Reminders -->
+    <string name="quick_settings_reminder">Reminder</string>
+    <string name="quick_settings_reminder_title">Title:</string>
+    <string name="quick_settings_reminder_message">Message:</string>
+    <string name="quick_settings_reminder_time">Reminder Time</string>
+    <string name="quick_settings_reminder_set">Set Time</string>
+    <string name="quick_settings_reminder_update">Update Time</string>
+    <string name="quick_settings_reminder_no_expire">No notification</string>
+    <string name="quick_settings_reminder_dismiss">Clear Reminder</string>
+    <string name="quick_settings_reminder_dismiss_message">Clear current reminder?</string>
+    <string name="quick_settings_reminder_help_title">Touch</string>
+    <string name="quick_settings_reminder_noti_dismiss">Dismiss</string>
+    <string name="quick_settings_reminder_help_message">Touch the empty space above to set or change the reminder. Long-press to clear the current reminder.</string>
+
+    <!-- Hide notification icons -->
+    <string name="status_bar_notification_hide_icon_packages">Hide app\'s notification icon(s)</string>
+</resources>
