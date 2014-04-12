@@ -3405,7 +3405,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             } else {
                 // use alternative clear all view/button?
                 Settings.System.putInt(mContext.getContentResolver(), Settings.System.ALTERNATIVE_RECENTS_CLEAR_ALL,
-                        mHasNavigationBar || mDevForceNavbar ? SHOW_ALTERNATIVE_RECENTS_CLEAR_ALL : HIDE_ALTERNATIVE_RECENTS_CLEAR_ALL);
+                        mHasNavigationBar || mDevForceNavbar ? HIDE_ALTERNATIVE_RECENTS_CLEAR_ALL : SHOW_ALTERNATIVE_RECENTS_CLEAR_ALL);
             }
 
             // If one is not in immersive mode and starts an app with native immersive mode
