@@ -14,9 +14,6 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- Network stats text size -->
-    <dimen name="network_stats_text_size">9dp</dimen>   
-
     <!-- Pie controls dimensions -->
     <dimen name="pie_trigger_height">10dp</dimen>
     <dimen name="pie_trigger_width">150dp</dimen>

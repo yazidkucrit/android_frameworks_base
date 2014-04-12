@@ -27,37 +27,9 @@
     <!--Screenshot delete -->
     <string name="screenshot_delete_action">Delete</string>
     <string name="screenshot_delete_confirmation">Screenshot deleted</string>
-    <!-- Quick pulldown confirmation dialog -->
-    <string name="quick_settings_quick_pull_down_title">Quick pull down</string>
-    <string name="quick_settings_quick_pull_down_message">Would you like the edge of the status bar to pull down quick settings?</string>
-
-    <!-- Dialog Cancel/OK -->
-    <string name="cancel">Cancel</string>
-    <string name="dlg_ok">Ok</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-
-    <!--App killed message used for navring targets -->
-    <string name="app_killed_message">App Killed</string>
     <!-- QS Battery Tile -->
     <string name="quick_settings_battery_charging">Charging</string>
     <string name="quick_settings_battery_discharging">Discharging</string>
-
-    <!-- Recents Ram Bar -->
-    <string name="memory">RAM</string>
-    <!-- [CHAR LIMIT=10] Running services, summary of background processes -->
-    <string name="service_free_mem"><xliff:g id="memory">%1$s</xliff:g> free</string>
-    <!-- [CHAR LIMIT=10] Running services, summary of foreground processes -->
-    <string name="service_used_mem"><xliff:g id="memory">%1$s</xliff:g> used</string>
-
-    <!-- NFC Quicksettings tile -->
-    <string name="quick_settings_nfc_label">NFC on</string>
-    <string name="quick_settings_nfc_off_label">NFC off</string>
-
-    <!-- ADB ober network quicksettings tile -->
-    <string name="quick_settings_adb_label">ADB over network on</string>
-    <string name="quick_settings_adb_off_label">ADB over network off</string>
-
     <!-- QuickSettings: Immersive global mode [CHAR LIMIT=NONE] -->
     <string name="quick_settings_immersive_global_on_label">Immersive</string>
     <!-- QuickSettings: Immersive global mode (Off) [CHAR LIMIT=NONE] -->
@@ -65,7 +37,6 @@
     <!-- QuickSettings: Immersive active modes [CHAR LIMIT=NONE] -->
     <string name="quick_settings_immersive_mode_off_label">Disabled</string>
     <string name="quick_settings_immersive_mode_full_label">Full</string>
-    <!-- QuickSettings: Immersive extra modes [CHAR LIMIT=NONE] -->
     <string name="quick_settings_immersive_mode_no_status_bar_label">Navigation bar</string>
     <string name="quick_settings_immersive_mode_no_navigation_bar_label">Status bar</string>
     <!-- QuickSettings: LTE On [CHAR LIMIT=NONE] -->
@@ -83,23 +54,11 @@
     <!-- QuickSettings: USB Tether Tile [CHAR LIMIT=NONE] -->
     <string name="quick_settings_usb_tether_connected_label">USB Tethering Off</string>
     <string name="quick_settings_usb_tether_on_label">USB Tethering</string>
-
-    <!-- Dialog title for navigation bar button selection -->
-    <string name="navbar_dialog_title">Choose action to assign</string>
-    <string name="navbar_home_button">Home button</string>
-    <string name="navbar_recent_button">Recent button</string>
-    <string name="navbar_search_button">Search button</string>
-    <string name="navbar_back_button">Back button</string>
-    <string name="navbar_empty_button">Empty button</string>
-    <string name="navbar_menu_conditional_button">Menu (AutoHide) button</string>
-    <string name="navbar_menu_always_button">Menu (AlwaysShow) button</string>
-    <string name="navbar_menu_big_button">Menu button</string>
-
     <!-- QuickSettings: Sleep Tile [CHAR LIMIT=NONE] -->
     <string name="quick_settings_sleep_action_label">Sleep</string>
     <string name="quick_settings_sleep_time_15_label">15 seconds</string>
     <string name="quick_settings_sleep_time_30_label">30 seconds</string>
-    <string name="quick_settings_sleep_time_45_label">45 seconds</string>
+    <string name="quick_settings_sleep_time_30_label">45 seconds</string>
     <string name="quick_settings_sleep_time_60_label">60 seconds</string>
     <string name="quick_settings_sleep_time_120_label">2 minutes</string>
     <string name="quick_settings_sleep_time_300_label">5 minutes</string>
@@ -125,6 +84,11 @@
     <string name="quick_settings_volume_label">Volume</string>
 
     <!-- On-the-spot preferences -->
+
+    <!-- Quick pulldown confirmation dialog -->
+    <string name="quick_settings_quick_pull_down_title">Quick pull down</string>
+    <string name="quick_settings_quick_pull_down_message">Would you like the edge of the status bar to pull down quick settings?</string>
+
     <!-- Pie controls -->
     <string name="pie_date_format">ccc, dd MMM yyyy</string>
     <string name="pie_hour_format_12">hh:mm</string>
@@ -132,25 +96,9 @@
     <string name="pie_am_pm">a</string>
     <string name="enable_pie_control_title">Pie controls</string>
     <string name="enable_pie_control_message">Would you like to use pie controls while in immersive mode?</string>
-    <string name="pie_state">@string/enable_pie_control_title</string>
 
     <!-- Names to be shown on settings, they must match with Settings.SETTINGS_TO_RESET array -->
+    <string name="quick_settings_quick_pull_down">@string/quick_settings_quick_pull_down_title</string>
     <string name="safe_headset_volume">@*android:string/safe_headset_warning_title</string>
-
-    <!-- Notification Reminders -->
-    <string name="quick_settings_reminder">Reminder</string>
-    <string name="quick_settings_reminder_title">Title:</string>
-    <string name="quick_settings_reminder_message">Message:</string>
-    <string name="quick_settings_reminder_time">Reminder Time</string>
-    <string name="quick_settings_reminder_set">Set Time</string>
-    <string name="quick_settings_reminder_update">Update Time</string>
-    <string name="quick_settings_reminder_no_expire">No notification</string>
-    <string name="quick_settings_reminder_dismiss">Clear Reminder</string>
-    <string name="quick_settings_reminder_dismiss_message">Clear current reminder?</string>
-    <string name="quick_settings_reminder_help_title">Touch</string>
-    <string name="quick_settings_reminder_noti_dismiss">Dismiss</string>
-    <string name="quick_settings_reminder_help_message">Touch the empty space above to set or change the reminder. Long-press to clear the current reminder.</string>
-
-    <!-- Hide notification icons -->
-    <string name="status_bar_notification_hide_icon_packages">Hide app\'s notification icon(s)</string>
+    <string name="pie_state">@string/enable_pie_control_title</string>
 </resources>
