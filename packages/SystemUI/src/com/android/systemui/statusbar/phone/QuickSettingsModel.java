@@ -1560,7 +1560,6 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
     // Sleep: Screen timeout sub-tile (sleep time tile)
     private static final int SCREEN_TIMEOUT_15     =   15000;
     private static final int SCREEN_TIMEOUT_30     =   30000;
-    private static final int SCREEN_TIMEOUT_45     =   45000;
     private static final int SCREEN_TIMEOUT_60     =   60000;
     private static final int SCREEN_TIMEOUT_120    =  120000;
     private static final int SCREEN_TIMEOUT_300    =  300000;
@@ -1601,9 +1600,6 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
                 screenTimeout = SCREEN_TIMEOUT_30;
                 break;
             case SCREEN_TIMEOUT_30:
-                screenTimeout = SCREEN_TIMEOUT_45;
-                break;
-            case SCREEN_TIMEOUT_45:
                 screenTimeout = SCREEN_TIMEOUT_60;
                 break;
             case SCREEN_TIMEOUT_60:
@@ -1634,8 +1630,6 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
                 return mContext.getString(R.string.quick_settings_sleep_time_15_label);
             case SCREEN_TIMEOUT_30:
                 return mContext.getString(R.string.quick_settings_sleep_time_30_label);
-            case SCREEN_TIMEOUT_45:
-                return mContext.getString(R.string.quick_settings_sleep_time_45_label);
             case SCREEN_TIMEOUT_60:
                 return mContext.getString(R.string.quick_settings_sleep_time_60_label);
             case SCREEN_TIMEOUT_120:

@@ -39,7 +39,6 @@
     <string name="quick_settings_sleep_action_label">Bloquear</string>
     <string name="quick_settings_sleep_time_15_label">15 segundos</string>
     <string name="quick_settings_sleep_time_30_label">30 segundos</string>
-    <string name="quick_settings_sleep_time_45_label">45 segundos</string>
     <string name="quick_settings_sleep_time_60_label">60 segundos</string>
     <string name="quick_settings_sleep_time_120_label">2 minutos</string>
     <string name="quick_settings_sleep_time_300_label">5 minutos</string>
