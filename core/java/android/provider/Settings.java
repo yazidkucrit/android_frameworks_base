@@ -2734,6 +2734,18 @@ public final class Settings {
         public static final String GESTURE_ANYWHERE_TRIGGER_HEIGHT = "gesture_anywhere_trigger_height";
 
         /**
+         * Opens music app when headset is plugged.
+         * @hide
+         */
+        public static final String HEADSET_PLUG_ENABLED = "headset_plug_enabled";
+
+        /**
+         * Disable opens music app when headset is plugged.
+         * @hide
+         */
+        public static final String HEADSET_PLUG_SYSTEM_DEFAULT = "SYSTEM_DEFAULT";
+
+        /**
 	*
 	* SMOOTH PROGRESS BAR interpolator
 	* @hide
