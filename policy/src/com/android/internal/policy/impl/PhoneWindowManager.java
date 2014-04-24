@@ -5248,7 +5248,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
-
     private void disableQbCharger() {
         if (SystemProperties.getInt("sys.quickboot.enable", 0) == 1) {
             SystemProperties.set("sys.qbcharger.enable", "false");
