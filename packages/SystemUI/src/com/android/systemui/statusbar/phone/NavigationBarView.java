@@ -456,11 +456,11 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
         button = mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_RECENT);
         if (button != null) {
             ((ImageView) button).setImageDrawable(
-                (0 != (hints & StatusBarManager.NAVIGATION_HINT_RECENT_ALT))
-                    ? (mVertical ? mRecentAltLandIcon : mRecentAltIcon)
-                    : (mVertical ? mRecentLandIcon : mRecentIcon));
+                (0 != (hints & StatusBarManager.NAVIGATION_HINT_RECENT_ALT)) && Settings.System.getInt(
+                    mContext.getContentResolver(), Settings.System.NAVBAR_RECENTS_CLEAR_ALL, 0) != 2
+                        ? (mVertical ? mRecentAltLandIcon : mRecentAltIcon)
+                        : (mVertical ? mRecentLandIcon : mRecentIcon));
         }
-
         setDisabledFlags(mDisabledFlags, true);
     }
 

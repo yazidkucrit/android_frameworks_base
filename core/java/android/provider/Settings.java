@@ -1794,6 +1794,13 @@ public final class Settings {
             "bluetooth_discoverability_timeout";
 
         /**
+         * If all file types can be accepted over Bluetooth OBEX.
+         * @hide
+         */
+        public static final String BLUETOOTH_ACCEPT_ALL_FILES =
+            "bluetooth_accept_all_files";
+
+        /**
          * @deprecated Use {@link android.provider.Settings.Secure#LOCK_PATTERN_ENABLED}
          * instead
          */
@@ -3578,11 +3585,6 @@ public final class Settings {
         public static final String FORMAL_TEXT_INPUT = "formal_text_input";
 
         /**
-         * Force dual panel for settings
-         */
-        public static final String FORCE_DUAL_PANEL = "force_dualpanel";
-
-        /**
          * Should the non-intrsive incall ui be used
          *
          * @hide
@@ -3789,6 +3791,12 @@ public final class Settings {
          */
         public static final String CUSTOM_FLING_VELOCITY = "custom_fling_velocity";
 
+         /**
+         * Navbar recents clear all option
+         * @hide
+         */
+        public static final String NAVBAR_RECENTS_CLEAR_ALL = "navbar_recents_clear_all";
+
         /**
          * Determine custom overscroll distance.
          * @hide
@@ -3857,6 +3865,7 @@ public final class Settings {
             WIFI_STATIC_DNS2,
             BLUETOOTH_DISCOVERABILITY,
             BLUETOOTH_DISCOVERABILITY_TIMEOUT,
+            BLUETOOTH_ACCEPT_ALL_FILES,
             DIM_SCREEN,
             SCREEN_OFF_TIMEOUT,
             SCREEN_BRIGHTNESS,
@@ -3919,7 +3928,8 @@ public final class Settings {
          */
         public static final String[] SETTINGS_TO_RESET = {
             SAFE_HEADSET_VOLUME,
-            PIE_STATE
+            PIE_STATE,
+            NAVBAR_RECENTS_CLEAR_ALL
         };
 
         // Settings moved to Settings.Secure
