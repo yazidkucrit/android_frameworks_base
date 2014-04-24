@@ -3514,6 +3514,12 @@ public final class Settings {
          */
         public static final String CUSTOM_FLING_VELOCITY = "custom_fling_velocity";
 
+         /**
+         * Navbar recents clear all option
+         * @hide
+         */
+        public static final String NAVBAR_RECENTS_CLEAR_ALL = "navbar_recents_clear_all";
+
         /**
          * Determine custom overscroll distance.
          * @hide
@@ -3648,7 +3654,8 @@ public final class Settings {
          */
         public static final String[] SETTINGS_TO_RESET = {
             SAFE_HEADSET_VOLUME,
-            PIE_STATE
+            PIE_STATE,
+            NAVBAR_RECENTS_CLEAR_ALL
         };
 
         // Settings moved to Settings.Secure
