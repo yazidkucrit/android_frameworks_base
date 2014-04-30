@@ -2136,6 +2136,20 @@ public final class Settings {
         public static final String REVERSE_LOOKUP_PROVIDER = "reverse_lookup_provider";
 
         /**
+         * The OpenCNAM paid account ID
+         *
+         * @hide
+         */
+        public static final String DIALER_OPENCNAM_ACCOUNT_SID = "dialer_opencnam_account_sid";
+
+        /**
+         * The OpenCNAM authentication token
+         *
+         * @hide
+         */
+        public static final String DIALER_OPENCNAM_AUTH_TOKEN = "dialer_opencnam_auth_token";
+
+        /**
          * Whether silent mode should allow vibration feedback. This is used
          * internally in AudioService and the Sound settings activity to
          * coordinate decoupling of vibrate and silent modes. This setting
@@ -3846,21 +3860,20 @@ public final class Settings {
         public static final String PIE_GRAVITY = "pie_gravity";
 
         /**
-<<<<<<< HEAD
          * Whether to show alternative recent clear all button on recent panel top right corner:
          * - navbar is not enabled/present
          * - pie immersive is disabled and not showing
          * @hide
          */
         public static final String ALTERNATIVE_RECENTS_CLEAR_ALL = "alternative_recents_clear_all";
-=======
+
+        /**
          * Either if notification peek is enabled of disabled
          * 0 = disabled (default)
          * 1 = enabled
          * @hide
          */
         public static final String PEEK_STATE = "peek_state";
->>>>>>> base/remix-staging
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
