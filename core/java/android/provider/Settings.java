@@ -3810,6 +3810,14 @@ public final class Settings {
         public static final String CUSTOM_OVERFLING_DISTANCE = "custom_overfling_distance";
 
         /**
+         * Recents longpress switchs apps.
+         * 0 = off
+         * 1 = on
+         * @hide
+         */
+        public static final String RECENTS_SWITCH = "recents_switch";
+
+        /**
          * Pie control panel. Meet him on the spot.
          * 0 = off
          * 1 = on
@@ -3838,12 +3846,21 @@ public final class Settings {
         public static final String PIE_GRAVITY = "pie_gravity";
 
         /**
+<<<<<<< HEAD
          * Whether to show alternative recent clear all button on recent panel top right corner:
          * - navbar is not enabled/present
          * - pie immersive is disabled and not showing
          * @hide
          */
         public static final String ALTERNATIVE_RECENTS_CLEAR_ALL = "alternative_recents_clear_all";
+=======
+         * Either if notification peek is enabled of disabled
+         * 0 = disabled (default)
+         * 1 = enabled
+         * @hide
+         */
+        public static final String PEEK_STATE = "peek_state";
+>>>>>>> base/remix-staging
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
@@ -3929,7 +3946,8 @@ public final class Settings {
         public static final String[] SETTINGS_TO_RESET = {
             SAFE_HEADSET_VOLUME,
             PIE_STATE,
-            NAVBAR_RECENTS_CLEAR_ALL
+            NAVBAR_RECENTS_CLEAR_ALL,
+            RECENTS_SWITCH
         };
 
         // Settings moved to Settings.Secure
