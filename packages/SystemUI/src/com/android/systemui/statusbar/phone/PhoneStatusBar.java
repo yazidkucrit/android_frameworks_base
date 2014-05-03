@@ -38,6 +38,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -3132,6 +3133,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                 startActivityDismissingKeyguard(
                         new Intent(android.provider.Settings.ACTION_SETTINGS), true);
             }
+        }
+    };
+
+   private View.OnClickListener mCalendarClickListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            Intent intent=Intent.makeMainSelectorActivity(Intent.ACTION_MAIN,
+                                                        Intent.CATEGORY_APP_CALENDAR);
+            startActivityDismissingKeyguard(intent,true);
         }
     };
 
