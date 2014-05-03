@@ -884,7 +884,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         mClearButton.setEnabled(false);
         mDateView = (DateView)mStatusBarWindow.findViewById(R.id.date);
         if (mDateView != null) {
-            mDateView.setOnClickListener(mCalendarClickListener);
+            mDateView.setOnClickListener(mDateClickListener);
             mDateView.setEnabled(true);
         }
         mClockView = mNotificationPanelHeader.findViewById(R.id.clock);
@@ -1039,7 +1039,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
                     View qsDateView = mSettingsPanel.findViewById(R.id.date);
                     if (qsDateView != null) {
-                        qsDateView.setOnClickListener(mCalendarClickListener);
+                        qsDateView.setOnClickListener(mDateClickListener);
                         qsDateView.setEnabled(true);
                     }
                 }
@@ -3133,14 +3133,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                 startActivityDismissingKeyguard(
                         new Intent(android.provider.Settings.ACTION_SETTINGS), true);
             }
-        }
-    };
-
-   private View.OnClickListener mCalendarClickListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            Intent intent=Intent.makeMainSelectorActivity(Intent.ACTION_MAIN,
-                                                        Intent.CATEGORY_APP_CALENDAR);
-            startActivityDismissingKeyguard(intent,true);
         }
     };
 
