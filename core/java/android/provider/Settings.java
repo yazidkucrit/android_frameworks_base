@@ -3546,18 +3546,6 @@ public final class Settings {
          */
         public static final String RECENTS_RAM_BAR_ACTIVE_APPS_COLOR = "recents_ram_bar_active_apps_color";
 
-         /**
-         * show "clear all recents" button
-         *  @hide
-         */
-        public static final String SHOW_CLEAR_RECENTS_BUTTON = "clear_recents_button";
-
-        /**
-         * location of the "clear all recents" button
-         * @hide
-         */
-        public static final String CLEAR_RECENTS_BUTTON_LOCATION = "clear_recents_button_location";
-
         /**
          * Developer options - Navigation Bar show switch
          * @hide
