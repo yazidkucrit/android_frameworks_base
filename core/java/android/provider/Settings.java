@@ -3373,20 +3373,6 @@ public final class Settings {
          */
         public static final String FORMAL_TEXT_INPUT = "formal_text_input";
 
-         /**
-         * Should Dialer suggest nearby phone numbers
-         *
-         * @hide
-         */
-        public static final String ENABLE_DIALER_SUGGESTIONS = "enable_dialer_suggestions";
-
-        /**
-         * Should Dialer reverse look up names for unknown phone numbers
-         *
-         * @hide
-         */
-        public static final String ENABLE_DIALER_REVERSE_LOOKUP = "enable_dialer_reverse_lookup";
-
         /**
          * Setting to show determine if AOSP dialer is used
          * @hide
