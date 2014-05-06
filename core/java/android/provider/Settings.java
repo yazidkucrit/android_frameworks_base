@@ -3859,6 +3859,14 @@ public final class Settings {
         public static final String PIE_GRAVITY = "pie_gravity";
 
         /**
+         * Either if notification peek is enabled of disabled
+         * 0 = disabled (default)
+         * 1 = enabled
+         * @hide
+         */
+        public static final String PEEK_STATE = "peek_state";
+
+        /**
          * Whether to show alternative recent clear all button on recent panel top right corner:
          * - navbar is not enabled/present
          * - pie immersive is disabled and not showing
@@ -3867,12 +3875,19 @@ public final class Settings {
         public static final String ALTERNATIVE_RECENTS_CLEAR_ALL = "alternative_recents_clear_all";
 
         /**
-         * Either if notification peek is enabled of disabled
-         * 0 = disabled (default)
-         * 1 = enabled
+         * Whether incomming call UI stays in background
+         *
          * @hide
          */
-        public static final String PEEK_STATE = "peek_state";
+        public static final String CALL_UI_IN_BACKGROUND = "call_ui_in_background";
+
+        /**
+         * In call dialpad state.
+         * 0 = hidden
+         * 1 = showing
+         * @hide
+         */
+        public static final String DIALPAD_STATE = "dialpad_state";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
