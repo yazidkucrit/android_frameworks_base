@@ -2120,6 +2120,19 @@ public final class Settings {
         public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
 
         /**
+         * Battery warning preferences
+         *
+         * 0 = show dialog + play sound (default)
+         * 1 = fire notification + play sound
+         * 2 = show dialog only
+         * 3 = fire notification only
+         * 4 = play sound only
+         * 5 = none
+         * @hide
+         */
+        public static final String POWER_UI_LOW_BATTERY_WARNING_POLICY = "power_ui_low_battery_warning_policy";
+
+        /**
          * Enable looking up of phone numbers of nearby places
          *
          * @hide
@@ -2160,6 +2173,20 @@ public final class Settings {
          * @hide
          */
         public static final String REVERSE_LOOKUP_PROVIDER = "reverse_lookup_provider";
+
+        /**
+         * The OpenCNAM paid account ID
+         *
+         * @hide
+         */
+        public static final String DIALER_OPENCNAM_ACCOUNT_SID = "dialer_opencnam_account_sid";
+
+        /**
+         * The OpenCNAM authentication token
+         *
+         * @hide
+         */
+        public static final String DIALER_OPENCNAM_AUTH_TOKEN = "dialer_opencnam_auth_token";
 
         /**
          * Whether silent mode should allow vibration feedback. This is used
@@ -2719,6 +2746,18 @@ public final class Settings {
          */
         @ChaosLab(name="GestureAnywhere", classification=Classification.NEW_FIELD)
         public static final String GESTURE_ANYWHERE_TRIGGER_HEIGHT = "gesture_anywhere_trigger_height";
+
+        /**
+         * Opens music app when headset is plugged.
+         * @hide
+         */
+        public static final String HEADSET_PLUG_ENABLED = "headset_plug_enabled";
+
+        /**
+         * Disable opens music app when headset is plugged.
+         * @hide
+         */
+        public static final String HEADSET_PLUG_SYSTEM_DEFAULT = "SYSTEM_DEFAULT";
 
         /**
 	*
@@ -3374,27 +3413,6 @@ public final class Settings {
         public static final String FORMAL_TEXT_INPUT = "formal_text_input";
 
         /**
-         * Should the non-intrsive incall ui be used
-         *
-         * @hide
-         */
-        public static final String NON_INTRUSIVE_INCALL = "non_intrusive_incall";
-
-         /**
-         * Should Dialer suggest nearby phone numbers
-         *
-         * @hide
-         */
-        public static final String ENABLE_DIALER_SUGGESTIONS = "enable_dialer_suggestions";
-
-        /**
-         * Should Dialer reverse look up names for unknown phone numbers
-         *
-         * @hide
-         */
-        public static final String ENABLE_DIALER_REVERSE_LOOKUP = "enable_dialer_reverse_lookup";
-
-        /**
          * Setting to show determine if AOSP dialer is used
          * @hide
          */
@@ -3412,6 +3430,30 @@ public final class Settings {
          * @hide
          */
         public static final String NOTIFICATION_CUSTOM_CARRIER_LABEL = "notification_custom_carrier_label";
+
+        /**
+         * Hide carrier information on notification drawer
+         * @hide
+         */
+        public static final String NOTIFICATION_HIDE_CARRIER = "notification_hide_carrier";
+
+        /**
+         * Stores values for notification shortcut targets
+         * @hide
+         */
+        public static final String NOTIFICATION_SHORTCUTS_CONFIG = "notification_shortcuts_config";
+
+        /**
+         * Stores the value for notification shortcuts icon color
+         * @hide
+         */
+        public static final String NOTIFICATION_SHORTCUTS_COLOR = "notification_shortcuts_color";
+
+        /**
+         * Whether to colorize the default application icons
+         * @hide
+         */
+        public static final String NOTIFICATION_SHORTCUTS_COLOR_MODE = "notification_shortcuts_color_mode";
 
         /**
          *  TeloRadio Low power network
@@ -3643,6 +3685,21 @@ public final class Settings {
          * @hide
          */
         public static final String PEEK_STATE = "peek_state";
+
+        /**
+         * Whether incomming call UI stays in background
+         *
+         * @hide
+         */
+        public static final String CALL_UI_IN_BACKGROUND = "call_ui_in_background";
+
+        /**
+         * In call dialpad state.
+         * 0 = hidden
+         * 1 = showing
+         * @hide
+         */
+        public static final String DIALPAD_STATE = "dialpad_state";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
@@ -6102,24 +6159,6 @@ public final class Settings {
         public static final String POWER_SOUNDS_ENABLED = "power_sounds_enabled";
 
         /**
-         * Whether to sound when charger power is connected/disconnected
-         * @hide
-         */
-        public static final String POWER_NOTIFICATIONS_ENABLED = "power_notifications_enabled";
-
-        /**
-         * Whether to vibrate when charger power is connected/disconnected
-         * @hide
-         */
-        public static final String POWER_NOTIFICATIONS_VIBRATE = "power_notifications_vibrate";
-
-        /**
-         * URI for power notification sounds
-         * @hide
-         */
-        public static final String POWER_NOTIFICATIONS_RINGTONE = "power_notifications_ringtone";
-
-        /**
          * URI for the "wireless charging started" sound.
          * @hide
          */
@@ -7335,9 +7374,6 @@ public final class Settings {
             AUTO_TIME,
             AUTO_TIME_ZONE,
             POWER_SOUNDS_ENABLED,
-            POWER_NOTIFICATIONS_ENABLED,
-            POWER_NOTIFICATIONS_VIBRATE,
-            POWER_NOTIFICATIONS_RINGTONE,
             DOCK_SOUNDS_ENABLED,
             USB_MASS_STORAGE_ENABLED,
             ENABLE_ACCESSIBILITY_GLOBAL_GESTURE_ENABLED,
