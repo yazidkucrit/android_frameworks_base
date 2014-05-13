@@ -1199,8 +1199,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
         mNotificationShortcutsLayout.setupShortcuts();
 
-        enableOrDisableReminder();
-
         return mStatusBarView;
     }
 
@@ -3497,7 +3495,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             boolean navLeftInLandscape = Settings.System.getInt(resolver,
                     Settings.System.NAVBAR_LEFT_IN_LANDSCAPE, 0) == 1;
             mNavigationBarView.setLeftInLandscape(navLeftInLandscape);
-
         }
 
         String notificationShortcutsIsActive = Settings.System.getStringForUser(resolver,
