@@ -21,9 +21,5 @@
     <!-- Don't use roaming icon for considered operators -->
     <string-array translatable="false" name="config_operatorConsideredNonRoaming">
         <item>23203</item>
-<<<<<<< HEAD
-        <item>23210</item>
-=======
->>>>>>> PA/kitkat
     </string-array>
 </resources>

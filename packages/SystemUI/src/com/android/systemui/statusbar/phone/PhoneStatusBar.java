@@ -1367,8 +1367,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         mNotificationShortcutsLayout.setupShortcuts();
 
-        enableOrDisableReminder();
-
         return mStatusBarView;
     }
 
