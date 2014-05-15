@@ -2698,13 +2698,6 @@ public final class Settings {
         public static final String LOCKSCREEN_DISABLE_HINTS = "lockscreen_disable_hints";
 
         /**
-         * Whether incomming call UI stays in background
-         *
-         * @hide
-         */
-        public static final String CALL_UI_IN_BACKGROUND = "call_ui_in_background";
-
-        /**
          * Whether to minimize lockscreen challenge on screen turned on
          * @hide
          */
