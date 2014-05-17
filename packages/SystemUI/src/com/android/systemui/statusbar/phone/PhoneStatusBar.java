@@ -1132,14 +1132,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                         }
                     });
 
-                    // set up the dynamic hide/show of the labels
-                    mPile.setOnSizeChangedListener(new OnSizeChangedListener() {
-                        @Override
-                        public void onSizeChanged(View view, int w, int h, int oldw, int oldh) {
-                            updateCarrierAndWifiLabelVisibility(false);
-                        }
-                    });
-                }
+                // set up the dynamic hide/show of the labels
+                mPile.setOnSizeChangedListener(new OnSizeChangedListener() {
+                    @Override
+                    public void onSizeChanged(View view, int w, int h, int oldw, int oldh) {
+                        updateCarrierAndWifiLabelVisibility(false);
+                    }
+                });
             }
         } else {
             mNetworkController = new NetworkController(mContext);
