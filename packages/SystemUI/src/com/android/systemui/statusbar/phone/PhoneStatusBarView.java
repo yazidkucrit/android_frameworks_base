@@ -280,7 +280,7 @@ public class PhoneStatusBarView extends PanelBar {
         }
 
         mBar.animateHeadsUp(mNotificationPanel == panel, mPanelExpandedFractionSum);
-        mBar.panelIsAnimating(mFullyOpenedPanel == null);
 
+        mBar.updateCarrierLabelVisibility(false);
     }
 }
