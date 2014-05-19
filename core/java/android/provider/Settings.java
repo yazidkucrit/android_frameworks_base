@@ -3344,6 +3344,14 @@ public final class Settings {
         public static final String STATUS_BAR_NETWORK_HIDE = "status_bar_network_hide";
 
         /**
+          * Always turn on screen after call ignoring proximity?
+          * 0 = no
+          * 1 = yes
+          * @hide
+          */
+         public static final String INACCURATE_PROXIMITY_WORKAROUND = "inaccurate_proximity_sensor";
+
+        /**
          * Whether to wake the screen with the volume keys, the value is boolean.
          * @hide
          */
