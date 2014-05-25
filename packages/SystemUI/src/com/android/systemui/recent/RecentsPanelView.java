@@ -25,9 +25,9 @@ import android.app.ActivityManagerNative;
 import android.app.ActivityOptions;
 import android.app.TaskStackBuilder;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -44,15 +44,16 @@ import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.ViewPropertyAnimator;
 import android.view.ViewRootImpl;
+import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
@@ -69,13 +70,13 @@ import com.android.systemui.R;
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.StatusBarPanel;
 import com.android.systemui.statusbar.phone.PhoneStatusBar;
-
 import com.android.internal.util.MemInfoReader;
 
-import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+
+import java.util.ArrayList;
 
 public class RecentsPanelView extends FrameLayout implements OnItemClickListener, RecentsCallback,
         StatusBarPanel, Animator.AnimatorListener {
@@ -84,7 +85,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     private PopupMenu mPopup;
     private View mRecentsScrim;
     private View mRecentsNoApps;
-    //private View mRecentsRamBar;
     private RecentsScrollView mRecentsContainer;
 
     private boolean mShowing;
@@ -104,8 +104,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     private boolean mHighEndGfx;
     private ImageView mClearRecents;
 
-    private RecentsActivity mRecentsActivity;
-
     private LinearColorBar mRamUsageBar;
 
     private long mFreeMemory;
@@ -118,6 +116,8 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     TextView mRamText;
 
     MemInfoReader mMemInfoReader = new MemInfoReader();
+
+    private RecentsActivity mRecentsActivity;
 
     public static interface RecentsScrollView {
         public int numItemsInOneScreenful();
@@ -368,6 +368,10 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             // if there are no apps, bring up a "No recent apps" message
             mRecentsNoApps.setAlpha(1f);
             mRecentsNoApps.setVisibility(getTasks() == 0 ? View.VISIBLE : View.INVISIBLE);
+            // TODO: Reimplement when hybrid is back!
+            /* int navBarPercent = Integer.parseInt(ExtendedPropertiesUtils.getProperty("com.android.systemui.navbar.dpi",
+                    "100"));
+            mClearRecents.setVisibility(navBarPercent == 0 && getTasks() > 0 ? View.VISIBLE : View.GONE);*/
             // mClearRecents is the top right view not the nabar one, so show it when navbar is not showing and/or pie is disabled.
             mClearRecents.setVisibility(showAlternativeRecentsClearAll() && getTasks() > 0 ? View.VISIBLE : View.GONE);
             onAnimationEnd(null);
@@ -487,7 +491,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
 
         mRecentsScrim = findViewById(R.id.recents_bg_protect);
         mRecentsNoApps = findViewById(R.id.recents_no_apps);
-	//mRecentsRamBar = findViewById(R.id.recents_ram_bar);
 
         mClearRecents = (ImageView) findViewById(R.id.recents_clear);
         if (mClearRecents != null){
@@ -508,7 +511,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                 ((BitmapDrawable) mRecentsScrim.getBackground()).setTileModeY(TileMode.REPEAT);
             }
         }
-	updateRamBar();
+        updateRamBar();
     }
 
     @Override
@@ -641,13 +644,14 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             mRecentTasksLoader.cancelLoadingThumbnailsAndIcons(this);
             onTaskLoadingCancelled();
         }
-	updateRamBar();
+        updateRamBar();
     }
 
     public void clearRecentViewList(){
         if (mShowing) {
             mRecentsContainer.swipeAllViewsInLayout();
         }
+        updateRamBar();
     }
 
     public void onTaskLoadingCancelled() {
@@ -656,14 +660,14 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             mRecentTaskDescriptions = null;
             mListAdapter.notifyDataSetInvalidated();
         }
-	updateRamBar();
+        updateRamBar();
     }
 
     public void refreshViews() {
         mListAdapter.notifyDataSetInvalidated();
         updateUiElements();
         showIfReady();
-	updateRamBar();
+        updateRamBar();
     }
 
     public void refreshRecentTasksList() {
@@ -811,7 +815,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
             setContentDescription(null);
         }
-	updateRamBar();
+        updateRamBar();
     }
 
     private void startApplicationDetailsActivity(String packageName) {
@@ -915,23 +919,23 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             long usedMem = 0;
             long freeMem = 0;
 
-                mRamUsageBar.setVisibility(View.VISIBLE);
-                updateMemoryInfo();
+            mRamUsageBar.setVisibility(View.VISIBLE);
+            updateMemoryInfo();
 
-                switch (mRamBarMode) {
-                    case 1:
-                        usedMem = mActiveMemory;
-                        freeMem = mTotalMemory - mActiveMemory;
-                        break;
-                    case 2:
-                        usedMem = mActiveMemory + mCachedMemory;
-                        freeMem = mTotalMemory - mActiveMemory - mCachedMemory;
-                        break;
-                    case 3:
-                        usedMem = mTotalMemory - mFreeMemory;
-                        freeMem = mFreeMemory;
-                        break;
-                }
+            switch (mRamBarMode) {
+                case 1:
+                    usedMem = mActiveMemory;
+                    freeMem = mTotalMemory - mActiveMemory;
+                    break;
+                case 2:
+                    usedMem = mActiveMemory + mCachedMemory;
+                    freeMem = mTotalMemory - mActiveMemory - mCachedMemory;
+                    break;
+                case 3:
+                    usedMem = mTotalMemory - mFreeMemory;
+                    freeMem = mFreeMemory;
+                    break;
+            }
 
             mUsedMemText = (TextView)findViewById(R.id.usedMemText);
             mFreeMemText = (TextView)findViewById(R.id.freeMemText);
@@ -943,7 +947,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             mRamText.setText(getResources().getString(
                     R.string.memory));
             float totalMem = mTotalMemory;
-            float totalShownMem = (mTotalMemory - mFreeMemory - mCachedMemory - mActiveMemory)/ totalMem;
+            float totalShownMem = (mTotalMemory - mFreeMemory - mCachedMemory -  mActiveMemory)/ totalMem;
             float totalActiveMem = mActiveMemory / totalMem;
             float totalCachedMem = mCachedMemory / totalMem;
             mRamUsageBar.setRatios(totalShownMem, totalCachedMem, totalActiveMem);
@@ -961,7 +965,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                         ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
                     } catch (RemoteException e) {
                     }
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                             | Intent.FLAG_ACTIVITY_MULTIPLE_TASK
                             | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
                             | Intent.FLAG_ACTIVITY_NO_HISTORY);
