@@ -247,8 +247,9 @@ public class PieController implements OnClickListener, NavigationCallback {
         if (mRecent == null || mBack == null) return;
         mNavigationIconHints = hints;
 
-        boolean alt = (0 != (hints &
-                StatusBarManager.NAVIGATION_HINT_RECENT_ALT)
+        if (button == NavigationCallback.NAVBAR_RECENTS_HINT) {
+            boolean alt = (0 != (hints &
+                    StatusBarManager.NAVIGATION_HINT_RECENT_ALT)
                             && !mKeyguardManager.isKeyguardLocked()
                             && Settings.System.getInt(mContext.getContentResolver(), Settings.System.NAVBAR_RECENTS_CLEAR_ALL, 0) != 2);
             mRecent.setIcon(alt ? R.drawable.ic_sysbar_recent_clear
