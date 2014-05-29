@@ -376,7 +376,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             // mClearRecents is the top right view not the nabar one, so show it when navbar is not showing and/or pie is disabled.
             mClearRecents.setVisibility(showAlternativeRecentsClearAll() && getTasks() > 0 ? View.VISIBLE : View.GONE);
 
-            boolean alternativeRecentsClearAll = Settings.System.getInt(mContext.getContentResolver(), Settings.System.ALTERNATIVE_RECENTS_CLEAR_ALL, 1) == 1;
+            boolean alternativeRecentsClearAll = Settings.System.getInt(mContext.getContentResolver(), Settings.System.ALTERNATIVE_RECENTS_CLEAR_ALL, 0) == 1;
     
             if (alternativeRecentsClearAll) {
                 int clearAllButtonLocation = Settings.System.getInt(mContext.getContentResolver(), Settings.System.CLEAR_RECENTS_BUTTON_LOCATION, Constants.CLEAR_ALL_BUTTON_BOTTOM_LEFT);
@@ -397,8 +397,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                         break;
                 }
                 mClearRecents.setLayoutParams(layoutParams);
-            } else {
-                mClearRecents.setVisibility(View.GONE);
             }            
 
             onAnimationEnd(null);
