@@ -186,6 +186,9 @@
     <!-- Default value of Settings.System.NOISE_SUPPRESSION -->
     <bool name="def_noise_suppression">false</bool>
 
-    <!-- Default value of Settings.System.DOUBLE_TAP_SLEEP_GESTURE -->
-    <integer name="def_double_tap_sleep_gesture">1</integer>
+    <!-- Default value of Settings.System.DOUBLE_TAP_SLEEP_STATUS_BAR -->
+    <integer name="def_double_tap_sleep_status_bar">1</integer>
+
+    <!-- Default value of Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN -->
+    <integer name="def_double_tap_sleep_lockscreen">1</integer>
 </resources>

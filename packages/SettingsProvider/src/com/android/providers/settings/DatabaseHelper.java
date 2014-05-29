@@ -2048,8 +2048,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadIntegerSetting(stmt, Settings.System.DEV_FORCE_SHOW_NAVBAR,
                     R.integer.def_force_disable_navkeys);
 
-            loadIntegerSetting(stmt, Settings.System.DOUBLE_TAP_SLEEP_GESTURE,
-                    R.integer.def_double_tap_sleep_gesture);
+            loadIntegerSetting(stmt, Settings.System.DOUBLE_TAP_SLEEP_STATUS_BAR,
+                    R.integer.def_double_tap_sleep_status_bar);
+
+            loadIntegerSetting(stmt, Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN,
+                    R.integer.def_double_tap_sleep_lockscreen);
 
         } finally {
             if (stmt != null) stmt.close();
