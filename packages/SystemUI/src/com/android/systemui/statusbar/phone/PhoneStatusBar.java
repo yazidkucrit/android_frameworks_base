@@ -251,7 +251,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     View mFlipSettingsView;
     QuickSettingsContainerView mSettingsContainer;
     int mSettingsPanelGravity;
-    private DevForceNavbarObserver mDevForceNavbarObserver
+    private DevForceNavbarObserver mDevForceNavbarObserver;
 
     // top bar
     View mNotificationPanelHeader;
