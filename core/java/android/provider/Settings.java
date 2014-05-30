@@ -1786,19 +1786,19 @@ public final class Settings {
             "bluetooth_discoverability";
 
         /**
+         * If all file types can be accepted over Bluetooth OBEX.
+         * @hide
+         */
+        public static final String BLUETOOTH_ACCEPT_ALL_FILES =
+            "bluetooth_accept_all_files";
+
+        /**
          * Bluetooth discoverability timeout.  If this value is nonzero, then
          * Bluetooth becomes discoverable for a certain number of seconds,
          * after which is becomes simply connectable.  The value is in seconds.
          */
         public static final String BLUETOOTH_DISCOVERABILITY_TIMEOUT =
             "bluetooth_discoverability_timeout";
-
-        /**
-         * If all file types can be accepted over Bluetooth OBEX.
-         * @hide
-         */
-        public static final String BLUETOOTH_ACCEPT_ALL_FILES =
-            "bluetooth_accept_all_files";
 
         /**
          * @deprecated Use {@link android.provider.Settings.Secure#LOCK_PATTERN_ENABLED}
@@ -2780,6 +2780,12 @@ public final class Settings {
         public static final String HEADSET_PLUG_SYSTEM_DEFAULT = "SYSTEM_DEFAULT";
 
         /**
+         * If true, music app will not open if music is active.
+         * @hide
+         */
+        public static final String HEADSET_PLUG_MUSIC_ACTIVE = "headset_plug_music_active";
+
+        /**
 	*
 	* SMOOTH PROGRESS BAR interpolator
 	* @hide
@@ -3338,6 +3344,14 @@ public final class Settings {
         public static final String STATUS_BAR_NETWORK_HIDE = "status_bar_network_hide";
 
         /**
+          * Always turn on screen after call ignoring proximity?
+          * 0 = no
+          * 1 = yes
+          * @hide
+          */
+         public static final String INACCURATE_PROXIMITY_WORKAROUND = "inaccurate_proximity_sensor";
+
+        /**
          * Whether to wake the screen with the volume keys, the value is boolean.
          * @hide
          */
@@ -3525,6 +3539,12 @@ public final class Settings {
         public static final String STATUSBAR_CLOCK_FONT_STYLE = "statusbar_clock_font_style";
 
         /**
+         * Display second in the Clock
+         * @hide
+         */
+        public static final String CLOCK_USE_SECOND = "clock_use_second";
+
+        /**
          * Quick Settings Quick Pulldown
          *
          * @hide
@@ -3570,6 +3590,12 @@ public final class Settings {
          * @hide
          */
         public static final String RECENTS_RAM_BAR_ACTIVE_APPS_COLOR = "recents_ram_bar_active_apps_color";
+
+        /**
+         * location of the clear all rectents button
+         * @hide
+         */
+        public static final String CLEAR_RECENTS_BUTTON_LOCATION = "clear_recents_button_location";
 
         /**
          * Developer options - Navigation Bar show switch

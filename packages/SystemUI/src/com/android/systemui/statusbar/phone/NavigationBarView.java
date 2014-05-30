@@ -416,11 +416,14 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
     }
 
     public void setNavigationIconHints(int hints) {
-        setNavigationIconHints(hints, false);
+        setNavigationIconHints(NavigationCallback.NAVBAR_BACK_HINT, hints, false);
     }
 
-    @Override
     public void setNavigationIconHints(int hints, boolean force) {
+        setNavigationIconHints(NavigationCallback.NAVBAR_BACK_HINT, hints, force);
+    }
+
+    public void setNavigationIconHints(int button, int hints, boolean force) {
         if (!force && hints == mNavigationIconHints) return;
         final boolean backAlt = (hints & StatusBarManager.NAVIGATION_HINT_BACK_ALT) != 0;
         if ((mNavigationIconHints & StatusBarManager.NAVIGATION_HINT_BACK_ALT) != 0 && !backAlt) {
@@ -428,34 +431,26 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
         }
         if (DEBUG) {
             android.widget.Toast.makeText(mContext,
-                "Navigation icon hints = " + hints,
+                "Navigation icon hints = " + hints+" button = "+button,
                 500).show();
         }
 
         mNavigationIconHints = hints;
 
-        View button = mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_HOME);
-        if (button != null) {
-            button.setAlpha(
-                    (0 != (hints & StatusBarManager.NAVIGATION_HINT_HOME_NOP)) ? 0.5f : 1.0f);
-        }
-        button = mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_RECENT);
-        if (button != null) {
-            button.setAlpha(
-                    (0 != (hints & StatusBarManager.NAVIGATION_HINT_RECENT_NOP)) ? 0.5f : 1.0f);
-        }
-        button = mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_BACK);
-        if (button != null) {
-            button.setAlpha(
-                    (0 != (hints & StatusBarManager.NAVIGATION_HINT_BACK_NOP)) ? 0.5f : 1.0f);
-            ((ImageView)button).setImageDrawable(
-                    (0 != (hints & StatusBarManager.NAVIGATION_HINT_BACK_ALT))
+        findViewWithTag(NavbarEditor.NAVBAR_BACK).setAlpha(
+            (0 != (hints & StatusBarManager.NAVIGATION_HINT_BACK_NOP)) ? 0.5f : 1.0f);
+        findViewWithTag(NavbarEditor.NAVBAR_HOME).setAlpha(
+            (0 != (hints & StatusBarManager.NAVIGATION_HINT_HOME_NOP)) ? 0.5f : 1.0f);
+        findViewWithTag(NavbarEditor.NAVBAR_RECENT).setAlpha(
+            (0 != (hints & StatusBarManager.NAVIGATION_HINT_RECENT_NOP)) ? 0.5f : 1.0f);
+
+        if(button == NavigationCallback.NAVBAR_BACK_HINT) {
+            ((ImageView)findViewWithTag(NavbarEditor.NAVBAR_BACK)).setImageDrawable(
+                (0 != (hints & StatusBarManager.NAVIGATION_HINT_BACK_ALT))
                     ? (mVertical ? mBackAltLandIcon : mBackAltIcon)
-                            : (mVertical ? mBackLandIcon : mBackIcon));
-        }
-        button = mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_RECENT);
-        if (button != null) {
-            ((ImageView) button).setImageDrawable(
+                    : (mVertical ? mBackLandIcon : mBackIcon));
+        } else if (button == NavigationCallback.NAVBAR_RECENTS_HINT) {
+            ((ImageView)findViewWithTag(NavbarEditor.NAVBAR_RECENT)).setImageDrawable(
                 (0 != (hints & StatusBarManager.NAVIGATION_HINT_RECENT_ALT)) && Settings.System.getInt(
                     mContext.getContentResolver(), Settings.System.NAVBAR_RECENTS_CLEAR_ALL, 0) != 2
                         ? (mVertical ? mRecentAltLandIcon : mRecentAltIcon)
@@ -519,6 +514,7 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
 
         setButtonWithTagVisibility(NavbarEditor.NAVBAR_BACK, !disableBack);
         setButtonWithTagVisibility(NavbarEditor.NAVBAR_HOME, !disableHome);
+        setButtonWithTagVisibility(NavbarEditor.NAVBAR_RECENT, !disableRecent);
         setButtonWithTagVisibility(NavbarEditor.NAVBAR_RECENT, !disableRecent);
         setButtonWithTagVisibility(NavbarEditor.NAVBAR_ALWAYS_MENU, !disableRecent);
         setButtonWithTagVisibility(NavbarEditor.NAVBAR_MENU_BIG, !disableRecent);
@@ -726,6 +722,9 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
         }
 
         setNavigationIconHints(mNavigationIconHints, true);
+        // Reset recents hints after reorienting
+        ((ImageView)findViewWithTag(NavbarEditor.NAVBAR_RECENT)).setImageDrawable(mVertical
+                ? mRecentLandIcon : mRecentIcon);
     }
 
     @Override
