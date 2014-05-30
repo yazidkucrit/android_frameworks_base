@@ -2760,6 +2760,12 @@ public final class Settings {
         public static final String HEADSET_PLUG_SYSTEM_DEFAULT = "SYSTEM_DEFAULT";
 
         /**
+         * If true, music app will not open if music is active.
+         * @hide
+         */
+        public static final String HEADSET_PLUG_MUSIC_ACTIVE = "headset_plug_music_active";
+
+        /**
 	*
 	* SMOOTH PROGRESS BAR interpolator
 	* @hide
@@ -3319,6 +3325,12 @@ public final class Settings {
          * @hide
          */
         public static final String STATUSBAR_CLOCK_FONT_STYLE = "statusbar_clock_font_style";
+
+        /**
+         * Display second in the Clock
+         * @hide
+         */
+        public static final String CLOCK_USE_SECOND = "clock_use_second";
 
         /**
          * Quick Settings Quick Pulldown
