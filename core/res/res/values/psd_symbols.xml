@@ -128,4 +128,6 @@
   <java-symbol type="bool" name="config_show_cmIMESwitcher"/>
   <java-symbol type="bool" name="config_hasRotationLockSwitch" />
   <java-symbol type="integer" name="config_wallpaperMaxWidth" />
+  <java-symbol type="drawable" name="aospal_logo" />
+  
 </resources>
